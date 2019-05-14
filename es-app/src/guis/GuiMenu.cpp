@@ -5,6 +5,7 @@
 #include "components/SwitchComponent.h"
 #include "guis/GuiCollectionSystemsOptions.h"
 #include "guis/GuiDetectDevice.h"
+#include "guis/GuiWifi.h"
 #include "guis/GuiGeneralScreensaverOptions.h"
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiScraperStart.h"
@@ -25,9 +26,12 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 
 	if (isFullUI)
 		addEntry("SCRAPER", 0x777777FF, true, [this] { openScraperSettings(); });
+	
+	if (isFullUI)
+		addEntry("NETWORK SETTINGS", 0x777777FF, true, [this] { openNetworkSettings(); });
 
-	addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
-
+	if (isFullUI)
+		addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
 
 	if (isFullUI)
 		addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
@@ -41,7 +45,8 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	if (isFullUI)
 		addEntry("CONFIGURE INPUT", 0x777777FF, true, [this] { openConfigInput(); });
 
-	addEntry("QUIT", 0x777777FF, true, [this] {openQuitMenu(); });
+	if (isFullUI)
+		addEntry("QUIT", 0x777777FF, true, [this] {openQuitMenu(); });
 
 	addChild(&mMenu);
 	addVersionInfo();
@@ -84,6 +89,11 @@ void GuiMenu::openScraperSettings()
 	s->addRow(row);
 
 	mWindow->pushGui(s);
+}
+
+void GuiMenu::openNetworkSettings()
+{
+	mWindow->pushGui(new GuiWifi(mWindow));
 }
 
 void GuiMenu::openSoundSettings()
