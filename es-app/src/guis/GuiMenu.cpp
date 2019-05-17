@@ -28,7 +28,7 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 		addEntry("SCRAPER", 0x777777FF, true, [this] { openScraperSettings(); });
 	
 	if (isFullUI)
-		addEntry("NETWORK SETTINGS", 0x777777FF, true, [this, window] { openNetworkSettings(); });
+		addEntry("NETWORK SETTINGS", 0x777777FF, true, [this,window] { mWindow->pushGui(new GuiWifi(mWindow)); });
 
 	if (isFullUI)
 		addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
@@ -89,11 +89,6 @@ void GuiMenu::openScraperSettings()
 	s->addRow(row);
 
 	mWindow->pushGui(s);
-}
-
-void GuiMenu::openNetworkSettings()
-{
-	mWindow->pushGui(new GuiWifi(mWindow));
 }
 
 void GuiMenu::openSoundSettings()
