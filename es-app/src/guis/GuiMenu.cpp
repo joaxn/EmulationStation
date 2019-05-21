@@ -18,6 +18,10 @@
 #include "VolumeControl.h"
 #include <SDL_events.h>
 #include <algorithm>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fstream>
 
 GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MENU"), mVersion(window)
 {
@@ -73,13 +77,95 @@ void GuiMenu::openNetworkSettings()
 	
 	
 	//WIFI INFO
-	//ComponentListRow wifiinfo_row;
-	//wifiinfo_row.elements.clear();
-	//wifiinfo_row.addElement(std::make_shared<TextComponent>(mWindow, "CURRENT WIFI INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	//wifiinfo_row.addElement(makeArrow(mWindow), false);
-	//wifiinfo_row.makeAcceptInputHandler(std::bind(&GuiMenu::openWifiInfo, this));
-	//s->addRow(wifiinfo_row);
+	ComponentListRow wifiinfo_row;
+	wifiinfo_row.elements.clear();
+	wifiinfo_row.addElement(std::make_shared<TextComponent>(mWindow, "CURRENT WIFI INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	wifiinfo_row.addElement(makeArrow(mWindow), false);
+	wifiinfo_row.makeAcceptInputHandler(std::bind(&GuiMenu::openWifiInfo, this));
+	s->addRow(wifiinfo_row);
 	
+	mWindow->pushGui(s);
+}
+
+void GuiMenu::openWifiInfo()
+{
+	auto s = new GuiSettings(mWindow, "CURRENT WIFI INFO");
+
+	FILE *iwList;
+	FILE *wIPP;
+	char iw[1035];
+	char wip[1035];
+
+	// Specific Linux commands. 
+	iwList = popen("iwlist wlan0 scanning | grep 'SSID\\|Frequency\\|Channel\\|IEEE\\|Quality'", "r");
+	wIPP = popen("ifconfig wlan0 | grep 'inet addr'", "r");
+
+	// Variables
+	std::string wSSID;
+	std::string wChannel;
+	std::string wQuality;
+	std::string wIP;
+
+	// Read the pipe to get info and parse into variables
+	std::string currentLine;
+	std::size_t found;
+
+	while (fgets(iw, sizeof(iw), iwList) != NULL) {
+		currentLine = iw;
+
+		found = currentLine.find("ESSID");
+		if (found != std::string::npos) {
+			wSSID = currentLine;
+			wSSID = wSSID.substr(found + 6);		// Trim out front garbage
+			int trim = wSSID.find("\n");
+			wSSID = wSSID.substr(1, trim -2);		// Trim out \n and "s
+		}
+
+		found = currentLine.find("Channel");
+		if (found != std::string::npos) {
+			wChannel = currentLine;
+			wChannel = wChannel.substr(found + 8) + " ";
+			int trim = wChannel.find("\n");
+			wChannel = wChannel.substr(0, trim - 1);	// trim out \n and ending )
+		}
+
+		found = currentLine.find("Quality");
+		if (found != std::string::npos) {
+			wQuality = currentLine;
+			wQuality = wQuality.substr(found);
+			int trim = wQuality.find("\n");
+			wQuality = wQuality.substr(0, trim);		// trim out \n
+		}
+	}
+
+	// Open up Grepped wlan0 ip file
+	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
+		currentLine = wip;
+
+		// find location of ipv4 address
+		found = currentLine.find("inet addr");
+		if (found != std::string::npos) {
+			// Format string to rip out uneeded data
+			wIP = currentLine;
+			wIP = wIP.substr(found + 10, 42);
+			int trimBcast = wIP.find("Bcast");
+			wIP = wIP.substr(0, trimBcast - 1);
+		}
+	}
+	
+	// ESSID
+	auto show_ssid = std::make_shared<TextComponent>(mWindow, "" + wSSID, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("Network Name", show_ssid);
+
+	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("IPv4", show_ip);
+
+	auto show_channel = std::make_shared<TextComponent>(mWindow, "" + wChannel, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("Channel", show_channel);
+
+	auto show_quality = std::make_shared<TextComponent>(mWindow, "" + wQuality, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("Signal", show_quality);
+
 	mWindow->pushGui(s);
 }
 
