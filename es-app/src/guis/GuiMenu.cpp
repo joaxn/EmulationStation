@@ -8,8 +8,8 @@
 #include "guis/GuiGeneralScreensaverOptions.h"
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiScraperStart.h"
-//#include "guis/GuiWifiConnect.h"
-//#include "guis/GuiKeyboard.h"
+#include "guis/GuiWifiConnect.h"
+#include "guis/GuiKeyboard.h"
 #include "guis/GuiSettings.h"
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
@@ -95,14 +95,12 @@ void GuiMenu::openNetworkSettings()
 	});
 	
 	//WIFI CONNECT
-	/*
 	ComponentListRow wificonnect_row;
 	wificonnect_row.elements.clear();
 	wificonnect_row.addElement(std::make_shared<TextComponent>(mWindow, "CONNECT TO WIFI", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	wificonnect_row.addElement(makeArrow(mWindow), false);
 	wificonnect_row.makeAcceptInputHandler(std::bind(&GuiMenu::openWifiConnect, this));
 	s->addRow(wificonnect_row);
-	*/
 	
 	//WIFI INFO
 	ComponentListRow wifiinfo_row;
@@ -190,7 +188,7 @@ void GuiMenu::openWifiInfo()
 	mWindow->pushGui(s);
 }
 
-/*
+
 void GuiMenu::openWifiConnect()
 {
 	auto s = new GuiSettings(mWindow, "AVAILABLE NETWORKS");
@@ -325,7 +323,7 @@ void GuiMenu::openWifiConnect()
 
 	mWindow->pushGui(s);
 }
-*/
+
 
 void GuiMenu::openScraperSettings()
 {
