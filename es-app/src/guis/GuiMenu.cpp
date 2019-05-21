@@ -5,7 +5,6 @@
 #include "components/SwitchComponent.h"
 #include "guis/GuiCollectionSystemsOptions.h"
 #include "guis/GuiDetectDevice.h"
-#include "guis/GuiWifi.h"
 #include "guis/GuiGeneralScreensaverOptions.h"
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiScraperStart.h"
@@ -59,7 +58,7 @@ void GuiMenu::openNetworkSettings()
 {
 	auto s = new GuiSettings(mWindow, "NETWORK SETTINGS");
 
-	// wifi on / off
+	// WIFI ON OFF
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(Settings::getInstance()->getBool("EnableWifi"));
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
@@ -71,7 +70,16 @@ void GuiMenu::openNetworkSettings()
 		}
 		Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
 	});
-
+	
+	
+	//WIFI INFO
+	//ComponentListRow wifiinfo_row;
+	//wifiinfo_row.elements.clear();
+	//wifiinfo_row.addElement(std::make_shared<TextComponent>(mWindow, "CURRENT WIFI INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	//wifiinfo_row.addElement(makeArrow(mWindow), false);
+	//wifiinfo_row.makeAcceptInputHandler(std::bind(&GuiMenu::openWifiInfo, this));
+	//s->addRow(wifiinfo_row);
+	
 	mWindow->pushGui(s);
 }
 
