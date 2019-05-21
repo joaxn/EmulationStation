@@ -28,7 +28,7 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 		addEntry("SCRAPER", 0x777777FF, true, [this] { openScraperSettings(); });
 	
 	if (isFullUI)
-		addEntry("NETWORK SETTINGS", 0x777777FF, true, [this,window] { mWindow->pushGui(new GuiWifi(mWindow)); });
+		addEntry("NETWORK SETTINGS", 0x777777FF, true, [this] { openNetworkSettings(); });
 
 	if (isFullUI)
 		addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
@@ -52,6 +52,27 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	addVersionInfo();
 	setSize(mMenu.getSize());
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
+}
+
+
+void GuiMenu::openNetworkSettings()
+{
+	auto s = new GuiSettings(mWindow, "NETWORK SETTINGS");
+
+	// wifi on / off
+	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
+	wifi_enabled->setState(Settings::getInstance()->getBool("EnableWifi"));
+	s->addWithLabel("ENABLE WIFI", wifi_enabled);
+	s->addSaveFunc([wifi_enabled] {
+		if (wifi_enabled->getState()){
+			system("sudo ifconfig wlan0 down");
+		} else{
+			system("sudo ifconfig wlan0 up");
+		}
+		Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
+	});
+
+	mWindow->pushGui(s);
 }
 
 void GuiMenu::openScraperSettings()
