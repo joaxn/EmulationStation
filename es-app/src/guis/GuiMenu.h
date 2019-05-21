@@ -27,6 +27,7 @@ private:
 	void openSoundSettings();
 	void openUISettings();
 	void openNetworkSettings();
+	void openWifiInfo();
 
 	MenuComponent mMenu;
 	TextComponent mVersion;

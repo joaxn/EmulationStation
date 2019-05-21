@@ -8,6 +8,8 @@
 #include "guis/GuiGeneralScreensaverOptions.h"
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiScraperStart.h"
+//#include "guis/GuiWifiConnect.h"
+//#include "guis/GuiKeyboard.h"
 #include "guis/GuiSettings.h"
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
@@ -75,6 +77,15 @@ void GuiMenu::openNetworkSettings()
 		Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
 	});
 	
+	//WIFI CONNECT
+	/*
+	ComponentListRow wificonnect_row;
+	wificonnect_row.elements.clear();
+	wificonnect_row.addElement(std::make_shared<TextComponent>(mWindow, "CONNECT TO WIFI", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	wificonnect_row.addElement(makeArrow(mWindow), false);
+	wificonnect_row.makeAcceptInputHandler(std::bind(&GuiMenu::openWifiConnect, this));
+	s->addRow(wificonnect_row);
+	*/
 	
 	//WIFI INFO
 	ComponentListRow wifiinfo_row;
@@ -168,6 +179,143 @@ void GuiMenu::openWifiInfo()
 
 	mWindow->pushGui(s);
 }
+
+/*
+void GuiMenu::openWifiConnect()
+{
+	auto s = new GuiSettings(mWindow, "AVAILABLE NETWORKS");
+			
+	// Holds the password the user types in.
+	std::shared_ptr<GuiComponent> password;
+
+	// bring down wireless to refresh
+	system("sudo ifconfig wlan0 down");
+	system("sudo ifconfig wlan0 up");
+
+	// dump iwlist into a memory file
+	FILE *fp;
+	char path[1035];
+	fp = popen("sudo iwlist wlan0 scanning | grep 'SSID\\|Channel:\\|Encryption\\|Quality'", "r");
+
+	// Variables
+	std::string wSSID[24];
+	std::string wChannel[24];
+	std::string wQuality[24];
+	bool bEncryption[24];
+
+	int ssidIndex = 0;
+	int channelIndex = 0;
+	int qualityIndex = 0;
+	int encryptionIndex = 0;
+
+	// Read that file to get info and parse into variables
+	std::string currentLine;
+	std::size_t found;
+
+	while (fgets(path, sizeof(path), fp) != NULL) {
+		currentLine = path;
+
+		// See if this network is encrypted
+		if (currentLine.find("Encryption key:on") != std::string::npos){
+			bEncryption[encryptionIndex] = true;
+			encryptionIndex++;
+		}
+		else {
+			if (currentLine.find("Encryption key:off") != std::string::npos) {
+				bEncryption[encryptionIndex] = false;
+				encryptionIndex++;
+			}
+		}
+
+		found = currentLine.find("ESSID");
+		if (found != std::string::npos) {
+			std::string ssid = currentLine;
+			ssid = ssid.substr(found + 6);
+			int trim = ssid.find("\n");
+			ssid = ssid.substr(1, trim - 2);
+			if (ssid == "" || ssid == " ") ssid = "[Hidden Network]";
+			wSSID[ssidIndex] = ssid;
+			ssidIndex++;
+			continue;
+		}
+
+		found = currentLine.find("Channel");
+		if (found != std::string::npos) {
+
+			std::string channel = currentLine;
+			channel = channel.substr(found + 8) + " ";
+			int trim = channel.find("\n");
+			channel = channel.substr(0, trim - 1);
+			wChannel[channelIndex] = channel;
+			channelIndex++;
+			continue;
+		}
+
+		found = currentLine.find("Quality");
+		if (found != std::string::npos) {
+			std::string quality = currentLine;
+			quality = quality.substr(found + 29, 2);
+			int trim = quality.find("\n");
+			quality = quality.substr(0, trim - 1);
+			wQuality[qualityIndex] = quality;
+			qualityIndex++;
+			continue;
+		}
+	}
+
+	ComponentListRow row;
+
+	// For loop all networks out
+	int color = 0x777777FF;
+	//for (int i = ssidIndex - 1; i > -1; i--) {
+	for (int i = 0; i < ssidIndex; i++){
+
+		// Signal strength color setter
+		std::string qual = wQuality[i];
+		std::string sigText = "|";
+		int intQuality = std::atoi(qual.c_str());
+		if (intQuality >= 85) color = 0xCE0000FF;
+		else if (intQuality >= 75) {
+			color = 0xF24207FF;
+			sigText = "| |";
+		}
+		else if (intQuality >= 65) {
+			color = 0x33F207FF;
+			sigText = "| | |";
+		}
+		else if (intQuality > 10) {
+			color = 0x078DF2FF;
+			sigText = "| | | |";
+		}
+
+		// Encrpytion color
+		int encryptionColor = 0x77BB77FF;
+		if (bEncryption[i]) encryptionColor = 0xFF7777FF;
+
+		// Add the Wifi information per row
+		row.addElement(std::make_shared<TextComponent>(mWindow, "" + wSSID[i], Font::get(FONT_SIZE_MEDIUM), encryptionColor), true);
+		//row.addElement(std::make_shared<TextComponent>(mWindow, "C: " + wChannel[i], Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true); // shows channel.  (buggy)
+
+		// Create signal graph, and align it to the right.
+		auto signal_comp = std::make_shared<TextComponent>(mWindow, "" + sigText, Font::get(FONT_SIZE_MEDIUM), color);
+		signal_comp->setAlignment(ALIGN_RIGHT);
+		row.addElement(signal_comp, true);
+
+		//Create what to do whne this network is clicked.
+		std::string pSSID = wSSID[i];
+		bool encrypt = bEncryption[i];
+		row.makeAcceptInputHandler( [this, pSSID, encrypt] {
+			mWindow->pushGui(new GuiWifiConnect(mWindow, pSSID, encrypt));
+		});
+
+		s->addRow(row);
+		row.elements.clear();
+		
+	}
+
+	mWindow->pushGui(s);
+}
+*/
 
 void GuiMenu::openScraperSettings()
 {
