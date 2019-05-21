@@ -157,6 +157,8 @@ void Settings::setDefaults()
 	mIntMap["ScreenRotate"]  = 0;
 
 	mStringMap["ExePath"] = "";
+	
+	mBoolMap["EnableWifi"] = true;
 }
 
 template <typename K, typename V>
