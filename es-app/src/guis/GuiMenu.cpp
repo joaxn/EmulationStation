@@ -65,8 +65,25 @@ void GuiMenu::openNetworkSettings()
 	auto s = new GuiSettings(mWindow, "NETWORK SETTINGS");
 
 	// WIFI ON OFF
+	FILE *wifiOnOff;
+	char wi[1035];
+	bool flagWifi;
+	
+	flagWifi = false;
+	wifiOnOff = popen("ifconfig wlan0 | grep 'flags='", "r");
+	
+	std::string currentLine;
+	std::size_t found;
+	while (fgets(wi, sizeof(wi), wifiOnOff) != NULL) {
+		currentLine = wi;
+		found = currentLine.find("RUNNING");
+		if (found != std::string::npos) {
+			flagWifi = true;
+		}
+	}
+	
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
-	wifi_enabled->setState(Settings::getInstance()->getBool("EnableWifi"));
+	wifi_enabled->setState(flagWifi);
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
 	s->addSaveFunc([wifi_enabled] {
 		if (wifi_enabled->getState()){
@@ -153,6 +170,8 @@ void GuiMenu::openWifiInfo()
 	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
 		currentLine = wip;
 		wIP = currentLine;
+		int trim = wIP.find("\n");
+		wIP = wIP.substr(0, trim);
 	}
 	
 	// ESSID
