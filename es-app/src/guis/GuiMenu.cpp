@@ -70,9 +70,9 @@ void GuiMenu::openNetworkSettings()
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
 	s->addSaveFunc([wifi_enabled] {
 		if (wifi_enabled->getState()){
-			system("sudo ifconfig wlan0 down");
-		} else{
 			system("sudo ifconfig wlan0 up");
+		} else{
+			system("sudo ifconfig wlan0 down");
 		}
 		Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
 	});
@@ -109,7 +109,7 @@ void GuiMenu::openWifiInfo()
 
 	// Specific Linux commands. 
 	iwList = popen("iwlist wlan0 scanning | grep 'SSID\\|Frequency\\|Channel\\|IEEE\\|Quality'", "r");
-	wIPP = popen("ifconfig wlan0 | grep 'inet addr'", "r");
+	wIPP = popen("hostname -I", "r");
 
 	// Variables
 	std::string wSSID;
@@ -152,16 +152,7 @@ void GuiMenu::openWifiInfo()
 	// Open up Grepped wlan0 ip file
 	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
 		currentLine = wip;
-
-		// find location of ipv4 address
-		found = currentLine.find("inet addr");
-		if (found != std::string::npos) {
-			// Format string to rip out uneeded data
-			wIP = currentLine;
-			wIP = wIP.substr(found + 10, 42);
-			int trimBcast = wIP.find("Bcast");
-			wIP = wIP.substr(0, trimBcast - 1);
-		}
+		wIP = currentLine;
 	}
 	
 	// ESSID
@@ -169,7 +160,7 @@ void GuiMenu::openWifiInfo()
 	s->addWithLabel("Network Name", show_ssid);
 
 	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("IPv4", show_ip);
+	s->addWithLabel("IP", show_ip);
 
 	auto show_channel = std::make_shared<TextComponent>(mWindow, "" + wChannel, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("Channel", show_channel);
