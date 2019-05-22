@@ -145,22 +145,16 @@ void GuiMenu::openWifiInfo()
 			wSSID = wSSID.substr(found + 6);		// Trim out front garbage
 			int trim = wSSID.find("\n");
 			wSSID = wSSID.substr(1, trim -2);		// Trim out \n and "s
-		}
-
-		found = currentLine.find("Channel");
-		if (found != std::string::npos) {
-			wChannel = currentLine;
-			wChannel = wChannel.substr(found + 8) + " ";
-			int trim = wChannel.find("\n");
-			wChannel = wChannel.substr(0, trim - 1);	// trim out \n and ending )
+			wSSID = std::regex_replace(wSSID, std::regex("^ +| +$|( ) +"), "$1"); //trim spaces
 		}
 
 		found = currentLine.find("Quality");
 		if (found != std::string::npos) {
 			wQuality = currentLine;
-			wQuality = wQuality.substr(found);
-			int trim = wQuality.find("\n");
+			wQuality = wQuality.substr(found + 8);
+			int trim = wQuality.find("Signal");
 			wQuality = wQuality.substr(0, trim);		// trim out \n
+			wQuality = std::regex_replace(wQuality, std::regex("^ +| +$|( ) +"), "$1"); //trim spaces
 		}
 	}
 
@@ -170,6 +164,7 @@ void GuiMenu::openWifiInfo()
 		wIP = currentLine;
 		int trim = wIP.find("\n");
 		wIP = wIP.substr(0, trim);
+		wIP = std::regex_replace(wIP, std::regex("^ +| +$|( ) +"), "$1"); //trim spaces
 	}
 	
 	// ESSID
@@ -179,11 +174,8 @@ void GuiMenu::openWifiInfo()
 	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("IP", show_ip);
 
-	auto show_channel = std::make_shared<TextComponent>(mWindow, "" + wChannel, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("Channel", show_channel);
-
 	auto show_quality = std::make_shared<TextComponent>(mWindow, "" + wQuality, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("Signal", show_quality);
+	s->addWithLabel("Signal Quality", show_quality);
 
 	mWindow->pushGui(s);
 }
