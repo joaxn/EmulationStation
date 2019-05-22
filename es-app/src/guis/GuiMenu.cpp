@@ -295,7 +295,7 @@ void GuiMenu::openWifiConnect()
 
 		// Create signal graph, and align it to the right.
 		auto signal_comp = std::make_shared<TextComponent>(mWindow, "" + sigText, Font::get(FONT_SIZE_MEDIUM), color);
-		signal_comp->setAlignment(ALIGN_RIGHT);
+		//signal_comp->setAlignment(ALIGN_RIGHT);
 		row.addElement(signal_comp, true);
 
 		//Create what to do whne this network is clicked.
