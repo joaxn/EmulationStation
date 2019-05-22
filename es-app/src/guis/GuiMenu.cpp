@@ -145,7 +145,6 @@ void GuiMenu::openWifiInfo()
 			wSSID = wSSID.substr(found + 6);		// Trim out front garbage
 			int trim = wSSID.find("\n");
 			wSSID = wSSID.substr(1, trim -2);		// Trim out \n and "s
-			wSSID = std::regex_replace(wSSID, std::regex("^ +| +$|( ) +"), "$1"); //trim spaces
 		}
 
 		found = currentLine.find("Quality");
@@ -154,7 +153,6 @@ void GuiMenu::openWifiInfo()
 			wQuality = wQuality.substr(found + 8);
 			int trim = wQuality.find("Signal");
 			wQuality = wQuality.substr(0, trim);		// trim out \n
-			wQuality = std::regex_replace(wQuality, std::regex("^ +| +$|( ) +"), "$1"); //trim spaces
 		}
 	}
 
@@ -164,7 +162,6 @@ void GuiMenu::openWifiInfo()
 		wIP = currentLine;
 		int trim = wIP.find("\n");
 		wIP = wIP.substr(0, trim);
-		wIP = std::regex_replace(wIP, std::regex("^ +| +$|( ) +"), "$1"); //trim spaces
 	}
 	
 	// ESSID
