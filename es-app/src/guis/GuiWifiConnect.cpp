@@ -6,7 +6,7 @@
 #include "Settings.h"
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiSettings.h"
-#include "FileData.h"
+#include "utils/FileSystemUtil.h"
 
 #include <boost/filesystem.hpp>
 #include <iostream>
@@ -130,11 +130,11 @@ GuiWifiConnect::GuiWifiConnect(Window* window, std::string wifiName, bool encryp
 		}
 		mWindow->pushGui(new GuiMsgBox(mWindow, "Network: " + wifiName + "\n Password: " + ed->getValue(), "Connect", [this, wifiName, ed] {
 			// Quick and dirty just send the info to wificonnect
-			std::string cmdStr = "sudo " + getHomePath() + "/.emulationstation/app/wifi/./wificonnect --ssid '" + wifiName + "' --password " + ed->getValue();
+			std::string cmdStr = "sudo " + Utils::FileSystem::getHomePath + "/.emulationstation/app/wifi/./wificonnect --ssid '" + wifiName + "' --password " + ed->getValue();
 			const char* cmd = cmdStr.c_str();
 
 			// Make sure wificonnect exists
-			std::string path = getHomePath() + "/.emulationstation/app/wifi/wificonnect";
+			std::string path = Utils::FileSystem::getHomePath + "/.emulationstation/app/wifi/wificonnect";
 			if (boost::filesystem::exists(path)) {
 				system(cmd);
 				mConnected = true;
