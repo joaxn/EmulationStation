@@ -131,7 +131,6 @@ void GuiMenu::openWifiInfo()
 	std::string wChannel;
 	std::string wQuality;
 	std::string wIP;
-	int wQualityPercent;
 
 	// Read the pipe to get info and parse into variables
 	std::string currentLine;
@@ -162,7 +161,6 @@ void GuiMenu::openWifiInfo()
 			wQuality = wQuality.substr(found + 29, 2);
 			int trim = wQuality.find("\n");
 			wQuality = wQuality.substr(0, trim - 1);
-			wQualityPercent = 100 - std::stoi(wQuality);
 		}
 	}
 
@@ -185,21 +183,15 @@ void GuiMenu::openWifiInfo()
 	//CHANNEL
 	auto show_channel = std::make_shared<TextComponent>(mWindow, "" + wChannel, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("Channel", show_channel);
-
-	// QUALITY BAR
-	auto pbar_total = std::make_shared<ProgressBarComponent>(mWindow, "ppp");
-	auto tell_perc = std::make_shared<TextComponent>(mWindow, wQualityPercent.str() + "%", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	int pbSize = mMenu.getSize().x() * .8f;
-	pbar_total->setSize(pbSize, mMenu.getSize().y() * .09f);
-	pbar_total->setPosition(0, 0);
-	pbar_total->setValue(wQualityPercent);
-	pbar_total->setColor(0x9999EEFF);
-	row.addElement(pbar_total, false);
-	row.addElement(tell_perc, true);
-	s->addRow(row);
 	
-	// QUALITY TEXT
-	auto show_quality = std::make_shared<TextComponent>(mWindow, "" + wQualityPercent.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	// QUALITY
+	std::string sigText = "[    ]";
+	int intQuality = std::atoi(wQuality.c_str());
+	if (intQuality >= 85){sigText = "[-   ]";}
+	else if (intQuality >= 75) {sigText = "[--  ]";}
+	else if (intQuality >= 65) {sigText = "[--- ]";}
+	else if (intQuality > 10) {sigText = "[----]";}
+	auto show_quality = std::make_shared<TextComponent>(mWindow, "" + sigText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("Signal Quality", show_quality);
 
 	mWindow->pushGui(s);
@@ -290,47 +282,30 @@ void GuiMenu::openWifiConnect()
 
 	ComponentListRow row;
 
-	// For loop all networks out
-	int color = 0x777777FF;
-	//for (int i = ssidIndex - 1; i > -1; i--) {
+
 	for (int i = 0; i < ssidIndex; i++){
 
 		// Signal strength color setter
 		std::string qual = wQuality[i];
-		std::string sigText = "|";
+		std::string sigText = "[    ]";
 		int intQuality = std::atoi(qual.c_str());
-		if (intQuality >= 85) color = 0xCE0000FF;
-		else if (intQuality >= 75) {
-			color = 0xF24207FF;
-			sigText = "| |";
-		}
-		else if (intQuality >= 65) {
-			color = 0x33F207FF;
-			sigText = "| | |";
-		}
-		else if (intQuality > 10) {
-			color = 0x078DF2FF;
-			sigText = "| | | |";
-		}
-
-		// Encrpytion color
-		int encryptionColor = 0x77BB77FF;
-		if (bEncryption[i]) encryptionColor = 0xFF7777FF;
+		if (intQuality >= 85){sigText = "[-   ]";}
+		else if (intQuality >= 75) {sigText = "[--  ]";}
+		else if (intQuality >= 65) {sigText = "[--- ]";}
+		else if (intQuality > 10) {sigText = "[----]";}
 
 		// Add the Wifi information per row
-		row.addElement(std::make_shared<TextComponent>(mWindow, "" + wSSID[i], Font::get(FONT_SIZE_MEDIUM), encryptionColor), true);
-		//row.addElement(std::make_shared<TextComponent>(mWindow, "C: " + wChannel[i], Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true); // shows channel.  (buggy)
+		row.addElement(std::make_shared<TextComponent>(mWindow, "" + wSSID[i], Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 
 		// Create signal graph, and align it to the right.
-		auto signal_comp = std::make_shared<TextComponent>(mWindow, "" + sigText, Font::get(FONT_SIZE_MEDIUM), color);
-		//signal_comp->setAlignment(ALIGN_RIGHT);
+		auto signal_comp = std::make_shared<TextComponent>(mWindow, "" + sigText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 		row.addElement(signal_comp, true);
 
 		//Create what to do whne this network is clicked.
 		std::string pSSID = wSSID[i];
 		bool encrypt = bEncryption[i];
 		row.makeAcceptInputHandler( [this, pSSID, encrypt] {
-			mWindow->pushGui(new GuiWifiConnect(mWindow, pSSID, encrypt));
+			//mWindow->pushGui(new GuiWifiConnect(mWindow, pSSID, encrypt));
 		});
 
 		s->addRow(row);
