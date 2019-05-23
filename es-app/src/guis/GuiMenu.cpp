@@ -131,6 +131,7 @@ void GuiMenu::openWifiInfo()
 	std::string wChannel;
 	std::string wQuality;
 	std::string wIP;
+	int wQualityPercent;
 
 	// Read the pipe to get info and parse into variables
 	std::string currentLine;
@@ -146,13 +147,22 @@ void GuiMenu::openWifiInfo()
 			int trim = wSSID.find("\n");
 			wSSID = wSSID.substr(1, trim -2);		// Trim out \n and "s
 		}
-
+		
+		found = currentLine.find("Channel");
+		if (found != std::string::npos) {
+			wChannel = currentLine;
+			wChannel = wChannel.substr(found + 8) + " ";
+			int trim = wChannel.find("\n");
+			wChannel = wChannel.substr(0, trim - 1);	// trim out \n and ending )
+		}
+		
 		found = currentLine.find("Quality");
 		if (found != std::string::npos) {
 			wQuality = currentLine;
-			wQuality = wQuality.substr(found + 8);
-			int trim = wQuality.find("Signal");
-			wQuality = wQuality.substr(0, trim);		// trim out \n
+			wQuality = wQuality.substr(found + 29, 2);
+			int trim = wQuality.find("\n");
+			wQuality = wQuality.substr(0, trim - 1);
+			wQualityPercent = 100 - std::stoi(wQuality);
 		}
 	}
 
@@ -167,11 +177,29 @@ void GuiMenu::openWifiInfo()
 	// ESSID
 	auto show_ssid = std::make_shared<TextComponent>(mWindow, "" + wSSID, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("Network Name", show_ssid);
-
+	
+	// IP
 	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("IP", show_ip);
+	
+	//CHANNEL
+	auto show_channel = std::make_shared<TextComponent>(mWindow, "" + wChannel, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("Channel", show_channel);
 
-	auto show_quality = std::make_shared<TextComponent>(mWindow, "" + wQuality, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	// QUALITY BAR
+	auto pbar_total = std::make_shared<ProgressBarComponent>(mWindow, "ppp");
+	auto tell_perc = std::make_shared<TextComponent>(mWindow, wQualityPercent.str() + "%", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	int pbSize = mMenu.getSize().x() * .8f;
+	pbar_total->setSize(pbSize, mMenu.getSize().y() * .09f);
+	pbar_total->setPosition(0, 0);
+	pbar_total->setValue(wQualityPercent);
+	pbar_total->setColor(0x9999EEFF);
+	row.addElement(pbar_total, false);
+	row.addElement(tell_perc, true);
+	s->addRow(row);
+	
+	// QUALITY TEXT
+	auto show_quality = std::make_shared<TextComponent>(mWindow, "" + wQualityPercent.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("Signal Quality", show_quality);
 
 	mWindow->pushGui(s);
