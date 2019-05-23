@@ -40,7 +40,7 @@ GuiKeyboard::GuiKeyboard(Window* window) : GuiComponent(window) , mMenu(window, 
 	mVersion.setFont(Font::get(FONT_SIZE_SMALL));
 	mVersion.setColor(0xB6B6C4FF);
 	mVersion.setText("KEYBOARD V.0.0.1");
-	mVersion.setAlignment(ALIGN_CENTER);
+	mVersion.setHorizontalAlignment(ALIGN_CENTER);
 
 	addChild(&mMenu);
 	addChild(&mVersion);

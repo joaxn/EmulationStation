@@ -6,6 +6,7 @@
 #include "Settings.h"
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiSettings.h"
+#include "FileData.h"
 
 #include <boost/filesystem.hpp>
 #include <iostream>
