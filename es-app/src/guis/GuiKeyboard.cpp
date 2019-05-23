@@ -20,19 +20,19 @@
 #include "VolumeControl.h"
 #include "scrapers/Scraper.h"
 
-GuiKeyboard::GuiKeyboard(Window* window) : GuiComponent(window) , mMenu(window, "KEYBOARD"), mVersion(window), cGrid(window, Eigen::Vector2i(256,256))
+GuiKeyboard::GuiKeyboard(Window* window) : GuiComponent(window) , mMenu(window, "KEYBOARD"), mVersion(window), cGrid(window, Vector2i(256,256))
 {
 
 	cGrid.setEntry(std::make_shared<ButtonComponent>(mWindow, "Q"), 
-		Eigen::Vector2i(32, 32), true, true, Eigen::Vector2i(32, 32));
+		Vector2i(32, 32), true, true, Vector2i(32, 32));
 	cGrid.setEntry(std::make_shared<ButtonComponent>(mWindow, "W"),
-		Eigen::Vector2i(64, 32), true, true, Eigen::Vector2i(32, 32));
+		Vector2i(64, 32), true, true, Vector2i(32, 32));
 	cGrid.setEntry(std::make_shared<ButtonComponent>(mWindow, "E"),
-		Eigen::Vector2i(96, 32), true, true, Eigen::Vector2i(32, 32));
+		Vector2i(96, 32), true, true, Vector2i(32, 32));
 	cGrid.setEntry(std::make_shared<ButtonComponent>(mWindow, "R"),
-		Eigen::Vector2i(128, 32), true, true, Eigen::Vector2i(32, 32));
+		Vector2i(128, 32), true, true, Vector2i(32, 32));
 	cGrid.setEntry(std::make_shared<ButtonComponent>(mWindow, "A"),
-		Eigen::Vector2i(32, 64), true, true, Eigen::Vector2i(32, 32));
+		Vector2i(32, 64), true, true, Vector2i(32, 32));
 
 	addChild(&cGrid);
 

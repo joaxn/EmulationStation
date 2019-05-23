@@ -3,8 +3,6 @@
 #include "Log.h"
 #include <locale>
 
-using namespace Eigen;
-
 GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::string& title, const std::string& initValue, 
 	const std::function<void(const std::string&)>& okCallback, bool multiLine, const char* acceptBtnText)
 	: GuiComponent(window), mBackground(window, ":/frame.png"), mGrid(window, Vector2i(1, 7)), mMultiLine(multiLine)
@@ -158,7 +156,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 
 void GuiTextEditPopupKeyboard::onSizeChanged()
 {
-	mBackground.fitTo(mSize, Eigen::Vector3f::Zero(), Eigen::Vector2f(-32, -32));
+	mBackground.fitTo(mSize, Vector3f::Zero(), Vector2f(-32, -32));
 
 	mText->setSize(mSize.x() - 40, mText->getSize().y());
 
