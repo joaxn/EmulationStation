@@ -237,7 +237,7 @@ void GuiMenu::openWifiConnect()
 
 	ComponentListRow row;
 
-	stringstream ssidText;
+	std::stringstream ssidText;
 	ssidText << ssidIndex;
 	auto counter = std::make_shared<TextComponent>(mWindow, "" + ssidText.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("Count", counter);
