@@ -45,7 +45,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 					}));
 	        	}
 	        	else {
-					std::string strName = charArray[y][x] + " " + charArrayUp[y][x];
+					std::string strName = "";
+					strName += charArray[y][x];
+					strName += " ";
+					strName += charArrayUp[y][x];
 					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, strName, charArray[y][x], [this, okCallback, x, y, loc] {
 						okCallback(mText->getValue());
 						mText->startEditing();
