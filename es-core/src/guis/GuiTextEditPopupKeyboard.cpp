@@ -77,10 +77,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; }));
 
 	// Add a/c buttons
-	mButtonGrid->setEntry(buttons[0], Vector2i(4, 5), true, false);
-	mButtonGrid->setEntry(buttons[1], Vector2i(5, 5), true, false);
-	mButtonGrid->setEntry(buttons[2], Vector2i(6, 5), true, false);
-	mButtonGrid->setEntry(buttons[3], Vector2i(7, 5), true, false);
+	mButtonGrid->setEntry(buttons[0], Vector2i(0, 0), true, false);
+	mButtonGrid->setEntry(buttons[1], Vector2i(1, 0), true, false);
+	mButtonGrid->setEntry(buttons[2], Vector2i(2, 0), true, false);
+	mButtonGrid->setEntry(buttons[3], Vector2i(3, 0), true, false);
 	
 	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
 
