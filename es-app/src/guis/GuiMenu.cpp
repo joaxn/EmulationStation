@@ -21,6 +21,7 @@
 #include <SDL_events.h>
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
@@ -236,8 +237,9 @@ void GuiMenu::openWifiConnect()
 
 	ComponentListRow row;
 
-
-	auto counter = std::make_shared<TextComponent>(mWindow, ssidIndex.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	stringstream ssidText;
+	ssidText << ssidIndex;
+	auto counter = std::make_shared<TextComponent>(mWindow, "" + ssidText.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("Count", counter);
 
 	for (int i = 0; i < ssidIndex; i++){
