@@ -253,12 +253,14 @@ void GuiMenu::openWifiConnect()
 		else if (intQuality >= 65) {sigText = "[--- ]";}
 		else if (intQuality > 10) {sigText = "[----]";}
 
-		// Add the Wifi information per row
-		row.addElement(std::make_shared<TextComponent>(mWindow, "" + wSSID[i], Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-
 		// Create signal graph, and align it to the right.
 		auto signal_comp = std::make_shared<TextComponent>(mWindow, "" + sigText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-		row.addElement(signal_comp, true);
+		signal_comp->setHorizontalAlignment(ALIGN_RIGHT);
+		auto bracket = makeArrow(mWindow);
+		
+		row.addElement(std::make_shared<TextComponent>(mWindow, "" + wSSID[i], Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		row.addElement(signal_comp, false);
+		row.addElement(bracket, false);
 
 		//Create what to do whne this network is clicked.
 		std::string pSSID = wSSID[i];

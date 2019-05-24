@@ -30,8 +30,8 @@ GuiWifiConnect::GuiWifiConnect(Window* window, std::string wifiName, bool encryp
 
 	// --------------
 
-	std::string windowName = "Connect to -> " + wifiName;
-	mMenu.setTitle(windowName.c_str(), Font::get(FONT_SIZE_MEDIUM));
+	std::string windowName = "Connect to > " + wifiName;
+	mMenu.setTitle(windowName.c_str(), Font::get(FONT_SIZE_LARGE));
 
 	auto ed = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_SMALL, FONT_PATH_LIGHT), 0x777777FF, ALIGN_RIGHT);
 
@@ -57,72 +57,11 @@ GuiWifiConnect::GuiWifiConnect(Window* window, std::string wifiName, bool encryp
 			mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, wifiName + " PASSWORD", ed->getValue(), updateVal, false));
 		});
 	}
+	
 
-
-	/// ===== FULL DETAILS =====
-	addEntry("GET FULL DETAILS", 0x777777FF, true, 
-		[this, wifiName] {
-			auto s = new GuiSettings(mWindow, "FULL DETAILS");
-
-			// scan only this ssid
-			FILE *fp;
-			char path[1035];
-			std::string command = "sudo iwlist wlan0 scanning essid \"" + wifiName + "\" | grep 'Channel:\\|IEEE\\|Signal'";
-			fp = popen(command.c_str(), "r");
-
-			// Sort through scanned essid
-			std::string currentLine;
-			std::size_t found = 0;
-			std::string wChannel, wIEEE, wSignal;
-
-			while (fgets(path, sizeof(path), fp) != NULL) {
-				currentLine = path;
-
-				found = currentLine.find("Channel:");
-				if (found != std::string::npos) {
-					std::string channel = currentLine;
-					channel = channel.substr(found + 8) + "";
-					int trim = channel.find("\n");
-					channel = channel.substr(0, trim - 1);
-					wChannel = channel;
-				}
-
-				found = currentLine.find("Quality");
-				if (found != std::string::npos) {
-					std::string wQuality = currentLine;
-					wQuality = wQuality.substr(found);
-					int trim = wQuality.find("\n");
-					wQuality = wQuality.substr(0, trim - 1);		// trim out \n
-					wSignal = wQuality;
-				}
-
-				found = currentLine.find("IEEE");
-				if (found != std::string::npos) {
-					wIEEE = currentLine.substr(found);
-					int endr = wIEEE.find("\n");
-					wIEEE = wIEEE.substr(0, endr - 1);
-				}
-
-			}
-
-			// ESSID
-			auto show_ssid = std::make_shared<TextComponent>(mWindow, wifiName, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-			s->addWithLabel("Network Name", show_ssid);
-
-			auto show_channel = std::make_shared<TextComponent>(mWindow, wChannel, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-			s->addWithLabel("Channel", show_channel);
-
-			auto show_encryption = std::make_shared<TextComponent>(mWindow, wIEEE, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-			s->addWithLabel("Encryption", show_encryption);
-
-			auto show_quality = std::make_shared<TextComponent>(mWindow, wSignal, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-			s->addWithLabel("Signal", show_quality);
-
-			mWindow->pushGui(s);
-	});
-
-	addEntry("CONNECT", 0x777777FF, true, [this, ed, wifiName, encrypted] {
-		// make sure the password is at least 8 characters long
+	addChild(&mMenu);
+	mMenu.addButton("BACK", "go back", [this] { delete this; });
+	mMenu.addButton("CONNECT", "connect", [this, ed, wifiName, encrypted] {
 		if (ed->getValue().length() < 8 && encrypted) {
 			mWindow->pushGui(new GuiMsgBox(mWindow, "Password is not long enough!  Must be at least 8 characters long.", "Ok", nullptr));
 			return;
@@ -142,7 +81,6 @@ GuiWifiConnect::GuiWifiConnect(Window* window, std::string wifiName, bool encryp
 				LOG(LogError) << "WifiConnect: Couldn't find wificonnect in " << path << " folder";
 			}
 
-
 			//std::ofstream oFile;
 			//oFile.open("~/.emulationstation/networks.lst", std::ofstream::out | std::ofstream::app);
 			//oFile << wifiName;
@@ -156,23 +94,13 @@ GuiWifiConnect::GuiWifiConnect(Window* window, std::string wifiName, bool encryp
 			"Cancel", nullptr));
 	});
 
-
-	mVersion.setFont(Font::get(FONT_SIZE_SMALL));
-	mVersion.setColor(0x0044FFFF);
-	mVersion.setText("GUIWIFI");
-	mVersion.setHorizontalAlignment(ALIGN_CENTER);
-
-	addChild(&mMenu);
-	addChild(&mVersion);
-
 	setSize(mMenu.getSize());
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
 }
 
 void GuiWifiConnect::onSizeChanged()
 {
-	mVersion.setSize(mSize.x(), 0);
-	mVersion.setPosition(0, mSize.y() - mVersion.getSize().y());
+	
 }
 
 void GuiWifiConnect::addEntry(const char* name, unsigned int color, bool add_arrow, const std::function<void()>& func)
