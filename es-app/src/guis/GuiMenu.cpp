@@ -69,6 +69,53 @@ void GuiMenu::openNetworkSettings()
 	char wi[1035];
 	bool flagWifi;
 	
+	// WIFI IP SSID
+	FILE *iwList;
+	FILE *wIPP;
+	char iw[1035];
+	char wip[1035];
+
+
+	// STATUS
+	std::string wStat;
+	std::string wStatText;
+	wIPP = popen("hostname -I", "r");
+	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
+		wStat = wip;
+		int trim = wStat.find("\n");
+		wStat = wStat.substr(0, trim);
+		if(wStat == "" | wStat == " "){
+			wStatText = "NOT CONNECTED";
+		}else{
+			wStatText = "CONNECTED";
+		}
+	}
+	auto show_stat = std::make_shared<TextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("STATUS", show_stat);
+
+	// IP
+	std::string wIP;
+	wIPP = popen("hostname -I", "r");
+	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
+		wIP = wip;
+		int trim = wIP.find("\n");
+		wIP = wIP.substr(0, trim);
+	}
+	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("IP ADDRESS", show_ip);
+
+	// NETWORK NAME
+	std::string wSSID;
+	iwList = popen("iwgetid -r", "r");
+	while (fgets(iw, sizeof(iw), iwList) != NULL) {
+		wSSID = iw;
+		int trim = wSSID.find("\n");
+		wSSID = wSSID.substr(0, trim);
+	}
+	auto show_ssid = std::make_shared<TextComponent>(mWindow, "" + wSSID, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("SSID", show_ssid);
+	
+	// WIFI ON OFF
 	flagWifi = false;
 	wifiOnOff = popen("ifconfig wlan0 | grep 'flags='", "r");
 	
@@ -102,101 +149,8 @@ void GuiMenu::openNetworkSettings()
 	wificonnect_row.makeAcceptInputHandler(std::bind(&GuiMenu::openWifiConnect, this));
 	s->addRow(wificonnect_row);
 	
-	//WIFI INFO
-	ComponentListRow wifiinfo_row;
-	wifiinfo_row.elements.clear();
-	wifiinfo_row.addElement(std::make_shared<TextComponent>(mWindow, "CURRENT WIFI INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	wifiinfo_row.addElement(makeArrow(mWindow), false);
-	wifiinfo_row.makeAcceptInputHandler(std::bind(&GuiMenu::openWifiInfo, this));
-	s->addRow(wifiinfo_row);
-	
 	mWindow->pushGui(s);
 }
-
-void GuiMenu::openWifiInfo()
-{
-	auto s = new GuiSettings(mWindow, "CURRENT WIFI INFO");
-
-	FILE *iwList;
-	FILE *wIPP;
-	char iw[1035];
-	char wip[1035];
-
-	// Specific Linux commands. 
-	iwList = popen("iwlist wlan0 scanning | grep 'SSID\\|Frequency\\|Channel\\|IEEE\\|Quality'", "r");
-	wIPP = popen("hostname -I", "r");
-
-	// Variables
-	std::string wSSID;
-	std::string wChannel;
-	std::string wQuality;
-	std::string wIP;
-
-	// Read the pipe to get info and parse into variables
-	std::string currentLine;
-	std::size_t found;
-
-	while (fgets(iw, sizeof(iw), iwList) != NULL) {
-		currentLine = iw;
-
-		found = currentLine.find("ESSID");
-		if (found != std::string::npos) {
-			wSSID = currentLine;
-			wSSID = wSSID.substr(found + 6);		// Trim out front garbage
-			int trim = wSSID.find("\n");
-			wSSID = wSSID.substr(1, trim -2);		// Trim out \n and "s
-		}
-		
-		found = currentLine.find("Channel");
-		if (found != std::string::npos) {
-			wChannel = currentLine;
-			wChannel = wChannel.substr(found + 8) + " ";
-			int trim = wChannel.find("\n");
-			wChannel = wChannel.substr(0, trim - 1);	// trim out \n and ending )
-		}
-		
-		found = currentLine.find("Quality");
-		if (found != std::string::npos) {
-			wQuality = currentLine;
-			wQuality = wQuality.substr(found + 29, 2);
-			int trim = wQuality.find("\n");
-			wQuality = wQuality.substr(0, trim - 1);
-		}
-	}
-
-	// Open up Grepped wlan0 ip file
-	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
-		currentLine = wip;
-		wIP = currentLine;
-		int trim = wIP.find("\n");
-		wIP = wIP.substr(0, trim);
-	}
-	
-	// ESSID
-	auto show_ssid = std::make_shared<TextComponent>(mWindow, "" + wSSID, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("Network Name", show_ssid);
-	
-	// IP
-	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("IP", show_ip);
-	
-	//CHANNEL
-	auto show_channel = std::make_shared<TextComponent>(mWindow, "" + wChannel, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("Channel", show_channel);
-	
-	// QUALITY
-	std::string sigText = "[    ]";
-	int intQuality = std::atoi(wQuality.c_str());
-	if (intQuality >= 85){sigText = "[-   ]";}
-	else if (intQuality >= 75) {sigText = "[--  ]";}
-	else if (intQuality >= 65) {sigText = "[--- ]";}
-	else if (intQuality > 10) {sigText = "[----]";}
-	auto show_quality = std::make_shared<TextComponent>(mWindow, "" + sigText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("Signal Quality", show_quality);
-
-	mWindow->pushGui(s);
-}
-
 
 void GuiMenu::openWifiConnect()
 {
@@ -206,8 +160,8 @@ void GuiMenu::openWifiConnect()
 	std::shared_ptr<GuiComponent> password;
 
 	// bring down wireless to refresh
-	system("sudo ifconfig wlan0 down");
-	system("sudo ifconfig wlan0 up");
+	//system("sudo ifconfig wlan0 down");
+	//system("sudo ifconfig wlan0 up");
 
 	// dump iwlist into a memory file
 	FILE *fp;
@@ -283,6 +237,9 @@ void GuiMenu::openWifiConnect()
 	ComponentListRow row;
 
 
+	auto counter = std::make_shared<TextComponent>(mWindow, ssidIndex.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("Count", counter);
+
 	for (int i = 0; i < ssidIndex; i++){
 
 		// Signal strength color setter
@@ -305,7 +262,7 @@ void GuiMenu::openWifiConnect()
 		std::string pSSID = wSSID[i];
 		bool encrypt = bEncryption[i];
 		row.makeAcceptInputHandler( [this, pSSID, encrypt] {
-			//mWindow->pushGui(new GuiWifiConnect(mWindow, pSSID, encrypt));
+			mWindow->pushGui(new GuiWifiConnect(mWindow, pSSID, encrypt));
 		});
 
 		s->addRow(row);

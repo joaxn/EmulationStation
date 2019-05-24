@@ -27,7 +27,6 @@ private:
 	void openSoundSettings();
 	void openUISettings();
 	void openNetworkSettings();
-	void openWifiInfo();
 	void openWifiConnect();
 
 	MenuComponent mMenu;
