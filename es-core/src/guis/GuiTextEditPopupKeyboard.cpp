@@ -8,7 +8,8 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	addChild(&mBackground);
 	addChild(&mGrid);
 
-	mTitle = std::make_shared<TextComponent>(mWindow, strToUpper(title), Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
+	mTitle = std::make_shared<TextComponent>(mWindow, title, Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
+	mTitle->setUppercase(true);
 	mKeyboardGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(10, 5));
 
 	mText = std::make_shared<TextEditComponent>(mWindow);
@@ -211,7 +212,7 @@ void GuiTextEditPopupKeyboard::shiftKeys() {
 	if (mShift) {
 		// FOR SHIFTING UP
 		// Change Shift button color
-		bButtons[0]->setColorShift(0xEBFD00AA);
+		//bButtons[0]->setColorShift(0xEBFD00AA);
 		// Change Special chara
 		hButtons[9]->setText(":", ":");
 		bButtons[8]->setText("<", "<");
@@ -219,7 +220,7 @@ void GuiTextEditPopupKeyboard::shiftKeys() {
 	} else {
 		// UNSHIFTING
 		// Remove button color
-		bButtons[0]->removeColorShift();
+		//bButtons[0]->removeColorShift();
 		// Change Special chara
 		hButtons[9]->setText(";", ";");
 		bButtons[8]->setText(",", ",");
