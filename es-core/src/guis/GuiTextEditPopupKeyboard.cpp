@@ -64,8 +64,8 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, acceptBtnText, acceptBtnText, [this, okCallback] { okCallback(mText->getValue()); delete this; }));
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SPACE", "SPACE", [this] {mText->startEditing();mText->textInput(" ");mText->stopEditing();}));
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, _("DELETE"), _("DELETE A CHAR"), [this] {mText->startEditing();mText->textInput("\b");mText->stopEditing();}));
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "discard changes", [this] { delete this; }));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DELETE", "DELETE A CHAR", [this] {mText->startEditing();mText->textInput("\b");mText->stopEditing();}));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; }));
 
 	// Add a/c buttons
 	mKeyboardGrid->setEntry(buttons[0], Vector2i(4, 5), true, false);
