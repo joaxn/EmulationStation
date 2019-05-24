@@ -19,16 +19,10 @@ public:
 
 private:
 	void shiftKeys();
+	void specialKeys();
 
 	NinePatchComponent mBackground;
 	ComponentGrid mGrid;
-
-	// Vectors for button rows
-	std::vector< std::shared_ptr<ButtonComponent> > buttons;
-	std::vector< std::shared_ptr<ButtonComponent> > kButtons;
-	std::vector< std::shared_ptr<ButtonComponent> > hButtons;
-	std::vector< std::shared_ptr<ButtonComponent> > bButtons;
-	std::vector< std::shared_ptr<ButtonComponent> > digitButtons;
 
 	std::shared_ptr<TextComponent> mTitle;
 	std::shared_ptr<TextEditComponent> mText;
@@ -37,18 +31,27 @@ private:
 	std::shared_ptr<ComponentGrid> mNewGrid;
 
 	// Define keyboard key rows.
-	const char* numRow[10] = { "1","2","3","4","5","6","7","8","9","0" };
-	const char* numRowUp[10] = { "!", "@", "#", "$", "%", "^", "&", "*", "(", ")" };
-	const char* topRow[10] = { "q","w","e","r","t","y","u","i","o","p" };
-	const char* topRowUp[10] = { "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P" };		// Just so I don't have to deal with toupper
-	const char* homeRow[10] = { "a","s","d","f","g","h","j","k","l",";" };
-	const char* homeRowUp[10] = { "A", "S", "D", "F", "G", "H", "J", "K", "L", ":" };
-	const char* bottomRow[9] = { "z","x","c","v","b","n","m",",","." };						// Shift is handled in the constructor
-	const char* bottomRowUp[9] = { "Z", "X", "C", "V", "B", "N", "M", "<", ">" };
+	const char* charArray[5][12] = {
+		{ "@","€","~","|","","","","","","","",""},
+		{"1","2","3","4","5","6","7","8","9","0","ß","´"},
+		{ "q","w","e","r","t","z","u","i","o","p","ü","+"},
+		{ "a","s","d","f","g","h","j","k","l","ö","ä","#" },
+		{ "SHIFT","<","y","x","c","v","b","n","m",",",".","-" }
+	};
+	const char* charArrayUp[5][12] = {
+		{ "@","€","~","|","","","","","","","",""},
+		{"!","\"","§","$","%","&","/","(",")","=","?","`"},
+		{ "Q","W","E","R","T","Z","U","I","O","P","Ü","*"},
+		{ "A","S","D","F","G","H","J","K","L","Ö","Ä","\'" },
+		{ "SHIFT",">","Y","X","C","V","B","N","M",";",":","_" }
+	};
+	
 
 	int mxIndex = 0;		// Stores the X index and makes every grid the same.
 
 	bool mMultiLine;
 	bool mShift = false;
 	bool mShiftChange = false;
+	bool mSpecial = false;
+	bool mSpecialChange = false;
 };

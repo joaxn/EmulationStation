@@ -10,7 +10,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 
 	mTitle = std::make_shared<TextComponent>(mWindow, title, Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
 	mTitle->setUppercase(true);
-	mKeyboardGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(10, 5));
+	mKeyboardGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(12, 6));
 
 	mText = std::make_shared<TextEditComponent>(mWindow);
 	mText->setValue(initValue);
@@ -32,105 +32,46 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		// Locale for shifting upper/lower case
 		std::locale loc;
 
-		// Digit Row & Special Chara.
-		for (int k = 0; k < 10; k++) {
-			// Create string for button display name.
-			std::string strName = "";
-			strName += numRow[k];
-			strName += " ";
-			strName += numRowUp[k];
-
-			// Init button and store in Vector
-			digitButtons.push_back(std::make_shared<ButtonComponent>
-				(mWindow, strName, numRow[k], [this, okCallback, k, loc] {
-				okCallback(mText->getValue());
-				mText->startEditing();
-				if (mShift) mText->textInput(numRowUp[k]);
-				else mText->textInput(numRow[k]);
-				mText->stopEditing();
-			}));
-
-			// Send just created button into mGrid
-			mKeyboardGrid->setEntry(digitButtons[k], Vector2i(k, 0), true, false);
-		}
-
-		// Top row
-		for (int k = 0; k < 10; k++) {
-			kButtons.push_back(std::make_shared<ButtonComponent>
-				(mWindow, topRowUp[k], topRowUp[k], [this, okCallback, k, loc] {
-				okCallback(mText->getValue());
-				mText->startEditing();
-				if (mShift) mText->textInput(topRowUp[k]);
-				else mText->textInput(topRow[k]);
-				mText->stopEditing();
-			}));
-
-			// Send just created button into mGrid
-			mKeyboardGrid->setEntry(kButtons[k], Vector2i(k, 1), true, false);
-		}
-
-		// Home Row
-		for (int k = 0; k < 10; k++) {
-			hButtons.push_back(std::make_shared<ButtonComponent>
-				(mWindow, homeRowUp[k], homeRowUp[k], [this, okCallback, k] {
-				okCallback(mText->getValue());
-				mText->startEditing();
-				if (mShift) mText->textInput(homeRowUp[k]);
-				else mText->textInput(homeRow[k]);
-				mText->stopEditing();
-			}));
-
-			// Send just created button into mGrid
-			mKeyboardGrid->setEntry(hButtons[k], Vector2i(k, 2), true, false);
-		}
-
-		// Special case for shift key
-		bButtons.push_back(std::make_shared<ButtonComponent>(mWindow, "SHIFT", "SHIFTS FOR UPPER,LOWER, AND SPECIAL", [this, okCallback] {
-			okCallback(mText->getValue());
-			if (mShift) mShift = false;
-			else mShift = true;
-			shiftKeys();
-		}));
-
-		// Bottom row [Z - M]
-		for (int k = 0; k < 7; k++) {
-			bButtons.push_back(std::make_shared<ButtonComponent>
-				(mWindow, bottomRowUp[k], bottomRowUp[k], [this, okCallback, k, loc] {
-				okCallback(mText->getValue());
-				mText->startEditing();
-				if (mShift) mText->textInput(bottomRowUp[k]);
-				else mText->textInput(bottomRow[k]);
-				mText->stopEditing();
-			}));
-		}
-
-		// Add in the last two manualy because they're special chara [,< and .>]
-		for (int k = 7; k < 9; k++) {
-			bButtons.push_back(std::make_shared<ButtonComponent>(mWindow, bottomRow[7], bottomRow[7], [this, okCallback, k] {
-				okCallback(mText->getValue());
-				mText->startEditing();
-				if (mShift) mText->textInput(bottomRowUp[k]);
-				else mText->textInput(bottomRow[k]);
-				mText->stopEditing();
-			}));
-		}
-
-		// Do a sererate for loop because shift key makes it weird
-		for (int k = 0; k < 10; k++) {
-			mKeyboardGrid->setEntry(bButtons[k], Vector2i(k, 3), true, false);
+		// Digit Row
+		for (int y = 0; y < 5; y++) {
+			std::vector< std::shared_ptr<ButtonComponent> > buttons;
+			for (int x = 0; x < 12; x++) {
+				if (y == 4 && x == 0){
+					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SHIFT", "SHIFTS FOR UPPER,LOWER, AND SPECIAL", [this] {
+						if (mShift) mShift = false;
+						else mShift = true;
+						shiftKeys();
+					}));
+	        	}
+	        	else {
+					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, charArray[y][x], charArray[y][x], [this, okCallback, x, y, loc] {
+						okCallback(mText->getValue());
+						mText->startEditing();
+						if (mShift) mText->textInput(charArrayUp[y][x]);
+						else mText->textInput(charArray[y][x]);
+						mText->stopEditing();
+					}));	
+				}
+				// Send just created button into mGrid
+				mKeyboardGrid->setEntry(buttons[x], Vector2i(x, y), true, true);
+			}
 		}
 
 		// END KEYBOARD IF
 	}
 
-
 	// Accept/Cancel buttons
+	std::vector< std::shared_ptr<ButtonComponent> > buttons;
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, acceptBtnText, acceptBtnText, [this, okCallback] { okCallback(mText->getValue()); delete this; }));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SPACE", "SPACE", [this] {mText->startEditing();mText->textInput(" ");mText->stopEditing();}));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, _("DELETE"), _("DELETE A CHAR"), [this] {mText->startEditing();mText->textInput("\b");mText->stopEditing();}));
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "discard changes", [this] { delete this; }));
 
 	// Add a/c buttons
-	mKeyboardGrid->setEntry(buttons[0], Vector2i(3, 4), true, false);
-	mKeyboardGrid->setEntry(buttons[1], Vector2i(6, 4), true, false);
+	mKeyboardGrid->setEntry(buttons[0], Vector2i(4, 5), true, false);
+	mKeyboardGrid->setEntry(buttons[1], Vector2i(5, 5), true, false);
+	mKeyboardGrid->setEntry(buttons[2], Vector2i(6, 5), true, false);
+	mKeyboardGrid->setEntry(buttons[3], Vector2i(7, 5), true, false);
 
 	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, true, Vector2i(2, 5));
 

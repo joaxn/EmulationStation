@@ -237,11 +237,6 @@ void GuiMenu::openWifiConnect()
 
 	ComponentListRow row;
 
-	std::stringstream ssidText;
-	ssidText << ssidIndex;
-	auto counter = std::make_shared<TextComponent>(mWindow, "" + ssidText.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("Count", counter);
-
 	for (int i = 0; i < ssidIndex; i++){
 
 		// Signal strength color setter
