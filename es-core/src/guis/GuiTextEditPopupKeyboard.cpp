@@ -10,7 +10,8 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 
 	mTitle = std::make_shared<TextComponent>(mWindow, title, Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
 	mTitle->setUppercase(true);
-	mKeyboardGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(12, 6));
+	mKeyboardGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(12, 5));
+	mMenuGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(4, 1));
 
 	mText = std::make_shared<TextEditComponent>(mWindow);
 	mText->setValue(initValue);
@@ -44,7 +45,8 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 					}));
 	        	}
 	        	else {
-					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, charArray[y][x], charArray[y][x], [this, okCallback, x, y, loc] {
+					std::string strName = charArray[y][x] + " " + charArrayUp[y][x];
+					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, strName, charArray[y][x], [this, okCallback, x, y, loc] {
 						okCallback(mText->getValue());
 						mText->startEditing();
 						if (mShift) mText->textInput(charArrayUp[y][x]);
@@ -56,9 +58,13 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 				mKeyboardGrid->setEntry(buttons[x], Vector2i(x, y), true, true);
 			}
 		}
-
+		
+		
 		// END KEYBOARD IF
 	}
+	
+	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
+	
 
 	// Accept/Cancel buttons
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
@@ -68,12 +74,14 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; }));
 
 	// Add a/c buttons
-	mKeyboardGrid->setEntry(buttons[0], Vector2i(4, 5), true, false);
-	mKeyboardGrid->setEntry(buttons[1], Vector2i(5, 5), true, false);
-	mKeyboardGrid->setEntry(buttons[2], Vector2i(6, 5), true, false);
-	mKeyboardGrid->setEntry(buttons[3], Vector2i(7, 5), true, false);
+	mMenuGrid->setEntry(buttons[0], Vector2i(4, 5), true, false);
+	mMenuGrid->setEntry(buttons[1], Vector2i(5, 5), true, false);
+	mMenuGrid->setEntry(buttons[2], Vector2i(6, 5), true, false);
+	mMenuGrid->setEntry(buttons[3], Vector2i(7, 5), true, false);
+	
+	mGrid.setEntry(mMenuGrid, Vector2i(0, 3), true, false);
 
-	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, true, Vector2i(2, 5));
+	
 
 	// Determine size from text size
 	float textHeight = mText->getFont()->getHeight();
