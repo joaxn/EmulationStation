@@ -11,7 +11,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mTitle = std::make_shared<TextComponent>(mWindow, title, Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
 	mTitle->setUppercase(true);
 	mKeyboardGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(12, 5));
-	mMenuGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(4, 1));
+	mButtonGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(4, 1));
 
 	mText = std::make_shared<TextEditComponent>(mWindow);
 	mText->setValue(initValue);
@@ -74,12 +74,12 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; }));
 
 	// Add a/c buttons
-	mMenuGrid->setEntry(buttons[0], Vector2i(4, 5), true, false);
-	mMenuGrid->setEntry(buttons[1], Vector2i(5, 5), true, false);
-	mMenuGrid->setEntry(buttons[2], Vector2i(6, 5), true, false);
-	mMenuGrid->setEntry(buttons[3], Vector2i(7, 5), true, false);
+	mButtonGrid->setEntry(buttons[0], Vector2i(4, 5), true, false);
+	mButtonGrid->setEntry(buttons[1], Vector2i(5, 5), true, false);
+	mButtonGrid->setEntry(buttons[2], Vector2i(6, 5), true, false);
+	mButtonGrid->setEntry(buttons[3], Vector2i(7, 5), true, false);
 	
-	mGrid.setEntry(mMenuGrid, Vector2i(0, 3), true, false);
+	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
 
 	
 
