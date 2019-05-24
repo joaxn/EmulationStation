@@ -155,17 +155,11 @@ void GuiTextEditPopupKeyboard::shiftKeys() {
 		// Change Shift button color
 		//bButtons[0]->setColorShift(0xEBFD00AA);
 		// Change Special chara
-		hButtons[9]->setText(":", ":");
-		bButtons[8]->setText("<", "<");
-		bButtons[9]->setText(">", ">");
 	} else {
 		// UNSHIFTING
 		// Remove button color
 		//bButtons[0]->removeColorShift();
 		// Change Special chara
-		hButtons[9]->setText(";", ";");
-		bButtons[8]->setText(",", ",");
-		bButtons[9]->setText(".", ".");
 	}
 
 }

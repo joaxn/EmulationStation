@@ -241,12 +241,12 @@ void GuiMenu::openWifiConnect()
 
 		// Signal strength color setter
 		std::string qual = wQuality[i];
-		std::string sigText = "[    ]";
+		std::string sigText = "| ";
 		int intQuality = std::atoi(qual.c_str());
-		if (intQuality >= 85){sigText = "[-   ]";}
-		else if (intQuality >= 75) {sigText = "[--  ]";}
-		else if (intQuality >= 65) {sigText = "[--- ]";}
-		else if (intQuality > 10) {sigText = "[----]";}
+		if (intQuality >= 85){sigText = "| ";}
+		else if (intQuality >= 75) {sigText = "|| ";}
+		else if (intQuality >= 65) {sigText = "||| ";}
+		else if (intQuality > 10) {sigText = "|||| ";}
 
 		// Create signal graph, and align it to the right.
 		auto signal_comp = std::make_shared<TextComponent>(mWindow, "" + sigText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
