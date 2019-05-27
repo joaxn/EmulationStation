@@ -70,7 +70,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		
 		buttonWidth = buttonList.at(0).at(0)->getSize().x();
 		buttonHeight = buttonList.at(0).at(0)->getSize().y();
-		gridHeight = (buttonHeight + 2) * 5 + 2;
+		gridHeight = (buttonHeight + 20) * 5 + 2;
 		gridWidth = (buttonWidth + 2) * 12 + 2;
 		mKeyboardGrid->setSize(gridWidth, gridHeight);
 		mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
