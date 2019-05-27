@@ -70,7 +70,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		// END KEYBOARD IF
 	}
 	
-	const float buttonHeight = buttons.at(0)->getSize().y();
+	const float buttonHeight = mText->getFont()->getHeight();
 	const float gridHeight = (buttonHeight) * 5;
 	mKeyboardGrid->setSize(gridWidth, gridHeight);
 	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
@@ -89,7 +89,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mButtonGrid->setEntry(buttons[2], Vector2i(2, 0), true, false);
 	mButtonGrid->setEntry(buttons[3], Vector2i(3, 0), true, false);
 	
-	const float buttonHeight = buttons.at(0)->getSize().y();
+	const float buttonHeight = mText->getFont()->getHeight();
 	const float gridHeight = (buttonHeight) * 5;
 	mButtonGrid->setSize(gridWidth, gridHeight);
 	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
@@ -100,7 +100,6 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	float textHeight = mText->getFont()->getHeight();
 	if (multiLine)
 		textHeight *= 6;
-	mText->setSize(gridWidth - 40, textHeight);
 
 	// If multiline, set all diminsions back to default, else draw size for keyboard.
 	if (mMultiLine) {
