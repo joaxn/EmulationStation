@@ -19,7 +19,7 @@ public:
 	bool input(InputConfig* config, Input input) override;
 	void render(const Transform4x4f& parentTrans) override;
 
-	void setText(const std::string& text, const std::string& helpText);
+	void setText(const std::string& text, const std::string& helpText, bool upperCase = true);
 
 	inline const std::string& getText() const { return mText; };
 	inline const std::function<void()>& getPressedFunc() const { return mPressedFunc; };
