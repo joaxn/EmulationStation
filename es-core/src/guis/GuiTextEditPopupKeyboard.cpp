@@ -37,6 +37,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	if (!mMultiLine) {
 
 		std::locale loc;
+		std::setlocale(LC_ALL, "German");
 		// Digit Row
 		for (int y = 0; y < 5; y++) {
 			std::vector< std::shared_ptr<ButtonComponent> > buttons;
@@ -70,7 +71,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		
 		buttonWidth = buttonList.at(0).at(0)->getSize().x();
 		buttonHeight = buttonList.at(0).at(0)->getSize().y();
-		gridHeight = (buttonHeight + 20) * 5 + 2;
+		gridHeight = (buttonHeight + 2) * 5 + 2;
 		gridWidth = (buttonWidth + 2) * 12 + 2;
 		mKeyboardGrid->setSize(gridWidth, gridHeight);
 		mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
@@ -105,6 +106,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	float textHeight = mText->getFont()->getHeight();
 	if (multiLine)
 		textHeight *= 6;
+	mText->setSize(0, textHeight);
 
 	// If multiline, set all diminsions back to default, else draw size for keyboard.
 	if (mMultiLine) {
