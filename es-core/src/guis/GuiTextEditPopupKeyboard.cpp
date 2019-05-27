@@ -8,6 +8,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	addChild(&mBackground);
 	addChild(&mGrid);
 
+	const float gridWidth = Renderer::getScreenWidth() * 0.96f;
+	float horizPadding = (float) 20;
+    float gridWidth, buttonWidth;
+
 	mTitle = std::make_shared<TextComponent>(mWindow, title, Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
 	mTitle->setUppercase(true);
 	mKeyboardGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(12, 5));
@@ -66,7 +70,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		// END KEYBOARD IF
 	}
 	
-	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, true, Vector2i(2, 5));
+	const float buttonHeight = buttons.at(0)->getSize().y();
+	const float gridHeight = (buttonHeight) * 5;
+	mKeyboardGrid->setSize(gridWidth, gridHeight);
+	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
 	
 
 	// Accept/Cancel buttons
@@ -82,7 +89,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mButtonGrid->setEntry(buttons[2], Vector2i(2, 0), true, false);
 	mButtonGrid->setEntry(buttons[3], Vector2i(3, 0), true, false);
 	
-	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, true);
+	const float buttonHeight = buttons.at(0)->getSize().y();
+	const float gridHeight = (buttonHeight) * 5;
+	mButtonGrid->setSize(gridWidth, gridHeight);
+	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
 
 	
 
@@ -90,7 +100,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	float textHeight = mText->getFont()->getHeight();
 	if (multiLine)
 		textHeight *= 6;
-	mText->setSize(0, textHeight);
+	mText->setSize(gridWidth - 40, textHeight);
 
 	// If multiline, set all diminsions back to default, else draw size for keyboard.
 	if (mMultiLine) {
@@ -99,7 +109,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	}
 	else {
 		// Set size based on ScreenHieght * .08f by the amount of keyboard rows there are.
-		setSize(Renderer::getScreenWidth() * 0.75f, mTitle->getFont()->getHeight() + textHeight + 40 + (Renderer::getScreenHeight() * 0.085f) * 5);
+		setSize(gridWidth, mTitle->getFont()->getHeight() + textHeight + 40 + mKeyboardGrid->getSize().y() + mButtonGrid->getSize().y());
 		setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, (Renderer::getScreenHeight() - mSize.y()) / 2);
 	}
 }
