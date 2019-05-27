@@ -40,7 +40,7 @@ bool ButtonComponent::input(InputConfig* config, Input input)
 
 void ButtonComponent::setText(const std::string& text, const std::string& helpText, bool upperCase)
 {
-	mText = upperCase ? strToUpper(text) : text;
+	mText = upperCase ? Utils::String::toUpper(text) : text;
 	mHelpText = helpText;
 	
 	mTextCache = std::unique_ptr<TextCache>(mFont->buildTextCache(mText, 0, 0, getCurTextColor()));
