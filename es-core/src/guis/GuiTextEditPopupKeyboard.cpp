@@ -30,13 +30,13 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1), GridFlags::BORDER_TOP | GridFlags::BORDER_BOTTOM);
 
 
+	std::vector< std::vector< std::shared_ptr<ButtonComponent> > > buttonList;
+
 	// Keyboard
 	// Case for if multiline is enabled, then don't create the keyboard.
 	if (!mMultiLine) {
 
 		std::locale loc;
-		std::vector< std::shared_ptr<ButtonComponent> > buttons;
-
 		// Digit Row
 		for (int y = 0; y < 5; y++) {
 			std::vector< std::shared_ptr<ButtonComponent> > buttons;
@@ -62,13 +62,14 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 						mText->stopEditing();
 					}));	
 				}
+				buttonList.push_back(buttons);
 				// Send just created button into mGrid
 				mKeyboardGrid->setEntry(buttons[x], Vector2i(x, y), true, false);
 			}
 		}
 		
-		buttonWidth = buttons.at(0)->getSize().x();
-		buttonHeight = mText->getFont()->getHeight();
+		buttonWidth = buttonList.at(0).at(0)->getSize().x();
+		buttonHeight = buttonList.at(0).at(0)->getSize().y();
 		gridHeight = (buttonHeight + 2) * 5 + 2;
 		gridWidth = (buttonWidth + 2) * 12 + 2;
 		mKeyboardGrid->setSize(gridWidth, gridHeight);
@@ -91,7 +92,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mButtonGrid->setEntry(buttons[2], Vector2i(2, 0), true, false);
 	mButtonGrid->setEntry(buttons[3], Vector2i(3, 0), true, false);
 	
-	gridHeight = buttonHeight + 4;
+	buttonWidth = buttons.at(0)->getSize().x();
+	buttonHeight = buttons.at(0)->getSize().y();
+	gridHeight = (buttonHeight + 4;
+	gridWidth = (buttonWidth + 2) * 4 + 2;
 	mButtonGrid->setSize(gridWidth, gridHeight);
 	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
 
