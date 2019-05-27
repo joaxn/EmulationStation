@@ -60,7 +60,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 						if (mShift) mText->textInput(charArrayUp[y][x]);
 						else mText->textInput(charArray[y][x]);
 						mText->stopEditing();
-					}));	
+					},false));	
 				}
 				buttonList.push_back(buttons);
 				// Send just created button into mGrid
@@ -113,7 +113,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	}
 	else {
 		// Set size based on ScreenHieght * .08f by the amount of keyboard rows there are.
-		setSize(gridWidth, mTitle->getFont()->getHeight() + textHeight + 40 + mKeyboardGrid->getSize().y() + mButtonGrid->getSize().y());
+		setSize(mKeyboardGrid->getSize().x()+40, mTitle->getFont()->getHeight() + textHeight + 40 + mKeyboardGrid->getSize().y() + mButtonGrid->getSize().y());
 		setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, (Renderer::getScreenHeight() - mSize.y()) / 2);
 	}
 }
