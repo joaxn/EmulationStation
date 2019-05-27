@@ -39,8 +39,11 @@ private:
 
 	bool mFocused;
 	bool mEnabled;
+	bool mNewColor = false;
+	
 	unsigned int mTextColorFocused;
 	unsigned int mTextColorUnfocused;
+	unsigned int mModdedColor;
 	
 	unsigned int getCurTextColor() const;
 	void updateImage();
