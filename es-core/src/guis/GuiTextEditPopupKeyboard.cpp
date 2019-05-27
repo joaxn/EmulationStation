@@ -34,8 +34,8 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	// Case for if multiline is enabled, then don't create the keyboard.
 	if (!mMultiLine) {
 
-		// Locale for shifting upper/lower case
 		std::locale loc;
+		std::vector< std::shared_ptr<ButtonComponent> > buttons;
 
 		// Digit Row
 		for (int y = 0; y < 5; y++) {
@@ -67,16 +67,15 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 			}
 		}
 		
-		
-		// END KEYBOARD IF
+		buttonWidth = buttons.at(0)->getSize().x();
+		buttonHeight = mText->getFont()->getHeight();
+		gridHeight = (buttonHeight + 2) * 5 + 2;
+		gridWidth = (buttonWidth + 2) * 12 + 2;
+		mKeyboardGrid->setSize(gridWidth, gridHeight);
+		mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
 	}
 	
-	buttonWidth = buttons.at(0)->getSize().x();
-	buttonHeight = mText->getFont()->getHeight();
-	gridHeight = (buttonHeight + 2) * 5 + 2;
-	gridWidth = (buttonWidth + 2) * 12 + 2;
-	mKeyboardGrid->setSize(gridWidth, gridHeight);
-	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
+	
 	
 
 	// Accept/Cancel buttons
