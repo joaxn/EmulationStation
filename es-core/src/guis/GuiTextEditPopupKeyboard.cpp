@@ -58,7 +58,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 					}));	
 				}
 				// Send just created button into mGrid
-				mKeyboardGrid->setEntry(buttons[x], Vector2i(x, y), true, true);
+				mKeyboardGrid->setEntry(buttons[x], Vector2i(x, y), true, false);
 			}
 		}
 		
@@ -66,7 +66,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		// END KEYBOARD IF
 	}
 	
-	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
+	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, true, Vector2i(2, 5));
 	
 
 	// Accept/Cancel buttons
@@ -82,7 +82,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mButtonGrid->setEntry(buttons[2], Vector2i(2, 0), true, false);
 	mButtonGrid->setEntry(buttons[3], Vector2i(3, 0), true, false);
 	
-	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
+	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, true);
 
 	
 
