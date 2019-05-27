@@ -1,5 +1,6 @@
 #include "guis/GuiTextEditPopupKeyboard.h"
 #include "components/MenuComponent.h"
+#include "utils/StringUtil.h"
 #include "Log.h"
 #include <locale>
 
@@ -8,9 +9,8 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	addChild(&mBackground);
 	addChild(&mGrid);
  
-	float gridHeight, buttonHeight;
+	float gridHeight, buttonHeight, buttonWidth, gridWidth;
 	float horizPadding = (float) 20;
-    float gridWidth = Renderer::getScreenWidth() * 0.96f;
 
 	mTitle = std::make_shared<TextComponent>(mWindow, title, Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
 	mTitle->setUppercase(true);
@@ -49,10 +49,11 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 					}));
 	        	}
 	        	else {
-					std::string strName = "";
-					strName += charArray[y][x];
-					strName += " ";
-					strName += charArrayUp[y][x];
+					std::string strName = charArray[y][x];
+					if(Utils::String::toUpper(strName) != charArrayUp[y][x]){
+						strName += " ";
+						strName += charArrayUp[y][x];
+					}
 					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, strName, charArray[y][x], [this, okCallback, x, y, loc] {
 						okCallback(mText->getValue());
 						mText->startEditing();
@@ -70,8 +71,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		// END KEYBOARD IF
 	}
 	
+	buttonWidth = buttons.at(0)->getSize().x();
 	buttonHeight = mText->getFont()->getHeight();
-	gridHeight = (buttonHeight) * 5;
+	gridHeight = (buttonHeight + 2) * 5 + 2;
+	gridWidth = (buttonWidth + 2) * 12 + 2;
 	mKeyboardGrid->setSize(gridWidth, gridHeight);
 	mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
 	
@@ -89,8 +92,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mButtonGrid->setEntry(buttons[2], Vector2i(2, 0), true, false);
 	mButtonGrid->setEntry(buttons[3], Vector2i(3, 0), true, false);
 	
-	buttonHeight = mText->getFont()->getHeight();
-	gridHeight = (buttonHeight) * 5;
+	gridHeight = buttonHeight + 4;
 	mButtonGrid->setSize(gridWidth, gridHeight);
 	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
 

@@ -10,7 +10,7 @@ class TextCache;
 class ButtonComponent : public GuiComponent
 {
 public:
-	ButtonComponent(Window* window, const std::string& text = "", const std::string& helpText = "", const std::function<void()>& func = nullptr);
+	ButtonComponent(Window* window, const std::string& text = "", const std::string& helpText = "", const std::function<void()>& func = nullptr, bool upperCase = true);
 
 	void setPressedFunc(std::function<void()> f);
 
@@ -27,6 +27,9 @@ public:
 	void onSizeChanged() override;
 	void onFocusGained() override;
 	void onFocusLost() override;
+	
+	void setColorShift(unsigned int color) { mModdedColor = color; mNewColor = true; updateImage(); }
+	void removeColorShift() { mNewColor = false; updateImage(); }
 
 	virtual std::vector<HelpPrompt> getHelpPrompts() override;
 
