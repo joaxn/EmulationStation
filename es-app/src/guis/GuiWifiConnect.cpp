@@ -30,7 +30,7 @@ GuiWifiConnect::GuiWifiConnect(Window* window, std::string wifiName, bool encryp
 
 	// --------------
 
-	std::string windowName = "Connect to > " + wifiName;
+	std::string windowName = wifiName;
 	mMenu.setTitle(windowName.c_str(), Font::get(FONT_SIZE_LARGE));
 
 	auto ed = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_SMALL, FONT_PATH_LIGHT), 0x777777FF, ALIGN_RIGHT);

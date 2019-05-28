@@ -37,7 +37,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	if (!mMultiLine) {
 
 		std::locale loc;
-		std::setlocale(LC_ALL, "German");
+		std::setlocale(LC_ALL,"de_DE.UTF-8");
 		// Digit Row
 		for (int y = 0; y < 5; y++) {
 			std::vector< std::shared_ptr<ButtonComponent> > buttons;
@@ -51,7 +51,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	        	}
 	        	else {
 					std::string strName = charArray[y][x];
-					if(Utils::String::toUpper(strName) != charArrayUp[y][x]){
+					if(!std::isalpha(static_cast<unsigned char>(strName))){
 						strName += " ";
 						strName += charArrayUp[y][x];
 					}
@@ -127,9 +127,13 @@ void GuiTextEditPopupKeyboard::onSizeChanged()
 
 	mText->setSize(mSize.x() - 40, mText->getSize().y());
 
+	float fullHeight = mTitle->getFont()->getHeight() + mText->getSize().y() + mKeyboardGrid->getSize().y() + mButtonGrid->getSize().y();
+
 	// update grid
-	mGrid.setRowHeightPerc(0, mTitle->getFont()->getHeight() / mSize.y());
-	mGrid.setRowHeightPerc(2, mKeyboardGrid->getSize().y() / mSize.y());
+	mGrid.setRowHeightPerc(0, mTitle->getFont()->getHeight() / fullHeight);
+	mGrid.setRowHeightPerc(1, mText->getSize().y() / fullHeight);
+	mGrid.setRowHeightPerc(2, mKeyboardGrid->getSize().y() / fullHeight);
+	mGrid.setRowHeightPerc(3, mButtonGrid->getSize().y() / fullHeight);
 
 	mGrid.setSize(mSize);
 }
