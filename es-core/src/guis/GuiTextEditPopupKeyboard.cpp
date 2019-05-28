@@ -51,7 +51,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	        	}
 	        	else {
 					std::string strName = charArray[y][x];
-					if(!std::isalpha(static_cast<unsigned char>(strName))){
+					if(!std::isalpha(charArray[y][x])){
 						strName += " ";
 						strName += charArrayUp[y][x];
 					}
