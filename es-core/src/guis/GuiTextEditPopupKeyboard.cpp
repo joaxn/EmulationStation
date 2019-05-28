@@ -75,14 +75,14 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 						mText->stopEditing();
 					},false));	
 				}
-				buttonList.push_back(buttons[x]);
 				// Send just created button into mGrid
-				mKeyboardGrid->setEntry(buttonList[x+y], Vector2i(x, y), true, false);
+				mKeyboardGrid->setEntry(buttons[x], Vector2i(x, y), true, false);
 			}
+			buttonList.push_back(buttons);
 		}
 		
-		buttonWidth = buttonList.at(0)->getSize().x();
-		buttonHeight = buttonList.at(0)->getSize().y();
+		buttonWidth = buttonList.at(0).at(0)->getSize().x();
+		buttonHeight = buttonList.at(0).at(0)->getSize().y();
 		gridHeight = (buttonHeight + 2) * sizeof(charArray) + 2;
 		gridWidth = (buttonWidth + 2) * sizeof(charArray[0]) + 2;
 		mKeyboardGrid->setSize(gridWidth, gridHeight);
