@@ -38,6 +38,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 
 		std::setlocale(LC_ALL,"de_DE.UTF-8");
 		std::locale loc;
+		loc = std::locale("de_DE.UTF-8");
 		
 		// Digit Row
 		for (int y = 0; y < 5; y++) {
