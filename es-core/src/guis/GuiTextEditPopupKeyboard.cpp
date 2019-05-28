@@ -27,7 +27,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mGrid.setEntry(mTitle, Vector2i(0, 0), false, true);
 
 	// Text edit add
-	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1), GridFlags::BORDER_TOP | GridFlags::BORDER_BOTTOM);
+	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1));
 
 
 	std::vector< std::vector< std::shared_ptr<ButtonComponent> > > buttonList;
@@ -53,7 +53,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	        	}
 	        	else {
 					std::string strName = charArray[y][x];
-					if(Utils::String::toUpper(charArray[y][x]) != charArrayUp[y][x]){
+					if(!std::isalpha(charArray[y][x],loc)){
 						strName += " ";
 						strName += charArrayUp[y][x];
 					}
@@ -95,8 +95,8 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mButtonGrid->setEntry(buttons[2], Vector2i(2, 0), true, false);
 	mButtonGrid->setEntry(buttons[3], Vector2i(3, 0), true, false);
 	
-	buttonWidth = buttons.at(0)->getSize().x();
-	buttonHeight = buttons.at(0)->getSize().y();
+	buttonWidth = buttons.at(2)->getSize().x();
+	buttonHeight = buttons.at(2)->getSize().y();
 	gridHeight = buttonHeight + 4;
 	gridWidth = (buttonWidth + 2) * 4 + 2;
 	mButtonGrid->setSize(gridWidth, gridHeight);
@@ -184,7 +184,7 @@ void GuiTextEditPopupKeyboard::update(int deltatime) {
 // Shifts the keys when user hits the shift button.
 void GuiTextEditPopupKeyboard::shiftKeys() {
 	if (mShift)
-		mShiftButton->setColorShift(0x898989FF);
+		mShiftButton->setColorShift(0xB2B2B2FF);
 	else
 		mShiftButton->removeColorShift();
 
