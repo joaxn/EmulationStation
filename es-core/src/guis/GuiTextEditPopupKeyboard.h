@@ -48,6 +48,8 @@ private:
 		{ "",">","Y","X","C","V","B","N","M",";",":","_" }
 	};
 	
+	
+	std::string charList = "abcdefghijklmnopqrstuvwxyzüöä";
 
 	int mxIndex = 0;		// Stores the X index and makes every grid the same.
 
