@@ -36,8 +36,8 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	if (isFullUI)
 		addEntry("NETWORK SETTINGS", 0x777777FF, true, [this] { openNetworkSettings(); });
 
-	if (isFullUI)
-		addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
+	//if (isFullUI)
+	//	addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
 
 	if (isFullUI)
 		addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
@@ -45,8 +45,8 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	//if (isFullUI)
 	//	addEntry("GAME COLLECTION SETTINGS", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
 
-	if (isFullUI)
-		addEntry("OTHER SETTINGS", 0x777777FF, true, [this] { openOtherSettings(); });
+	//if (isFullUI)
+	//	addEntry("OTHER SETTINGS", 0x777777FF, true, [this] { openOtherSettings(); });
 
 	if (isFullUI)
 		addEntry("CONFIGURE INPUT", 0x777777FF, true, [this] { openConfigInput(); });

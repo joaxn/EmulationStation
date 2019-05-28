@@ -27,7 +27,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mGrid.setEntry(mTitle, Vector2i(0, 0), false, true);
 
 	// Text edit add
-	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1));
+	mGrid.setEntry(mText, Vector2i(0, 1), false, false, Vector2i(1, 1));
 
 
 	std::vector< std::vector< std::shared_ptr<ButtonComponent> > > buttonList;
@@ -98,8 +98,8 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	
 	buttonWidth = buttons.at(2)->getSize().x();
 	buttonHeight = buttons.at(2)->getSize().y();
-	gridHeight = buttonHeight + 4;
-	gridWidth = (buttonWidth + 2) * 4 + 2;
+	gridHeight = buttonHeight + 20;
+	gridWidth = (buttonWidth + 2) * 4 + 20;
 	mButtonGrid->setSize(gridWidth, gridHeight);
 	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
 
