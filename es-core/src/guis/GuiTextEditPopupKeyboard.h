@@ -20,6 +20,7 @@ public:
 private:
 	void shiftKeys();
 	void specialKeys();
+	void updateKeys();
 
 	NinePatchComponent mBackground;
 	ComponentGrid mGrid;
@@ -31,6 +32,7 @@ private:
 	std::shared_ptr<ComponentGrid> mNewGrid;
 	
 	std::shared_ptr<ButtonComponent> mShiftButton;
+	std::shared_ptr<ButtonComponent> mSpecialButton;
 
 	// Define keyboard key rows.
 	const char* charArray[5][12] = {
@@ -42,6 +44,13 @@ private:
 	};
 	const char* charArrayUp[5][12] = {
 		{ "@","€","~","|","","","","","","","",""},
+		{"!","\"","§","$","%","&","/","(",")","=","?","`"},
+		{ "Q","W","E","R","T","Z","U","I","O","P","Ü","*"},
+		{ "A","S","D","F","G","H","J","K","L","Ö","Ä","\'" },
+		{ "",">","Y","X","C","V","B","N","M",";",":","_" }
+	};
+	const char* charArraySpecial[5][12] = {
+		{ "!","\"","§","$","%","&","/","(",")","=","?","`"},
 		{"!","\"","§","$","%","&","/","(",")","=","?","`"},
 		{ "Q","W","E","R","T","Z","U","I","O","P","Ü","*"},
 		{ "A","S","D","F","G","H","J","K","L","Ö","Ä","\'" },

@@ -39,9 +39,9 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		std::locale loc;
 		
 		// Digit Row
-		for (int y = 0; y < 5; y++) {
+		for (int y = 0; y < charArray.size(); y++) {
 			std::vector< std::shared_ptr<ButtonComponent> > buttons;
-			for (int x = 0; x < 12; x++) {
+			for (int x = 0; x < charArray[0].size(); x++) {
 				if (y == 4 && x == 0){
 					mShiftButton = std::make_shared<ButtonComponent>(mWindow, "SHIFT", "SHIFTS FOR UPPER,LOWER, AND SPECIAL", [this] {
 						if (mShift) mShift = false;
@@ -49,6 +49,14 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 						shiftKeys();
 					});
 					buttons.push_back(mShiftButton);
+	        	}
+				if (y == 4 && x == 1){
+					mSpecialButton = std::make_shared<ButtonComponent>(mWindow, "#+=", "SPECIAL CHARACTERS", [this] {
+						if (mSpecial) mSpecial = false;
+						else mSpecial = true;
+						shiftKeys();
+					});
+					buttons.push_back(mSpecialButton);
 	        	}
 	        	else {
 					std::string strName = charArray[y][x];
@@ -61,21 +69,22 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, strName, charArray[y][x], [this, okCallback, x, y, loc] {
 						okCallback(mText->getValue());
 						mText->startEditing();
-						if (mShift) mText->textInput(charArrayUp[y][x]);
+						if (mSpecial) mText->textInput(charArraySpecial[y][x]);
+						else if(mShift) mText->textInput(charArrayUp[y][x]);
 						else mText->textInput(charArray[y][x]);
 						mText->stopEditing();
 					},false));	
 				}
-				buttonList.push_back(buttons);
+				buttonList.push_back(buttons[x]);
 				// Send just created button into mGrid
-				mKeyboardGrid->setEntry(buttons[x], Vector2i(x, y), true, false);
+				mKeyboardGrid->setEntry(buttonList[x+y], Vector2i(x, y), true, false);
 			}
 		}
 		
-		buttonWidth = buttonList.at(0).at(0)->getSize().x();
-		buttonHeight = buttonList.at(0).at(0)->getSize().y();
-		gridHeight = (buttonHeight + 2) * 5 + 2;
-		gridWidth = (buttonWidth + 2) * 12 + 2;
+		buttonWidth = buttonList.at(0)->getSize().x();
+		buttonHeight = buttonList.at(0)->getSize().y();
+		gridHeight = (buttonHeight + 2) * charArray.size() + 2;
+		gridWidth = (buttonWidth + 2) * charArray[0].size() + 2;
 		mKeyboardGrid->setSize(gridWidth, gridHeight);
 		mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
 	}
@@ -99,7 +108,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	buttonWidth = buttons.at(2)->getSize().x();
 	buttonHeight = buttons.at(2)->getSize().y();
 	gridHeight = buttonHeight + 20;
-	gridWidth = (buttonWidth + 2) * 4 + 20;
+	gridWidth = (buttonWidth + 2) * buttons.size() + 20;
 	mButtonGrid->setSize(gridWidth, gridHeight);
 	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
 
@@ -185,10 +194,33 @@ void GuiTextEditPopupKeyboard::update(int deltatime) {
 // Shifts the keys when user hits the shift button.
 void GuiTextEditPopupKeyboard::shiftKeys() {
 	if (mShift)
-		mShiftButton->setColorShift(0xB2B2B2FF);
+		mShiftButton->setColorShift(0x212121FF);	
 	else
 		mShiftButton->removeColorShift();
+	updateKeys();
+}
 
+// Special keys when user hits the shift button.
+void GuiTextEditPopupKeyboard::specialKeys() {
+	if (mSpecial)
+		mSpecialButton->setColorShift(0x212121FF);
+	else
+		mSpecialButton->removeColorShift();
+	updateKeys();
+}
+
+void GuiTextEditPopupKeyboard::updateKeys(){
+	for (int y = 0; y < charArray.size(); y++) {
+		for (int x = 0; x < charArray[0].size(); x++) {
+			if (mSpecial){
+				buttonList[x+y]->setText(charArraySpecial[y][x], charArraySpecial[y][x]);
+			}else if(mShift){
+				buttonList[x+y]->setText(charArrayUp[y][x], charArrayUp[y][x]);
+			}else{
+				buttonList[x+y]->setText(charArray[y][x], charArrayUp[y][x]);
+			}
+		}
+	}
 }
 
 std::vector<HelpPrompt> GuiTextEditPopupKeyboard::getHelpPrompts()
