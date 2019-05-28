@@ -33,6 +33,8 @@ private:
 	
 	std::shared_ptr<ButtonComponent> mShiftButton;
 	std::shared_ptr<ButtonComponent> mSpecialButton;
+	
+	std::vector< std::vector< std::shared_ptr<ButtonComponent> > > buttonList;
 
 	// Define keyboard key rows.
 	const char* charArray[5][12] = {

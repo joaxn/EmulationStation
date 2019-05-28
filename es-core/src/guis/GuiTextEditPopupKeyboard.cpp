@@ -29,9 +29,6 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	// Text edit add
 	mGrid.setEntry(mText, Vector2i(0, 1), false, false, Vector2i(1, 1));
 
-
-	std::vector< std::vector< std::shared_ptr<ButtonComponent> > > buttonList;
-
 	// Keyboard
 	// Case for if multiline is enabled, then don't create the keyboard.
 	if (!mMultiLine) {
@@ -213,11 +210,11 @@ void GuiTextEditPopupKeyboard::updateKeys(){
 	for (int y = 0; y < sizeof(charArray); y++) {
 		for (int x = 0; x < sizeof(charArray[0]); x++) {
 			if (mSpecial){
-				buttonList[x+y]->setText(charArraySpecial[y][x], charArraySpecial[y][x]);
+				buttonList.at(y).at(x)->setText(charArraySpecial[y][x], charArraySpecial[y][x]);
 			}else if(mShift){
-				buttonList[x+y]->setText(charArrayUp[y][x], charArrayUp[y][x]);
+				buttonList.at(y).at(x)->setText(charArrayUp[y][x], charArrayUp[y][x]);
 			}else{
-				buttonList[x+y]->setText(charArray[y][x], charArrayUp[y][x]);
+				buttonList.at(y).at(x)->setText(charArray[y][x], charArrayUp[y][x]);
 			}
 		}
 	}
