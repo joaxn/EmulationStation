@@ -54,10 +54,9 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 					std::string strName = charArray[y][x];
 					std::size_t found;
 					found = charList.find(strName);
-						if (found == std::string::npos) {
-							strName += " ";
-							strName += charArrayUp[y][x];
-						}
+					if (found == std::string::npos) {
+						strName += " ";
+						strName += charArrayUp[y][x];
 					}
 					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, strName, charArray[y][x], [this, okCallback, x, y, loc] {
 						okCallback(mText->getValue());
