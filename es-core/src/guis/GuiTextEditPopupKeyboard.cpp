@@ -36,9 +36,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	// Case for if multiline is enabled, then don't create the keyboard.
 	if (!mMultiLine) {
 
-		std::setlocale(LC_ALL,"de_DE.UTF-8");
 		std::locale loc;
-		loc = std::locale("de_DE.UTF-8");
 		
 		// Digit Row
 		for (int y = 0; y < 5; y++) {
