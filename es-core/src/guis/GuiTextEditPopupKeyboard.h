@@ -29,6 +29,8 @@ private:
 	std::shared_ptr<ComponentGrid> mKeyboardGrid;
 	std::shared_ptr<ComponentGrid> mButtonGrid;
 	std::shared_ptr<ComponentGrid> mNewGrid;
+	
+	std::shared_ptr<ButtonComponent> mShiftButton;
 
 	// Define keyboard key rows.
 	const char* charArray[5][12] = {

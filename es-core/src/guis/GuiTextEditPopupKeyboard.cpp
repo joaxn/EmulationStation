@@ -36,22 +36,24 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	// Case for if multiline is enabled, then don't create the keyboard.
 	if (!mMultiLine) {
 
-		std::locale loc;
 		std::setlocale(LC_ALL,"de_DE.UTF-8");
+		std::locale loc;
+		
 		// Digit Row
 		for (int y = 0; y < 5; y++) {
 			std::vector< std::shared_ptr<ButtonComponent> > buttons;
 			for (int x = 0; x < 12; x++) {
 				if (y == 4 && x == 0){
-					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SHIFT", "SHIFTS FOR UPPER,LOWER, AND SPECIAL", [this] {
+					mShiftButton = std::make_shared<ButtonComponent>(mWindow, "SHIFT", "SHIFTS FOR UPPER,LOWER, AND SPECIAL", [this] {
 						if (mShift) mShift = false;
 						else mShift = true;
 						shiftKeys();
-					}));
+					});
+					buttons.push_back(mShiftButton);
 	        	}
 	        	else {
 					std::string strName = charArray[y][x];
-					if(!std::isalpha(charArray[y][x])){
+					if(Utils::String::toUpper(charArray[y][x]) != charArrayUp[y][x]){
 						strName += " ";
 						strName += charArrayUp[y][x];
 					}
@@ -181,17 +183,10 @@ void GuiTextEditPopupKeyboard::update(int deltatime) {
 
 // Shifts the keys when user hits the shift button.
 void GuiTextEditPopupKeyboard::shiftKeys() {
-	if (mShift) {
-		// FOR SHIFTING UP
-		// Change Shift button color
-		//bButtons[0]->setColorShift(0xEBFD00AA);
-		// Change Special chara
-	} else {
-		// UNSHIFTING
-		// Remove button color
-		//bButtons[0]->removeColorShift();
-		// Change Special chara
-	}
+	if (mShift)
+		mShiftButton->setColorShift(0x898989FF);
+	else
+		mShiftButton->removeColorShift();
 
 }
 
