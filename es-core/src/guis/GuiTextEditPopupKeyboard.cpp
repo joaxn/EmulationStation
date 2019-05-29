@@ -39,31 +39,24 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		for (int y = 0; y < ROWS; y++) {
 			std::vector< std::shared_ptr<ButtonComponent> > buttons;
 			for (int x = 0; x < COLUMNS; x++) {
-				if (y == 4 && x == 0){
-					mShiftButton = std::make_shared<ButtonComponent>(mWindow, "SHIFT", "SHIFTS FOR UPPER,LOWER, AND SPECIAL", [this] {
+				if (charArray[y][x] == "SHIFT"){
+					mShiftButton = std::make_shared<ButtonComponent>(mWindow, charArray[y][x], "SHIFTS FOR UPPER,LOWER, AND SPECIAL", [this] {
 						if (mShift) mShift = false;
 						else mShift = true;
 						shiftKeys();
-					});
+					},false);
 					buttons.push_back(mShiftButton);
 	        	}
-				if (y == 4 && x == 1){
-					mSpecialButton = std::make_shared<ButtonComponent>(mWindow, "#+=", "SPECIAL CHARACTERS", [this] {
+				else if (charArray[y][x] == "#+="){
+					mSpecialButton = std::make_shared<ButtonComponent>(mWindow, charArray[y][x], "SPECIAL CHARACTERS", [this] {
 						if (mSpecial) mSpecial = false;
 						else mSpecial = true;
-						shiftKeys();
-					});
+						specialKeys();
+					},false);
 					buttons.push_back(mSpecialButton);
 	        	}
 	        	else {
-					std::string strName = charArray[y][x];
-					std::size_t found;
-					found = charList.find(strName);
-					if (found == std::string::npos) {
-						strName += " ";
-						strName += charArrayUp[y][x];
-					}
-					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, strName, charArray[y][x], [this, okCallback, x, y, loc] {
+					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, charArray[y][x], charArrayUp[y][x], [this, okCallback, x, y, loc] {
 						okCallback(mText->getValue());
 						mText->startEditing();
 						if (mSpecial) mText->textInput(charArraySpecial[y][x]);
@@ -191,7 +184,7 @@ void GuiTextEditPopupKeyboard::update(int deltatime) {
 // Shifts the keys when user hits the shift button.
 void GuiTextEditPopupKeyboard::shiftKeys() {
 	if (mShift)
-		mShiftButton->setColorShift(0x212121FF);	
+		mShiftButton->setColorShift(0xD6D6D6FF);	
 	else
 		mShiftButton->removeColorShift();
 	updateKeys();
@@ -200,7 +193,7 @@ void GuiTextEditPopupKeyboard::shiftKeys() {
 // Special keys when user hits the shift button.
 void GuiTextEditPopupKeyboard::specialKeys() {
 	if (mSpecial){
-		mSpecialButton->setColorShift(0x212121FF);
+		mSpecialButton->setColorShift(0xD6D6D6FF);
 		mShiftButton->removeColorShift();
 		mShift = false;
 	}else{
@@ -212,12 +205,14 @@ void GuiTextEditPopupKeyboard::specialKeys() {
 void GuiTextEditPopupKeyboard::updateKeys(){
 	for (int y = 0; y < ROWS; y++) {
 		for (int x = 0; x < COLUMNS; x++) {
-			if (mSpecial){
-				buttonList.at(y).at(x)->setText(charArraySpecial[y][x], charArraySpecial[y][x]);
-			}else if(mShift){
-				buttonList.at(y).at(x)->setText(charArrayUp[y][x], charArrayUp[y][x]);
-			}else{
-				buttonList.at(y).at(x)->setText(charArray[y][x], charArrayUp[y][x]);
+			if (charArray[y][x] != "SHIFT" && charArray[y][x] != "#+="){
+				if (mSpecial){
+					buttonList.at(y).at(x)->setText(charArraySpecial[y][x],charArraySpecial[y][x],false);
+				}else if(mShift){
+					buttonList.at(y).at(x)->setText(charArrayUp[y][x],charArrayUp[y][x],false);
+				}else{
+					buttonList.at(y).at(x)->setText(charArray[y][x],charArrayUp[y][x],false);
+				}
 			}
 		}
 	}
