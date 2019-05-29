@@ -4,7 +4,7 @@
 #include "utils/StringUtil.h"
 #include "Renderer.h"
 
-ButtonComponent::ButtonComponent(Window* window, const std::string& text, const std::string& helpText, const std::function<void()>& func, bool upperCase, std:string minText) : GuiComponent(window),
+ButtonComponent::ButtonComponent(Window* window, const std::string& text, const std::string& helpText, const std::function<void()>& func, bool upperCase, const std::string& minText) : GuiComponent(window),
 	mBox(window, ":/button.png"),
 	mFont(Font::get(FONT_SIZE_MEDIUM)), 
 	mFocused(false), 
@@ -38,7 +38,7 @@ bool ButtonComponent::input(InputConfig* config, Input input)
 	return GuiComponent::input(config, input);
 }
 
-void ButtonComponent::setText(const std::string& text, const std::string& helpText, bool upperCase, std:string minText)
+void ButtonComponent::setText(const std::string& text, const std::string& helpText, bool upperCase, const std::string& minText)
 {
 	mText = upperCase ? Utils::String::toUpper(text) : text;
 	mHelpText = helpText;
