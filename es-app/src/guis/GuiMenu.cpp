@@ -164,7 +164,7 @@ void GuiMenu::openNetworkSettings()
 	s->addRow(row);
 	
 	//PASSWORD
-	ComponentListRow row;
+	row.elements.clear();
 	auto title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto editPass = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
