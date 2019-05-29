@@ -144,15 +144,15 @@ void GuiMenu::openNetworkSettings()
 	
 	
 	ComponentListRow row;
-	auto bracket = makeArrow(mWindow);
 	auto title = std::make_shared<TextComponent>(mWindow, "SSID", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto ed = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_RIGHT);
 	auto updateVal = [ed](const std::string& newVal) { ed->setValue(newVal); };
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
 	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
+	auto bracket = makeArrow(mWindow);
 
 	row.addElement(title, true);
-	row.addElement(text, false);
+	row.addElement(ed, false);
 	row.addElement(spacer, false);
 	row.addElement(bracket, false);
 
