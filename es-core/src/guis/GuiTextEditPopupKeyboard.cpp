@@ -14,7 +14,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 
 	mTitle = std::make_shared<TextComponent>(mWindow, title, Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
 	mTitle->setUppercase(true);
-	mKeyboardGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(12, 5));
+	mKeyboardGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(COLUMNS, ROWS));
 	mButtonGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(4, 1));
 
 	mText = std::make_shared<TextEditComponent>(mWindow);
@@ -36,9 +36,9 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		std::locale loc;
 		
 		// Digit Row
-		for (int y = 0; y < 5; y++) {
+		for (int y = 0; y < ROWS; y++) {
 			std::vector< std::shared_ptr<ButtonComponent> > buttons;
-			for (int x = 0; x < 12; x++) {
+			for (int x = 0; x < COLUMNS; x++) {
 				if (y == 4 && x == 0){
 					mShiftButton = std::make_shared<ButtonComponent>(mWindow, "SHIFT", "SHIFTS FOR UPPER,LOWER, AND SPECIAL", [this] {
 						if (mShift) mShift = false;
@@ -80,8 +80,8 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		
 		buttonWidth = buttonList.at(0).at(0)->getSize().x();
 		buttonHeight = buttonList.at(0).at(0)->getSize().y();
-		gridHeight = (buttonHeight + 2) * 5 + 2;
-		gridWidth = (buttonWidth + 2) * 12 + 2;
+		gridHeight = (buttonHeight + 2) * ROWS + 2;
+		gridWidth = (buttonWidth + 2) * COLUMNS + 2;
 		mKeyboardGrid->setSize(gridWidth, gridHeight);
 		mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
 	}
@@ -199,16 +199,19 @@ void GuiTextEditPopupKeyboard::shiftKeys() {
 
 // Special keys when user hits the shift button.
 void GuiTextEditPopupKeyboard::specialKeys() {
-	if (mSpecial)
+	if (mSpecial){
 		mSpecialButton->setColorShift(0x212121FF);
-	else
+		mShiftButton->removeColorShift();
+		mShift = false;
+	}else{
 		mSpecialButton->removeColorShift();
+	}
 	updateKeys();
 }
 
 void GuiTextEditPopupKeyboard::updateKeys(){
-	for (int y = 0; y < sizeof(charArray); y++) {
-		for (int x = 0; x < sizeof(charArray[0]); x++) {
+	for (int y = 0; y < ROWS; y++) {
+		for (int x = 0; x < COLUMNS; x++) {
 			if (mSpecial){
 				buttonList.at(y).at(x)->setText(charArraySpecial[y][x], charArraySpecial[y][x]);
 			}else if(mShift){
