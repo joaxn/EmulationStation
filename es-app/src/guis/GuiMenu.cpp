@@ -154,7 +154,7 @@ void GuiMenu::openNetworkSettings()
 	auto bracket = makeArrow(mWindow);
 
 	row.addElement(title, true);
-	row.addElement(editSSID, false);
+	row.addElement(editSSID, true);
 	row.addElement(spacer, false);
 	row.addElement(bracket, false);
 
@@ -169,9 +169,12 @@ void GuiMenu::openNetworkSettings()
 	auto editPass = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updatePass = [editPass](const std::string& newVal) { editPass->setValue(newVal); };
+	auto spacer = std::make_shared<GuiComponent>(mWindow);
+	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
+	auto bracket = makeArrow(mWindow);
 	
 	row.addElement(title, true);
-	row.addElement(editPass, false);
+	row.addElement(editPass, true);
 	row.addElement(spacer, false);
 	row.addElement(bracket, false);
 

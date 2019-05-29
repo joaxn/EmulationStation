@@ -184,7 +184,7 @@ void GuiTextEditPopupKeyboard::update(int deltatime) {
 // Shifts the keys when user hits the shift button.
 void GuiTextEditPopupKeyboard::shiftKeys() {
 	if (mShift){
-		mShiftButton->setColorShift(0x00000070);
+		mShiftButton->setColorShift(0x00000044);
 		mSpecialButton->removeColorShift();	
 		mSpecial = false;
 	}else{
