@@ -10,6 +10,7 @@
 #include "guis/GuiScraperStart.h"
 #include "guis/GuiWifiConnect.h"
 #include "guis/GuiKeyboard.h"
+#include "guis/GuiTextEditPopupKeyboard.h"
 #include "guis/GuiSettings.h"
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
