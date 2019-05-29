@@ -142,13 +142,34 @@ void GuiMenu::openNetworkSettings()
 		Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
 	});
 	
+	
+	ComponentListRow row;
+	auto bracket = makeArrow(mWindow);
+	auto title = std::make_shared<TextComponent>(mWindow, "SSID", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto ed = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_RIGHT);
+	auto updateVal = [ed](const std::string& newVal) { ed->setValue(newVal); };
+	auto spacer = std::make_shared<GuiComponent>(mWindow);
+	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
+
+	row.addElement(title, true);
+	row.addElement(text, false);
+	row.addElement(spacer, false);
+	row.addElement(bracket, false);
+
+	row.makeAcceptInputHandler( [this, ed, updateVal] {
+		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "SSID", ed->getValue(), updateVal, false));
+	});
+	s->addRow(row);
+	
 	//WIFI CONNECT
+	/*
 	ComponentListRow wificonnect_row;
 	wificonnect_row.elements.clear();
 	wificonnect_row.addElement(std::make_shared<TextComponent>(mWindow, "CONNECT TO WIFI", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	wificonnect_row.addElement(makeArrow(mWindow), false);
 	wificonnect_row.makeAcceptInputHandler(std::bind(&GuiMenu::openWifiConnect, this));
 	s->addRow(wificonnect_row);
+	*/
 	
 	mWindow->pushGui(s);
 }
