@@ -44,7 +44,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 						if (mShift) mShift = false;
 						else mShift = true;
 						shiftKeys();
-					},false);
+					},false,minText);
 					buttons.push_back(mShiftButton);
 	        	}
 				else if (charArray[y][x] == "#+="){
@@ -52,7 +52,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 						if (mSpecial) mSpecial = false;
 						else mSpecial = true;
 						specialKeys();
-					},false);
+					},false,minText);
 					buttons.push_back(mSpecialButton);
 	        	}
 	        	else {
@@ -63,7 +63,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 						else if(mShift) mText->textInput(charArrayUp[y][x]);
 						else mText->textInput(charArray[y][x]);
 						mText->stopEditing();
-					},false));	
+					},false,minText));
 				}
 				// Send just created button into mGrid
 				mKeyboardGrid->setEntry(buttons[x], Vector2i(x, y), true, false);
@@ -183,17 +183,20 @@ void GuiTextEditPopupKeyboard::update(int deltatime) {
 
 // Shifts the keys when user hits the shift button.
 void GuiTextEditPopupKeyboard::shiftKeys() {
-	if (mShift)
-		mShiftButton->setColorShift(0xD6D6D6FF);	
-	else
+	if (mShift){
+		mShiftButton->setColorShift(0xD10000FF);
+		mSpecialButton->removeColorShift();	
+		mSpecial = false;
+	}else{
 		mShiftButton->removeColorShift();
+	}
 	updateKeys();
 }
 
 // Special keys when user hits the shift button.
 void GuiTextEditPopupKeyboard::specialKeys() {
 	if (mSpecial){
-		mSpecialButton->setColorShift(0xD6D6D6FF);
+		mSpecialButton->setColorShift(0xD10000FF);
 		mShiftButton->removeColorShift();
 		mShift = false;
 	}else{
@@ -207,11 +210,11 @@ void GuiTextEditPopupKeyboard::updateKeys(){
 		for (int x = 0; x < COLUMNS; x++) {
 			if (charArray[y][x] != "SHIFT" && charArray[y][x] != "#+="){
 				if (mSpecial){
-					buttonList.at(y).at(x)->setText(charArraySpecial[y][x],charArraySpecial[y][x],false);
+					buttonList.at(y).at(x)->setText(charArraySpecial[y][x],charArraySpecial[y][x],false,minText);
 				}else if(mShift){
-					buttonList.at(y).at(x)->setText(charArrayUp[y][x],charArrayUp[y][x],false);
+					buttonList.at(y).at(x)->setText(charArrayUp[y][x],charArrayUp[y][x],false,minText);
 				}else{
-					buttonList.at(y).at(x)->setText(charArray[y][x],charArrayUp[y][x],false);
+					buttonList.at(y).at(x)->setText(charArray[y][x],charArrayUp[y][x],false,minText);
 				}
 			}
 		}

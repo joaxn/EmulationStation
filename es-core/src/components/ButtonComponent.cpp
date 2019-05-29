@@ -4,7 +4,7 @@
 #include "utils/StringUtil.h"
 #include "Renderer.h"
 
-ButtonComponent::ButtonComponent(Window* window, const std::string& text, const std::string& helpText, const std::function<void()>& func, bool upperCase) : GuiComponent(window),
+ButtonComponent::ButtonComponent(Window* window, const std::string& text, const std::string& helpText, const std::function<void()>& func, bool upperCase, std:string minText) : GuiComponent(window),
 	mBox(window, ":/button.png"),
 	mFont(Font::get(FONT_SIZE_MEDIUM)), 
 	mFocused(false), 
@@ -12,7 +12,7 @@ ButtonComponent::ButtonComponent(Window* window, const std::string& text, const 
 	mTextColorFocused(0xFFFFFFFF), mTextColorUnfocused(0x777777FF)
 {
 	setPressedFunc(func);
-	setText(text, helpText, upperCase);
+	setText(text, helpText, upperCase, minText);
 	updateImage();
 }
 
@@ -38,15 +38,15 @@ bool ButtonComponent::input(InputConfig* config, Input input)
 	return GuiComponent::input(config, input);
 }
 
-void ButtonComponent::setText(const std::string& text, const std::string& helpText, bool upperCase)
+void ButtonComponent::setText(const std::string& text, const std::string& helpText, bool upperCase, std:string minText)
 {
 	mText = upperCase ? Utils::String::toUpper(text) : text;
 	mHelpText = helpText;
 	
 	mTextCache = std::unique_ptr<TextCache>(mFont->buildTextCache(mText, 0, 0, getCurTextColor()));
 
-	float minWidth = mFont->sizeText("DELETE").x() + 12;
-	setSize(Math::max(mTextCache->metrics.size.x() + 12, minWidth), mTextCache->metrics.size.y());
+	float minWidth = mFont->sizeText(minText).x() + 16;
+	setSize(Math::max(mTextCache->metrics.size.x() + 16, minWidth), mTextCache->metrics.size.y());
 
 	updateHelpPrompts();
 }

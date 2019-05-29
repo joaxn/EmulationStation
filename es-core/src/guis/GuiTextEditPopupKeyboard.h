@@ -61,6 +61,7 @@ private:
 	
 	
 	std::string charList = "abcdefghijklmnopqrstuvwxyzüöä";
+	std::string minText = "SHIFT";
 
 	int mxIndex = 0;		// Stores the X index and makes every grid the same.
 
