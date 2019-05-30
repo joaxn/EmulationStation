@@ -176,8 +176,9 @@ void GuiMenu::openNetworkSettings()
 	auto updatePass = [editPass](const std::string& newVal) {
 		Settings::getInstance()->setString("WifiKey", newVal);
 		Settings::getInstance()->saveFile();
-		for(int i = 0; i < newVal.length(); ++i) newVal[i] = '*';
-		editPass->setValue(newVal);
+		std::string wifiKey = newVal;
+		for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
+		editPass->setValue(wifiKey);
 	};
 	
 	row.addElement(title, true);
