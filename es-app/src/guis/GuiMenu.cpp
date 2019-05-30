@@ -101,7 +101,7 @@ void GuiMenu::openNetworkSettings()
 	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
 		wIP = wip;
 		int trim = wIP.find("\n");
-		wIP = wIP.substr(0, trim);
+		wIP = wIP.substr(0, trim-1);
 	}
 	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("IP ADDRESS", show_ip);
@@ -151,12 +151,11 @@ void GuiMenu::openNetworkSettings()
 	auto updateSSID = [editSSID](const std::string& newVal) { editSSID->setValue(newVal); };
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
 	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
-	auto bracket = makeArrow(mWindow);
 
 	row.addElement(title, true);
 	row.addElement(editSSID, true);
 	row.addElement(spacer, false);
-	row.addElement(bracket, false);
+	row.addElement(makeArrow(mWindow), false);
 
 	row.makeAcceptInputHandler( [this, editSSID, updateSSID] {
 		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "SSID", editSSID->getValue(), updateSSID, false));
@@ -169,14 +168,11 @@ void GuiMenu::openNetworkSettings()
 	auto editPass = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updatePass = [editPass](const std::string& newVal) { editPass->setValue(newVal); };
-	auto spacer = std::make_shared<GuiComponent>(mWindow);
-	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
-	auto bracket = makeArrow(mWindow);
 	
 	row.addElement(title, true);
 	row.addElement(editPass, true);
 	row.addElement(spacer, false);
-	row.addElement(bracket, false);
+	row.addElement(makeArrow(mWindow), false);
 
 	row.makeAcceptInputHandler( [this, editPass, updatePass] {
 		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "PASSWORD", editPass->getValue(), updatePass, false));

@@ -84,10 +84,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 
 	// Accept/Cancel buttons
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, acceptBtnText, acceptBtnText, [this, okCallback] { okCallback(mText->getValue()); delete this; }));
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SPACE", "SPACE", [this] {mText->startEditing();mText->textInput(" ");mText->stopEditing();}));
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DELETE", "DELETE A CHAR", [this] {mText->startEditing();mText->textInput("\b");mText->stopEditing();}));
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; }));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, acceptBtnText, acceptBtnText, [this, okCallback] { okCallback(mText->getValue()); delete this; },true,"DELETE"));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SPACE", "SPACE", [this] {mText->startEditing();mText->textInput(" ");mText->stopEditing();},true,"DELETE"));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DELETE", "DELETE A CHAR", [this] {mText->startEditing();mText->textInput("\b");mText->stopEditing();},true,"DELETE"));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; },true,"DELETE"));
 
 	// Add a/c buttons
 	mButtonGrid->setEntry(buttons[0], Vector2i(0, 0), true, false);
@@ -95,10 +95,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mButtonGrid->setEntry(buttons[2], Vector2i(2, 0), true, false);
 	mButtonGrid->setEntry(buttons[3], Vector2i(3, 0), true, false);
 	
-	buttonWidth = buttons.at(2)->getSize().x();
-	buttonHeight = buttons.at(2)->getSize().y();
+	buttonWidth = buttons.at(0)->getSize().x();
+	buttonHeight = buttons.at(0)->getSize().y();
 	gridHeight = buttonHeight + 20;
-	gridWidth = (buttonWidth + 2) * buttons.size() + 20;
+	gridWidth = (buttonWidth + 10) * buttons.size() + 20;
 	mButtonGrid->setSize(gridWidth, gridHeight);
 	mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
 
