@@ -141,11 +141,16 @@ void GuiMenu::openNetworkSettings()
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
 	s->addSaveFunc([wifi_enabled] {
 		if (wifi_enabled->getState()){
+			// enable wifi
 			system("sudo ifconfig wlan0 up");
+			system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*/#/g' /boot/config.txt");
 		} else{
+			// disable wifi
 			system("sudo ifconfig wlan0 down");
+			system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*//g' /boot/config.txt");
 		}
 		Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
+		Settings::getInstance()->saveFile();
 	});
 	
 	//SSID
@@ -154,9 +159,14 @@ void GuiMenu::openNetworkSettings()
 	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updateSSID = [editSSID](const std::string& newVal) {
+		system("sudo sed -i 's/ssid=.*/ssid=\""+newVal+"\"/' /etc/wpa_supplicant/wpa_supplicant.conf");
 		editSSID->setValue(newVal);
 		Settings::getInstance()->setString("WifiSSID", newVal);
 		Settings::getInstance()->saveFile();
+		if (wifi_enabled->getState()){
+			system("sudo ifconfig wlan0 down");
+			system("sudo ifconfig wlan0 up");
+		}
 	};
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
 	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
@@ -179,11 +189,16 @@ void GuiMenu::openNetworkSettings()
 	auto editPass = std::make_shared<TextComponent>(mWindow, wifiKey, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updatePass = [editPass](const std::string& newVal) {
+		system("sudo sed -i 's/psk=.*/psk=\""+newVal+"\"/' /etc/wpa_supplicant/wpa_supplicant.conf");
 		Settings::getInstance()->setString("WifiKey", newVal);
 		Settings::getInstance()->saveFile();
 		std::string wifiKey = newVal;
 		for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
 		editPass->setValue(wifiKey);
+		if (wifi_enabled->getState()){
+			system("sudo ifconfig wlan0 down");
+			system("sudo ifconfig wlan0 up");
+		}
 	};
 	
 	row.addElement(title, true);
@@ -195,16 +210,6 @@ void GuiMenu::openNetworkSettings()
 		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "PASSWORD", "", updatePass, false));
 	});
 	s->addRow(row);
-	
-	//WIFI CONNECT
-	/*
-	ComponentListRow wificonnect_row;
-	wificonnect_row.elements.clear();
-	wificonnect_row.addElement(std::make_shared<TextComponent>(mWindow, "CONNECT TO WIFI", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	wificonnect_row.addElement(makeArrow(mWindow), false);
-	wificonnect_row.makeAcceptInputHandler(std::bind(&GuiMenu::openWifiConnect, this));
-	s->addRow(wificonnect_row);
-	*/
 	
 	mWindow->pushGui(s);
 }
