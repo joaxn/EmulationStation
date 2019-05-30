@@ -159,7 +159,8 @@ void GuiMenu::openNetworkSettings()
 	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updateSSID = [editSSID,wifi_enabled](const std::string& newVal) {
-		system("sudo sed -i 's/ssid=.*/ssid=\""+newVal+"\"/' /etc/wpa_supplicant/wpa_supplicant.conf");
+		std::stringstream callSupplicant;
+		callSupplicant << "sudo sed -i 's/ssid=.*/ssid=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf");
 		editSSID->setValue(newVal);
 		Settings::getInstance()->setString("WifiSSID", newVal);
 		Settings::getInstance()->saveFile();
