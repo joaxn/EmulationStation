@@ -146,9 +146,13 @@ void GuiMenu::openNetworkSettings()
 	//SSID
 	ComponentListRow row;
 	auto title = std::make_shared<TextComponent>(mWindow, "SSID", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	auto editSSID = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
-	auto updateSSID = [editSSID](const std::string& newVal) { editSSID->setValue(newVal); };
+	auto updateSSID = [editSSID](const std::string& newVal) {
+		editSSID->setValue(newVal);
+		Settings::getInstance()->setString("WifiSSID", newVal);
+		Settings::getInstance()->saveFile();
+	};
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
 	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
 
@@ -164,10 +168,17 @@ void GuiMenu::openNetworkSettings()
 	
 	//PASSWORD
 	row.elements.clear();
+	std::string wifiKey = Settings::getInstance()->getString("WifiKey");
+	for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
 	title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	auto editPass = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto editPass = std::make_shared<TextComponent>(mWindow, wifiKey, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
-	auto updatePass = [editPass](const std::string& newVal) { editPass->setValue(newVal); };
+	auto updatePass = [editPass](const std::string& newVal) {
+		Settings::getInstance()->setString("WifiKey", newVal);
+		Settings::getInstance()->saveFile();
+		for(int i = 0; i < newVal.length(); ++i) newVal[i] = '*';
+		editPass->setValue(newVal);
+	};
 	
 	row.addElement(title, true);
 	row.addElement(editPass, true);
@@ -175,7 +186,7 @@ void GuiMenu::openNetworkSettings()
 	row.addElement(makeArrow(mWindow), false);
 
 	row.makeAcceptInputHandler( [this, editPass, updatePass] {
-		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "PASSWORD", editPass->getValue(), updatePass, false));
+		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "PASSWORD", "", updatePass, false));
 	});
 	s->addRow(row);
 	

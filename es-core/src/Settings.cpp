@@ -159,6 +159,9 @@ void Settings::setDefaults()
 	mStringMap["ExePath"] = "";
 	
 	mBoolMap["EnableWifi"] = true;
+	
+	mStringMap["WifiSSID"] = "";
+	mStringMap["WifiKey"] = "";
 }
 
 template <typename K, typename V>
