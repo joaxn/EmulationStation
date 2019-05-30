@@ -76,7 +76,10 @@ void GuiMenu::openNetworkSettings()
 	FILE *wIPP;
 	char iw[1035];
 	char wip[1035];
-
+	
+	// FIND
+	std::string currentLine;
+	std::size_t found;
 
 	// STATUS
 	std::string wStat;
@@ -100,8 +103,13 @@ void GuiMenu::openNetworkSettings()
 	wIPP = popen("hostname -I", "r");
 	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
 		wIP = wip;
-		int trim = wIP.find("\n");
-		wIP = wIP.substr(0, trim-1);
+		found = wIP.find(".");
+		if (found != std::string::npos) {
+			int trim = wIP.find("\n");
+			wIP = wIP.substr(0, trim-1);
+		}else{
+			wIP = "NOT CONNECTED";
+		}
 	}
 	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("IP ADDRESS", show_ip);
@@ -120,9 +128,6 @@ void GuiMenu::openNetworkSettings()
 	// WIFI ON OFF
 	flagWifi = false;
 	wifiOnOff = popen("ifconfig wlan0 | grep 'flags='", "r");
-	
-	std::string currentLine;
-	std::size_t found;
 	while (fgets(wi, sizeof(wi), wifiOnOff) != NULL) {
 		currentLine = wi;
 		found = currentLine.find("RUNNING");
