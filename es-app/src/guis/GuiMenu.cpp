@@ -160,7 +160,7 @@ void GuiMenu::openNetworkSettings()
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updateSSID = [editSSID,wifi_enabled](const std::string& newVal) {
 		std::stringstream callSupplicant;
-		callSupplicant << "sudo sed -i 's/ssid=.*/ssid=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf");
+		callSupplicant << "sudo sed -i 's/ssid=.*/ssid=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
 		editSSID->setValue(newVal);
 		Settings::getInstance()->setString("WifiSSID", newVal);
 		Settings::getInstance()->saveFile();
@@ -191,7 +191,7 @@ void GuiMenu::openNetworkSettings()
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updatePass = [editPass,wifi_enabled](const std::string& newVal) {
 		std::stringstream callSupplicant;
-		callSupplicant << "sudo sed -i 's/psk=.*/psk=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf");
+		callSupplicant << "sudo sed -i 's/psk=.*/psk=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
 		system(callSupplicant.str().c_str());
 		Settings::getInstance()->setString("WifiKey", newVal);
 		Settings::getInstance()->saveFile();
