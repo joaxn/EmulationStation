@@ -15,7 +15,7 @@ class Timer {
 
 void Timer::setTimeout(const std::function<void()>& func, int delay) {
     this->clear = false;
-    std::thread t([=]() {
+    std::thread t([=]{
         if(this->clear) return;
         std::this_thread::sleep_for(std::chrono::milliseconds(delay));
         if(this->clear) return;
@@ -27,8 +27,10 @@ void Timer::setTimeout(const std::function<void()>& func, int delay) {
 void Timer::setInterval(const std::function<void()>& func, int interval) {
     LOG(LogError) << "Interval launched";
 	this->clear = false;
-    std::thread t([=]() {
-        while(true) {
+    std::thread t([=]{
+        LOG(LogError) << "Interval bevore while";
+		while(true) {
+			LOG(LogError) << "Interval inside while";
             if(this->clear) return;
             std::this_thread::sleep_for(std::chrono::milliseconds(interval));
             if(this->clear) return;
