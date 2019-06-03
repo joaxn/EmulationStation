@@ -157,16 +157,16 @@ void GuiMenu::openNetworkSettings()
 	});
 	s->addRow(row);
 	
-	mWindow->pushGui(s);
-	
-	// timer
+	// TIMER
 	Timer t = Timer();
-    t.setInterval([this,show_stat,show_ip]() {
+    t.setInterval([&show_stat,&show_ip]() {
 		std::string wStatText = "test";
 		std::string wIP = getIP();
 		show_stat->setValue(wStatText);
         show_ip->setValue(wIP);
     }, 1000);
+	
+	mWindow->pushGui(s);
 }
 
 std::string GuiMenu::getIP()
