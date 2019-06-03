@@ -188,7 +188,7 @@ std::string GuiMenu::getIP()
 			wIP = "NOT CONNECTED";
 		}
 	}
-	retrun wIP;
+	return wIP;
 }
 
 std::string GuiMenu::getNetStatus()
