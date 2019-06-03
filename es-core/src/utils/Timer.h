@@ -34,8 +34,6 @@ void Timer::setInterval(const std::function<void()>& func, int interval) {
             if(this->timeClear) return;
 			LOG(LogError) << "Interval after timeclear check";
             std::this_thread::sleep_for(std::chrono::milliseconds(interval));
-			LOG(LogError) << "Interval after sleep";
-            if(this->timeClear) return;
 			LOG(LogError) << "Interval launch function";
             func();
         }
