@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include "Log.h"
 
 class Timer {
     bool clear = false;
@@ -24,12 +25,14 @@ void Timer::setTimeout(const std::function<void()>& func, int delay) {
 }
 
 void Timer::setInterval(const std::function<void()>& func, int interval) {
-    this->clear = false;
+    LOG(LogError) << "Interval launched";
+	this->clear = false;
     std::thread t([=]() {
         while(true) {
             if(this->clear) return;
             std::this_thread::sleep_for(std::chrono::milliseconds(interval));
             if(this->clear) return;
+			LOG(LogError) << "Interval launch function";
             func();
         }
     });
