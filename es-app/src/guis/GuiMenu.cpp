@@ -162,7 +162,7 @@ void GuiMenu::openNetworkSettings()
 	// timer
 	Timer t = Timer();
     t.setInterval([this,show_stat,show_ip]() {
-		std::string wStatText = getNetStatus();
+		std::string wStatText = "test";
 		std::string wIP = getIP();
 		show_stat->setValue(wStatText);
         show_ip->setValue(wIP);
