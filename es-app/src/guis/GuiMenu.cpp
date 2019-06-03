@@ -14,6 +14,7 @@
 #include "guis/GuiSettings.h"
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
+#include "utils/Timer.h"
 #include "CollectionSystemManager.h"
 #include "EmulationStation.h"
 #include "Scripting.h"
@@ -72,9 +73,7 @@ void GuiMenu::openNetworkSettings()
 	bool flagWifi;
 	
 	// WIFI IP SSID
-	FILE *iwList;
 	FILE *wIPP;
-	char iw[1035];
 	char wip[1035];
 	
 	// FIND
@@ -113,17 +112,6 @@ void GuiMenu::openNetworkSettings()
 	}
 	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("IP ADDRESS", show_ip);
-
-	// NETWORK NAME
-	std::string wSSID;
-	iwList = popen("iwgetid -r", "r");
-	while (fgets(iw, sizeof(iw), iwList) != NULL) {
-		wSSID = iw;
-		int trim = wSSID.find("\n");
-		wSSID = wSSID.substr(0, trim);
-	}
-	auto show_ssid = std::make_shared<TextComponent>(mWindow, "" + wSSID, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("SSID", show_ssid);
 	
 	// WIFI ON OFF
 	flagWifi = false;
@@ -135,7 +123,6 @@ void GuiMenu::openNetworkSettings()
 			flagWifi = true;
 		}
 	}
-	
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
@@ -215,6 +202,14 @@ void GuiMenu::openNetworkSettings()
 	s->addRow(row);
 	
 	mWindow->pushGui(s);
+	
+	// timer
+	Timer t = Timer();
+    t.setInterval([show_ip]() {
+		std::string theIP = "theIP";
+        show_ip->setValue(theIP);
+    }, 1000);
+	while(true);
 }
 
 void GuiMenu::openWifiConnect()
