@@ -68,17 +68,17 @@ void GuiMenu::openNetworkSettings()
 	auto s = new GuiSettings(mWindow, "NETWORK SETTINGS");
 
 	// STATUS
-	std::string wStatText = GuiMenu::getNetStatus();
+	std::string wStatText = getNetStatus();
 	auto show_stat = std::make_shared<TextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("STATUS", show_stat);
 
 	// IP
-	std::string wIP = GuiMenu::getIP();
+	std::string wIP = getIP();
 	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("IP ADDRESS", show_ip);
 	
 	// WIFI ON OFF
-	bool flagWifi = GuiMenu::getWifiBool();
+	bool flagWifi = getWifiBool();
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
@@ -161,9 +161,11 @@ void GuiMenu::openNetworkSettings()
 	
 	// timer
 	Timer t = Timer();
-    t.setInterval([show_stat,show_ip]() {
-		show_stat->setValue(GuiMenu::getNetStatus());
-        show_ip->setValue(GuiMenu::getIP());
+    t.setInterval([this,show_stat,show_ip]() {
+		std::string wStatText = getNetStatus();
+		std::string wIP = getIP();
+		show_stat->setValue(wStatText);
+        show_ip->setValue(wIP);
     }, 1000);
 }
 
