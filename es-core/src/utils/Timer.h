@@ -4,7 +4,7 @@
 #include "Log.h"
 
 class Timer {
-    bool clear = false;
+    bool timeClear = false;
 
     public:
         void setTimeout(const std::function<void()>& func, int delay);
@@ -14,11 +14,11 @@ class Timer {
 };
 
 void Timer::setTimeout(const std::function<void()>& func, int delay) {
-    this->clear = false;
+    this->timeClear = false;
     std::thread t([=]{
-        if(this->clear) return;
+        if(this->timeClear) return;
         std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-        if(this->clear) return;
+        if(this->timeClear) return;
         func();
     });
     t.detach();
@@ -26,14 +26,16 @@ void Timer::setTimeout(const std::function<void()>& func, int delay) {
 
 void Timer::setInterval(const std::function<void()>& func, int interval) {
     LOG(LogError) << "Interval launched";
-	this->clear = false;
+	this->timeClear = false;
     std::thread t([=]{
         LOG(LogError) << "Interval bevore while";
 		while(true) {
 			LOG(LogError) << "Interval inside while";
-            if(this->clear) return;
+            if(this->timeClear) return;
+			LOG(LogError) << "Interval after timeclear check";
             std::this_thread::sleep_for(std::chrono::milliseconds(interval));
-            if(this->clear) return;
+			LOG(LogError) << "Interval after sleep";
+            if(this->timeClear) return;
 			LOG(LogError) << "Interval launch function";
             func();
         }
@@ -42,5 +44,5 @@ void Timer::setInterval(const std::function<void()>& func, int interval) {
 }
 
 void Timer::stop() {
-    this->clear = true;
+    this->timeClear = true;
 }
