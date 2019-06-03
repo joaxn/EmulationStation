@@ -67,62 +67,18 @@ void GuiMenu::openNetworkSettings()
 {
 	auto s = new GuiSettings(mWindow, "NETWORK SETTINGS");
 
-	// WIFI ON OFF
-	FILE *wifiOnOff;
-	char wi[1035];
-	bool flagWifi;
-	
-	// WIFI IP SSID
-	FILE *wIPP;
-	char wip[1035];
-	
-	// FIND
-	std::string currentLine;
-	std::size_t found;
-
 	// STATUS
-	std::string wStat;
-	std::string wStatText;
-	wIPP = popen("hostname -I", "r");
-	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
-		wStat = wip;
-		int trim = wStat.find("\n");
-		wStat = wStat.substr(0, trim);
-		if(wStat == "" | wStat == " "){
-			wStatText = "NOT CONNECTED";
-		}else{
-			wStatText = "CONNECTED";
-		}
-	}
+	std::string wStatText = GuiMenu::getNetStatus();
 	auto show_stat = std::make_shared<TextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("STATUS", show_stat);
 
 	// IP
-	std::string wIP;
-	wIPP = popen("hostname -I", "r");
-	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
-		wIP = wip;
-		found = wIP.find(".");
-		if (found != std::string::npos) {
-			int trim = wIP.find("\n");
-			wIP = wIP.substr(0, trim-1);
-		}else{
-			wIP = "NOT CONNECTED";
-		}
-	}
+	std::string wIP = GuiMenu::getIP();
 	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("IP ADDRESS", show_ip);
 	
 	// WIFI ON OFF
-	flagWifi = false;
-	wifiOnOff = popen("ifconfig wlan0 | grep 'flags='", "r");
-	while (fgets(wi, sizeof(wi), wifiOnOff) != NULL) {
-		currentLine = wi;
-		found = currentLine.find("RUNNING");
-		if (found != std::string::npos) {
-			flagWifi = true;
-		}
-	}
+	bool flagWifi = GuiMenu::getWifiBool();
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
@@ -205,11 +161,72 @@ void GuiMenu::openNetworkSettings()
 	
 	// timer
 	Timer t = Timer();
-    t.setInterval([show_ip]() {
-		std::string theIP = "theIP";
-        show_ip->setValue(theIP);
+    t.setInterval([show_stat,show_ip]() {
+		show_stat->setValue(GuiMenu::getNetStatus());
+        show_ip->setValue(GuiMenu::getIP());
     }, 1000);
-	while(true);
+}
+
+std::string GuiMenu::getIP()
+{
+	FILE *wIPP;
+	char wip[1035];
+	std::string currentLine;
+	std::size_t found;
+	
+	std::string wIP;
+	wIPP = popen("hostname -I", "r");
+	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
+		wIP = wip;
+		found = wIP.find(".");
+		if (found != std::string::npos) {
+			int trim = wIP.find("\n");
+			wIP = wIP.substr(0, trim-1);
+		}else{
+			wIP = "NOT CONNECTED";
+		}
+	}
+	retrun wIP;
+}
+
+std::string GuiMenu::getNetStatus()
+{
+	FILE *wIPP;
+	char wip[1035];
+	
+	std::string wStat;
+	std::string wStatText;
+	wIPP = popen("hostname -I", "r");
+	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
+		wStat = wip;
+		int trim = wStat.find("\n");
+		wStat = wStat.substr(0, trim);
+		if(wStat == "" | wStat == " "){
+			wStatText = "NOT CONNECTED";
+		}else{
+			wStatText = "CONNECTED";
+		}
+	}
+	return wStatText;
+}
+
+bool GuiMenu::getWifiBool()
+{
+	FILE *wifiOnOff;
+	char wi[1035];
+	bool flagWifi;
+	std::string currentLine;
+	std::size_t found;
+	flagWifi = false;
+	wifiOnOff = popen("ifconfig wlan0 | grep 'flags='", "r");
+	while (fgets(wi, sizeof(wi), wifiOnOff) != NULL) {
+		currentLine = wi;
+		found = currentLine.find("RUNNING");
+		if (found != std::string::npos) {
+			flagWifi = true;
+		}
+	}
+	return flagWifi;
 }
 
 void GuiMenu::openWifiConnect()

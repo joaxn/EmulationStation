@@ -28,6 +28,10 @@ private:
 	void openUISettings();
 	void openNetworkSettings();
 	void openWifiConnect();
+	
+	std::string getIP();
+	std::string getNetStatus();
+	bool getWifiBool();
 
 	MenuComponent mMenu;
 	TextComponent mVersion;
