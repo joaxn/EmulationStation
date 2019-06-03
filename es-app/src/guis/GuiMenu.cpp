@@ -20,6 +20,7 @@
 #include "Scripting.h"
 #include "SystemData.h"
 #include "VolumeControl.h"
+#include "Log.h"
 #include <SDL_events.h>
 #include <algorithm>
 #include <iostream>
@@ -159,7 +160,8 @@ void GuiMenu::openNetworkSettings()
 	
 	// TIMER
 	Timer t = Timer();
-    t.setInterval([&show_stat,&show_ip]() {
+    t.setInterval([this,&show_stat,&show_ip]() {
+		LOG(LogInfo) << "Interval launched";
 		std::string wStatText = "test";
 		std::string wIP = getIP();
 		show_stat->setValue(wStatText);
