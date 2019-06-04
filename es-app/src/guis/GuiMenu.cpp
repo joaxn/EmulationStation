@@ -28,8 +28,9 @@
 #include <stdlib.h>
 #include <fstream>
 
-GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MENU"), mVersion(window)
+GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MENU"), mVersion(window), mTimer(0)
 {
+	mCurrent = "MAIN";
 	bool isFullUI = UIModeController::getInstance()->isUIModeFull();
 
 	if (isFullUI)
@@ -65,6 +66,8 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 
 void GuiMenu::openNetworkSettings()
 {
+	mTimer = 0;
+	mCurrent = "NETWORK";
 	auto s = new GuiSettings(mWindow, "NETWORK SETTINGS");
 
 	// STATUS
@@ -74,8 +77,8 @@ void GuiMenu::openNetworkSettings()
 
 	// IP
 	std::string wIP = getIP();
-	auto show_ip = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("IP ADDRESS", show_ip);
+	updateIP = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	s->addWithLabel("IP ADDRESS", updateIP);
 	
 	// WIFI ON OFF
 	bool flagWifi = getWifiBool();
@@ -344,6 +347,9 @@ void GuiMenu::openWifiConnect()
 
 void GuiMenu::openScraperSettings()
 {
+	mTimer = 0;
+	mCurrent = "SCRAPER";
+	
 	auto s = new GuiSettings(mWindow, "SCRAPER");
 
 	// scrape from
@@ -381,6 +387,9 @@ void GuiMenu::openScraperSettings()
 
 void GuiMenu::openSoundSettings()
 {
+	mTimer = 0;
+	mCurrent = "SOUND";
+	
 	auto s = new GuiSettings(mWindow, "SOUND SETTINGS");
 
 	// volume
@@ -495,6 +504,9 @@ void GuiMenu::openSoundSettings()
 
 void GuiMenu::openUISettings()
 {
+	mTimer = 0;
+	mCurrent = "UI";
+	
 	auto s = new GuiSettings(mWindow, "UI SETTINGS");
 
 	//UI mode
@@ -664,6 +676,9 @@ void GuiMenu::openUISettings()
 
 void GuiMenu::openOtherSettings()
 {
+	mTimer = 0;
+	mCurrent = "OTHER";
+	
 	auto s = new GuiSettings(mWindow, "OTHER SETTINGS");
 
 	// maximum vram
@@ -747,6 +762,9 @@ void GuiMenu::openOtherSettings()
 
 void GuiMenu::openConfigInput()
 {
+	mTimer = 0;
+	mCurrent = "INPUT";
+	
 	Window* window = mWindow;
 	window->pushGui(new GuiMsgBox(window, "ARE YOU SURE YOU WANT TO CONFIGURE INPUT?", "YES",
 		[window] {
@@ -758,6 +776,9 @@ void GuiMenu::openConfigInput()
 
 void GuiMenu::openQuitMenu()
 {
+	mTimer = 0;
+	mCurrent = "QUIT";
+	
 	auto s = new GuiSettings(mWindow, "QUIT");
 
 	Window* window = mWindow;
@@ -893,4 +914,12 @@ std::vector<HelpPrompt> GuiMenu::getHelpPrompts()
 	prompts.push_back(HelpPrompt("a", "select"));
 	prompts.push_back(HelpPrompt("start", "close"));
 	return prompts;
+}
+
+void GuiMenu::update(int deltaTime) {
+	mTimer += deltaTime;
+	if (mTimer > 2000 && mCurrent == "NETWORK"){
+		updateIP->setValue(getIP());
+		LOG(LogInfo) << "Current Menu: " << mCurrent << "\n";
+	}
 }
