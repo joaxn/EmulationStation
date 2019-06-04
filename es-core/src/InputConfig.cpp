@@ -210,15 +210,13 @@ void InputConfig::writeToXML(pugi::xml_node& parent)
 
 	cfg.append_attribute("deviceGUID") = mDeviceGUID.c_str();
 	
-	LOG(LogInfo) << "Writing inputconfig to xml\n";
-
 	typedef std::map<std::string, Input>::const_iterator it_type;
 	for(it_type iterator = mNameMap.cbegin(); iterator != mNameMap.cend(); iterator++)
 	{
 		if(!iterator->second.configured)
 			continue;
 		
-		LOG(LogInfo) << "Adding" << iterator->first.c_str() << "to xml\n";
+		LOG(LogInfo) << "Adding " << iterator->first.c_str() << " to xml\n";
 		
 		pugi::xml_node input = cfg.append_child("input");
 		input.append_attribute("name") = iterator->first.c_str();

@@ -334,6 +334,9 @@ void InputManager::loadDefaultKBConfig()
 
 void InputManager::writeDeviceConfig(InputConfig* config)
 {
+	
+	LOG(LogInfo) << "Writing to device config.\n";
+	
 	assert(initialized());
 
 	std::string path = getConfigPath();
@@ -359,6 +362,7 @@ void InputManager::writeDeviceConfig(InputConfig* config)
 				pugi::xml_node actionnode = root.find_child_by_attribute("inputAction", "type", "onfinish");
 				if(actionnode)
 				{
+					LOG(LogInfo) << "Actionnode.\n";
 					path = getTemporaryConfigPath();
 					doc.reset();
 					root = doc.append_child("inputList");
@@ -366,6 +370,7 @@ void InputManager::writeDeviceConfig(InputConfig* config)
 				}
 				else
 				{
+					LOG(LogInfo) << "No actionnode.\n";
 					pugi::xml_node oldEntry = root.find_child_by_attribute("inputConfig", "deviceGUID",
 											  config->getDeviceGUIDString().c_str());
 					if(oldEntry)
