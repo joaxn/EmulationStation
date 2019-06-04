@@ -896,6 +896,15 @@ bool GuiMenu::input(InputConfig* config, Input input)
 		delete this;
 		return true;
 	}
+	
+	if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("lock", input) && input.value != 0)
+	{
+		// lock menu
+		delete this;
+		Settings::getInstance()->setString("UIMode", "Kiosk");
+		Settings::getInstance()->saveFile();
+		return true;
+	}
 
 	return false;
 }
@@ -919,7 +928,9 @@ std::vector<HelpPrompt> GuiMenu::getHelpPrompts()
 void GuiMenu::update(int deltaTime) {
 	mTimer += deltaTime;
 	if (mTimer > 2000 && mCurrent == "NETWORK"){
-		updateIP->setValue(getIP());
+		mTimer = 0;
+		std::string ip = "test";
+		updateIP->setValue(ip);
 		LOG(LogInfo) << "Current Menu: " << mCurrent << "\n";
 	}
 }
