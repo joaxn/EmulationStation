@@ -7,7 +7,7 @@ namespace Scripting
 {
 	void fireEvent(const std::string& eventName, const std::string& arg1, const std::string& arg2)
 	{
-		LOG(LogDebug) << "fireEvent: " << eventName << " " << arg1 << " " << arg2;
+		LOG(LogInfo) << "fireEvent: " << eventName << " " << arg1 << " " << arg2;
 
         std::list<std::string> scriptDirList;
         std::string test;

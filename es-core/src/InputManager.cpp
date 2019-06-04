@@ -393,6 +393,7 @@ void InputManager::writeDeviceConfig(InputConfig* config)
 		root = doc.append_child("inputList");
 
 	config->writeToXML(root);
+	LOG(LogInfo) << "Safe file " << path.c_str() << " \n";
 	doc.save_file(path.c_str());
 
 	Scripting::fireEvent("config-changed");
