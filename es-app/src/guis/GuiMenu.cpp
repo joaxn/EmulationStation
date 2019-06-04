@@ -929,8 +929,9 @@ void GuiMenu::update(int deltaTime) {
 	mTimer += deltaTime;
 	if (mTimer > 2000 && mCurrent == "NETWORK"){
 		mTimer = 0;
+		updateIP->setValue("Test");
 		std::string ip = updateIP->getValue();
-		
-		LOG(LogInfo) << "Current IP: " << ip.c_str() << "\n";
+		LOG(LogInfo) << "Current Menu: " << ip.c_str() << "\n";
+		mWindow->update(deltaTime);
 	}
 }
