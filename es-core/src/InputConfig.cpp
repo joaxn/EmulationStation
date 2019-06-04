@@ -216,8 +216,6 @@ void InputConfig::writeToXML(pugi::xml_node& parent)
 		if(!iterator->second.configured)
 			continue;
 		
-		LOG(LogInfo) << "Adding " << iterator->first.c_str() << " to xml\n";
-		
 		pugi::xml_node input = cfg.append_child("input");
 		input.append_attribute("name") = iterator->first.c_str();
 		input.append_attribute("type") = inputTypeToString(iterator->second.type).c_str();
