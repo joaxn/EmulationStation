@@ -36,7 +36,7 @@ private:
 	
 	int mTimer;
 	std::string mCurrent;
-	auto updateIP;
+	std::make_shared<TextComponent> updateIP;
 	
 	MenuComponent mMenu;
 	TextComponent mVersion;
