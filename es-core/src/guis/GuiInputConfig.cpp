@@ -15,7 +15,7 @@ struct InputConfigStructure
 	const char* icon;
 };
 
-static const int inputCount = 25;
+static const int inputCount = 26;
 static const InputConfigStructure GUI_INPUT_CONFIG_LIST[inputCount] =
 {
 	{ "Up",               false, "D-PAD UP",           ":/help/dpad_up.svg" },
@@ -42,6 +42,7 @@ static const InputConfigStructure GUI_INPUT_CONFIG_LIST[inputCount] =
 	{ "RightAnalogDown",  true,  "RIGHT ANALOG DOWN",  ":/help/analog_down.svg" },
 	{ "RightAnalogLeft",  true,  "RIGHT ANALOG LEFT",  ":/help/analog_left.svg" },
 	{ "RightAnalogRight", true,  "RIGHT ANALOG RIGHT", ":/help/analog_right.svg" },
+	{ "Lock",             true,  "LOCK MENU",          ":/help/button_lock.svg" },
 	{ "HotKeyEnable",     true,  "HOTKEY ENABLE",      ":/help/button_hotkey.svg" }
 };
 

@@ -360,18 +360,36 @@ bool ViewController::input(InputConfig* config, Input input)
 		return true;
 
 	// open menu
-	if(!UIModeController::getInstance()->isUIModeKid() && config->isMappedTo("start", input) && input.value != 0)
+	if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("start", input) && input.value != 0)
 	{
 		// open menu
 		mWindow->pushGui(new GuiMenu(mWindow));
 		return true;
 	}
-
+	
+	// lock unlock menu
+	if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("lock", input) && input.value != 0)
+	{
+		// lock menu
+		Settings::getInstance()->setString("UIMode", "Kiosk");
+		Settings::getInstance()->saveFile();
+		return true;
+	}
+	if(UIModeController::getInstance()->isUIModeKiosk() && config->isMappedTo("lock", input) && input.value != 0)
+	{
+		// unlock menu
+		Settings::getInstance()->setString("UIMode", "Full");
+		Settings::getInstance()->saveFile();
+		return true;
+	}
+	
+	/*
 	if(UIModeController::getInstance()->listen(config, input))  // check if UI mode has changed due to passphrase completion
 	{
 		return true;
 	}
-
+	*/
+	
 	if(mCurrentView)
 		return mCurrentView->input(config, input);
 

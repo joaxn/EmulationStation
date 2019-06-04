@@ -14,7 +14,6 @@
 #include "guis/GuiSettings.h"
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
-#include "utils/Timer.h"
 #include "CollectionSystemManager.h"
 #include "EmulationStation.h"
 #include "Scripting.h"
@@ -157,16 +156,6 @@ void GuiMenu::openNetworkSettings()
 		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "PASSWORD", "", updatePass, false));
 	});
 	s->addRow(row);
-	
-	// TIMER
-	Timer t = Timer();
-    t.setInterval([this,&show_stat,&show_ip]() {
-		LOG(LogInfo) << "Interval launched";
-		std::string wStatText = "test";
-		std::string wIP = getIP();
-		show_stat->setValue(wStatText);
-        show_ip->setValue(wIP);
-    }, 1000);
 	
 	mWindow->pushGui(s);
 }
