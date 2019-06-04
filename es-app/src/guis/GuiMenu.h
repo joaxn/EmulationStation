@@ -36,6 +36,8 @@ private:
 	
 	int mTimer;
 	std::string mCurrent;
+	auto updateIP;
+	
 	MenuComponent mMenu;
 	TextComponent mVersion;
 };
