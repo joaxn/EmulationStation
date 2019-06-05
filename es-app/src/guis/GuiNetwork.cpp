@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <fstream>
 
-GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mVersion(window)
+GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTimer(0)
 {
 
 	openNetworkSettings();
@@ -197,4 +197,12 @@ bool GuiNetwork::getWifiBool()
 		}
 	}
 	return flagWifi;
+}
+
+void GuiMenu::update(int deltaTime) {
+	mTimer += deltaTime;
+	if (mTimer > 2000 && mCurrent == "NETWORK"){
+		mTimer = 0;
+	}
+	GuiComponent::update(deltaTime);
 }

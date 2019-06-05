@@ -21,11 +21,8 @@ private:
 	bool getWifiBool();
 	
 	int mTimer;
-	std::string mCurrent;
-	std::shared_ptr<TextComponent> updateIP;
 	
 	MenuComponent mMenu;
-	TextComponent mVersion;
 };
 
 #endif // ES_APP_GUIS_GUI_MENU_H

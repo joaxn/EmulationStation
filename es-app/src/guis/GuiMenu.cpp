@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <fstream>
 
-GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MENU"), mVersion(window), mTimer(0)
+GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MENU"), mVersion(window)
 {
 	bool isFullUI = UIModeController::getInstance()->isUIModeFull();
 
@@ -65,8 +65,6 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 
 void GuiMenu::openScraperSettings()
 {
-	mTimer = 0;
-	mCurrent = "SCRAPER";
 	
 	auto s = new GuiSettings(mWindow, "SCRAPER");
 
@@ -105,8 +103,6 @@ void GuiMenu::openScraperSettings()
 
 void GuiMenu::openSoundSettings()
 {
-	mTimer = 0;
-	mCurrent = "SOUND";
 	
 	auto s = new GuiSettings(mWindow, "SOUND SETTINGS");
 
@@ -222,8 +218,6 @@ void GuiMenu::openSoundSettings()
 
 void GuiMenu::openUISettings()
 {
-	mTimer = 0;
-	mCurrent = "UI";
 	
 	auto s = new GuiSettings(mWindow, "UI SETTINGS");
 
@@ -394,9 +388,7 @@ void GuiMenu::openUISettings()
 
 void GuiMenu::openOtherSettings()
 {
-	mTimer = 0;
-	mCurrent = "OTHER";
-	
+
 	auto s = new GuiSettings(mWindow, "OTHER SETTINGS");
 
 	// maximum vram
@@ -480,8 +472,6 @@ void GuiMenu::openOtherSettings()
 
 void GuiMenu::openConfigInput()
 {
-	mTimer = 0;
-	mCurrent = "INPUT";
 	
 	Window* window = mWindow;
 	window->pushGui(new GuiMsgBox(window, "ARE YOU SURE YOU WANT TO CONFIGURE INPUT?", "YES",
@@ -494,8 +484,6 @@ void GuiMenu::openConfigInput()
 
 void GuiMenu::openQuitMenu()
 {
-	mTimer = 0;
-	mCurrent = "QUIT";
 	
 	auto s = new GuiSettings(mWindow, "QUIT");
 
@@ -641,15 +629,4 @@ std::vector<HelpPrompt> GuiMenu::getHelpPrompts()
 	prompts.push_back(HelpPrompt("a", "select"));
 	prompts.push_back(HelpPrompt("start", "close"));
 	return prompts;
-}
-
-void GuiMenu::update(int deltaTime) {
-	mTimer += deltaTime;
-	if (mTimer > 2000 && mCurrent == "NETWORK"){
-		mTimer = 0;
-		updateIP->setValue("Test");
-		std::string ip = updateIP->getValue();
-		LOG(LogInfo) << "Current Menu: " << ip.c_str() << "\n";
-	}
-	GuiComponent::update(deltaTime);
 }
