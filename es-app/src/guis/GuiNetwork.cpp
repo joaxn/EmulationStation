@@ -3,7 +3,6 @@
 #include "components/OptionListComponent.h"
 #include "components/SliderComponent.h"
 #include "components/SwitchComponent.h"
-#include "guis/GuiMsgBox.h"
 
 #include "components/OptionListComponent.h"
 #include "components/SliderComponent.h"
@@ -12,10 +11,6 @@
 #include "guis/GuiKeyboard.h"
 #include "guis/GuiTextEditPopupKeyboard.h"
 #include "guis/GuiSettings.h"
-#include "views/UIModeController.h"
-#include "views/ViewController.h"
-#include "CollectionSystemManager.h"
-#include "EmulationStation.h"
 #include "Scripting.h"
 #include "SystemData.h"
 #include "Log.h"
@@ -30,7 +25,7 @@
 GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTimer(0)
 {
 
-	displayNetworkSettings();
+	//displayNetworkSettings();
 
 	addChild(&mMenu);
 	setSize(mMenu.getSize());
@@ -198,6 +193,36 @@ bool GuiNetwork::getWifiBool()
 		}
 	}
 	return flagWifi;
+}
+
+bool GuiNetwork::input(InputConfig* config, Input input)
+{
+	if(config->isMappedTo("b", input) && input.value != 0)
+	{
+		delete this;
+		return true;
+	}
+
+	if(config->isMappedTo("start", input) && input.value != 0)
+	{
+		// close everything
+		Window* window = mWindow;
+		while(window->peekGui() && window->peekGui() != ViewController::get())
+			delete window->peekGui();
+		return true;
+	}
+	
+	return GuiComponent::input(config, input);
+}
+
+std::vector<HelpPrompt> GuiNetwork::getHelpPrompts()
+{
+	std::vector<HelpPrompt> prompts = mMenu.getHelpPrompts();
+
+	prompts.push_back(HelpPrompt("b", "back"));
+	prompts.push_back(HelpPrompt("start", "close"));
+
+	return prompts;
 }
 
 void GuiNetwork::update(int deltaTime) {
