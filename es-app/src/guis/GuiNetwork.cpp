@@ -42,7 +42,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	mMenu.addWithLabel("ENABLE WIFI", wifi_enabled);
-	mMenu.addSaveFunc([this,wifi_enabled,updateIP] {
+	addSaveFunc([this,wifi_enabled,updateIP] {
 		if (wifi_enabled->getState()){
 			updateIP->setValue("TRYING TO CONNECT");
 			// enable wifi
