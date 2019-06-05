@@ -36,7 +36,7 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 		addEntry("SCRAPER", 0x777777FF, true, [this] { openScraperSettings(); });
 	
 	if (isFullUI)
-		addEntry("NETWORK SETTINGS", 0x777777FF, true, [this] { mWindow->pushGui(new GuiNetwork(mWindow)); });
+		addEntry("NETWORK SETTINGS", 0x777777FF, true, [this] { openNetworkSettings(); });
 
 	//if (isFullUI)
 	//	addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
@@ -60,6 +60,13 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	addVersionInfo();
 	setSize(mMenu.getSize());
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
+}
+
+void GuiMenu::openNetworkSettings()
+{
+	
+	Window* window = mWindow;
+	window->pushGui(new GuiNetwork(window);
 }
 
 

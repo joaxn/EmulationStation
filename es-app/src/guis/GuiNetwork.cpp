@@ -30,14 +30,14 @@
 GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTimer(0)
 {
 
-	openNetworkSettings();
+	displayNetworkSettings();
 
 	addChild(&mMenu);
 	setSize(mMenu.getSize());
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
 }
 
-void GuiNetwork::openNetworkSettings()
+void GuiNetwork::displayNetworkSettings()
 {
 	auto s = new GuiSettings(mWindow, "NETWORK SETTINGS");
 
