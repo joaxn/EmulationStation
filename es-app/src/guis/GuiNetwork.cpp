@@ -56,7 +56,7 @@ void GuiNetwork::openNetworkSettings()
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
-	s->addSaveFunc([this,wifi_enabled] {
+	s->addSaveFunc([this,wifi_enabled,updateIP] {
 		if (wifi_enabled->getState()){
 			updateIP->setValue("TRYING TO CONNECT");
 			// enable wifi
@@ -77,7 +77,7 @@ void GuiNetwork::openNetworkSettings()
 	auto title = std::make_shared<TextComponent>(mWindow, "SSID", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
-	auto updateSSID = [this,editSSID,wifi_enabled](const std::string& newVal) {
+	auto updateSSID = [this,editSSID,wifi_enabled,updateIP](const std::string& newVal) {
 		std::stringstream callSupplicant;
 		callSupplicant << "sudo sed -i 's/ssid=.*/ssid=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
 		editSSID->setValue(newVal);
@@ -109,7 +109,7 @@ void GuiNetwork::openNetworkSettings()
 	title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto editPass = std::make_shared<TextComponent>(mWindow, wifiKey, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
-	auto updatePass = [this,editPass,wifi_enabled](const std::string& newVal) {
+	auto updatePass = [this,editPass,wifi_enabled,updateIP](const std::string& newVal) {
 		std::stringstream callSupplicant;
 		callSupplicant << "sudo sed -i 's/psk=.*/psk=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
 		system(callSupplicant.str().c_str());
