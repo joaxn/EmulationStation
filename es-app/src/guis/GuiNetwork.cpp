@@ -199,9 +199,9 @@ bool GuiNetwork::getWifiBool()
 	return flagWifi;
 }
 
-void GuiMenu::update(int deltaTime) {
+void GuiNetwork::update(int deltaTime) {
 	mTimer += deltaTime;
-	if (mTimer > 2000 && mCurrent == "NETWORK"){
+	if (mTimer > 2000){
 		mTimer = 0;
 	}
 	GuiComponent::update(deltaTime);

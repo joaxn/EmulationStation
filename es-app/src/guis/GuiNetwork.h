@@ -19,6 +19,7 @@ private:
 	std::string getIP();
 	std::string getNetStatus();
 	bool getWifiBool();
+	void openNetworkSettings();
 	
 	int mTimer;
 	
