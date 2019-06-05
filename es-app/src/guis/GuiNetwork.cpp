@@ -11,6 +11,7 @@
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiKeyboard.h"
 #include "guis/GuiTextEditPopupKeyboard.h"
+#include "guis/GuiSettings.h"
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
 #include "CollectionSystemManager.h"
@@ -47,7 +48,7 @@ void GuiNetwork::openNetworkSettings()
 
 	// IP
 	std::string wIP = getIP();
-	updateIP = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto updateIP = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	s->addWithLabel("IP ADDRESS", updateIP);
 	
 	// WIFI ON OFF
