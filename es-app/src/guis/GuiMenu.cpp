@@ -66,7 +66,7 @@ void GuiMenu::openNetworkSettings()
 {
 	
 	Window* window = mWindow;
-	window->pushGui(new GuiNetwork(window);
+	window->pushGui(new GuiNetwork(window));
 }
 
 
