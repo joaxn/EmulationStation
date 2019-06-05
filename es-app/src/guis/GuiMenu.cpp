@@ -932,6 +932,7 @@ void GuiMenu::update(int deltaTime) {
 		updateIP->setValue("Test");
 		std::string ip = updateIP->getValue();
 		LOG(LogInfo) << "Current Menu: " << ip.c_str() << "\n";
-		mWindow->update(deltaTime);
 	}
+	updateSelf(deltaTime);
+	updateChildren(deltaTime);
 }
