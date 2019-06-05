@@ -1,5 +1,3 @@
-#pragma once
-
 #include "components/MenuComponent.h"
 #include "GuiComponent.h"
 
@@ -22,5 +20,3 @@ private:
 	
 	MenuComponent mMenu;
 };
-
-#endif // ES_APP_GUIS_GUI_MENU_H

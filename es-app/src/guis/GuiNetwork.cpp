@@ -11,6 +11,8 @@
 #include "guis/GuiKeyboard.h"
 #include "guis/GuiTextEditPopupKeyboard.h"
 #include "guis/GuiSettings.h"
+#include "views/UIModeController.h"
+#include "views/ViewController.h"
 #include "Scripting.h"
 #include "SystemData.h"
 #include "Log.h"
@@ -25,33 +27,22 @@
 GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTimer(0)
 {
 
-	//displayNetworkSettings();
-
-	addChild(&mMenu);
-	setSize(mMenu.getSize());
-	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
-}
-
-void GuiNetwork::displayNetworkSettings()
-{
-	auto s = new GuiSettings(mWindow, "NETWORK SETTINGS");
-
 	// STATUS
 	std::string wStatText = getNetStatus();
 	auto show_stat = std::make_shared<TextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("STATUS", show_stat);
+	mMenu.addWithLabel("STATUS", show_stat);
 
 	// IP
 	std::string wIP = getIP();
 	auto updateIP = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	s->addWithLabel("IP ADDRESS", updateIP);
+	mMenu.addWithLabel("IP ADDRESS", updateIP);
 	
 	// WIFI ON OFF
 	bool flagWifi = getWifiBool();
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
-	s->addWithLabel("ENABLE WIFI", wifi_enabled);
-	s->addSaveFunc([this,wifi_enabled,updateIP] {
+	mMenu.addWithLabel("ENABLE WIFI", wifi_enabled);
+	mMenu.addSaveFunc([this,wifi_enabled,updateIP] {
 		if (wifi_enabled->getState()){
 			updateIP->setValue("TRYING TO CONNECT");
 			// enable wifi
@@ -95,7 +86,7 @@ void GuiNetwork::displayNetworkSettings()
 	row.makeAcceptInputHandler( [this, editSSID, updateSSID] {
 		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "SSID", editSSID->getValue(), updateSSID, false));
 	});
-	s->addRow(row);
+	mMenu.addRow(row);
 	
 	//PASSWORD
 	row.elements.clear();
@@ -128,9 +119,17 @@ void GuiNetwork::displayNetworkSettings()
 	row.makeAcceptInputHandler( [this, editPass, updatePass] {
 		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "PASSWORD", "", updatePass, false));
 	});
-	s->addRow(row);
+	mMenu.addRow(row);
+
+	addChild(&mMenu);
+	setSize(mMenu.getSize());
+	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
+}
+
+void GuiNetwork::displayNetworkSettings()
+{
+
 	
-	mWindow->pushGui(s);
 }
 
 std::string GuiNetwork::getIP()
