@@ -28,15 +28,6 @@ private:
 	void openSoundSettings();
 	void openUISettings();
 	void openNetworkSettings();
-	void openWifiConnect();
-	
-	std::string getIP();
-	std::string getNetStatus();
-	bool getWifiBool();
-	
-	int mTimer;
-	std::string mCurrent;
-	std::shared_ptr<TextComponent> updateIP;
 	
 	MenuComponent mMenu;
 	TextComponent mVersion;
