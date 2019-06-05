@@ -85,9 +85,8 @@ void GuiMenu::openNetworkSettings()
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
-	s->addSaveFunc([wifi_enabled] {
+	s->addSaveFunc([this,wifi_enabled] {
 		if (wifi_enabled->getState()){
-			updateIP->setValue("");
 			updateIP->setValue("TRYING TO CONNECT");
 			// enable wifi
 			//system("sudo ifconfig wlan0 up");
@@ -107,7 +106,7 @@ void GuiMenu::openNetworkSettings()
 	auto title = std::make_shared<TextComponent>(mWindow, "SSID", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
-	auto updateSSID = [editSSID,wifi_enabled](const std::string& newVal) {
+	auto updateSSID = [this,editSSID,wifi_enabled](const std::string& newVal) {
 		std::stringstream callSupplicant;
 		callSupplicant << "sudo sed -i 's/ssid=.*/ssid=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
 		editSSID->setValue(newVal);
@@ -116,6 +115,7 @@ void GuiMenu::openNetworkSettings()
 		if (wifi_enabled->getState()){
 			system("sudo ifconfig wlan0 down");
 			system("sudo ifconfig wlan0 up");
+			updateIP->setValue("TRYING TO CONNECT");
 		}
 	};
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
@@ -138,7 +138,7 @@ void GuiMenu::openNetworkSettings()
 	title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto editPass = std::make_shared<TextComponent>(mWindow, wifiKey, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
-	auto updatePass = [editPass,wifi_enabled](const std::string& newVal) {
+	auto updatePass = [this,editPass,wifi_enabled](const std::string& newVal) {
 		std::stringstream callSupplicant;
 		callSupplicant << "sudo sed -i 's/psk=.*/psk=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
 		system(callSupplicant.str().c_str());
@@ -150,6 +150,7 @@ void GuiMenu::openNetworkSettings()
 		if (wifi_enabled->getState()){
 			system("sudo ifconfig wlan0 down");
 			system("sudo ifconfig wlan0 up");
+			updateIP->setValue("TRYING TO CONNECT");
 		}
 	};
 	
