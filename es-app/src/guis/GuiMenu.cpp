@@ -87,13 +87,16 @@ void GuiMenu::openNetworkSettings()
 	s->addWithLabel("ENABLE WIFI", wifi_enabled);
 	s->addSaveFunc([wifi_enabled] {
 		if (wifi_enabled->getState()){
+			updateIP->setValue("");
+			updateIP->setValue("TRYING TO CONNECT");
 			// enable wifi
-			system("sudo ifconfig wlan0 up");
-			system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*/#/g' /boot/config.txt");
+			//system("sudo ifconfig wlan0 up");
+			//system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*/#/g' /boot/config.txt");
 		} else{
+			updateIP->setValue("NOT CONNECTED");
 			// disable wifi
-			system("sudo ifconfig wlan0 down");
-			system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*//g' /boot/config.txt");
+			//system("sudo ifconfig wlan0 down");
+			//system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*//g' /boot/config.txt");
 		}
 		Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
 		Settings::getInstance()->saveFile();
@@ -933,6 +936,5 @@ void GuiMenu::update(int deltaTime) {
 		std::string ip = updateIP->getValue();
 		LOG(LogInfo) << "Current Menu: " << ip.c_str() << "\n";
 	}
-	updateSelf(deltaTime);
-	updateChildren(deltaTime);
+	GuiComponent::update(deltaTime);
 }
