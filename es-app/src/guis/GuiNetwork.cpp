@@ -67,10 +67,6 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 		callSupplicant << "sudo sed -i 's/ssid=.*/ssid=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
 		editSSID->setText(newVal);
 		Settings::getInstance()->setString("WifiSSID", newVal);
-		if (wifi_enabled->getState()){
-			system("sudo ifconfig wlan0 down");
-			system("sudo ifconfig wlan0 up");
-		}
 	};
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
 	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
@@ -100,10 +96,6 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 		std::string wifiKey = newVal;
 		for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
 		editPass->setText(wifiKey);
-		if (wifi_enabled->getState()){
-			system("sudo ifconfig wlan0 down");
-			system("sudo ifconfig wlan0 up");
-		}
 	};
 	
 	row.addElement(title, true);
@@ -237,6 +229,8 @@ void GuiNetwork::connect() {
 	mState = 1;
 	mTrys = 0;
 	mTimer = 0;
+	system("sudo ifconfig wlan0 down");
+	system("sudo ifconfig wlan0 up");
 	updateStat->setText("TRYING TO CONNECT");
 }
 
