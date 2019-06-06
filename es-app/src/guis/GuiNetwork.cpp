@@ -29,12 +29,12 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 
 	// STATUS
 	std::string wStatText = getNetStatus();
-	auto show_stat = std::make_shared<TextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto show_stat = std::make_shared<DynamicTextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	mMenu.addWithLabel("STATUS", show_stat);
 
 	// IP
 	std::string wIP = getIP();
-	auto updateIP = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto updateIP = std::make_shared<DynamicTextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	mMenu.addWithLabel("IP ADDRESS", updateIP);
 	
 	// WIFI ON OFF
@@ -198,6 +198,7 @@ bool GuiNetwork::input(InputConfig* config, Input input)
 {
 	if(config->isMappedTo("b", input) && input.value != 0)
 	{
+		save();
 		delete this;
 		return true;
 	}
@@ -222,6 +223,16 @@ std::vector<HelpPrompt> GuiNetwork::getHelpPrompts()
 	prompts.push_back(HelpPrompt("start", "close"));
 
 	return prompts;
+}
+
+void GuiNetwork::save() {
+	if (mSaveFuncs.empty()) {
+		return;
+	}
+	for (auto it = mSaveFuncs.begin(); it != mSaveFuncs.end(); it++) {
+		(*it)();
+	}
+	Settings::getInstance()->saveFile();
 }
 
 void GuiNetwork::update(int deltaTime) {
