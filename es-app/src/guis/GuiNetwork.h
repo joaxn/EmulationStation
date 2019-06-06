@@ -26,6 +26,6 @@ private:
 	int mTrys;
 	std::shared_ptr<DynamicTextComponent> updateStat;
 	std::shared_ptr<DynamicTextComponent> updateIP;
-	std::shared_ptr<SwitchComponent> wifi_enabled;
+	std::shared_ptr<GuiComponent> wifi_enabled;
 	MenuComponent mMenu;
 };
