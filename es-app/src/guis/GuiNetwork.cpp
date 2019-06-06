@@ -249,12 +249,14 @@ void GuiNetwork::update(int deltaTime) {
 			mTimer = 0;
 			if(mTrys > 3){
 				mState = 0;
+				Window* window = mWindow;
 				window->pushGui(new GuiMsgBox(window, "WIFI CONNECTION FAILED"));
 			}else{
 				mTrys += 1;
 			}
 		}else{
 			mState = 0;
+			Window* window = mWindow;
 			window->pushGui(new GuiMsgBox(window, "WIFI CONNECTED"));
 		}
 		
