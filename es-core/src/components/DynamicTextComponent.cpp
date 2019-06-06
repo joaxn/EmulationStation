@@ -245,7 +245,7 @@ std::string DynamicTextComponent::getValue() const
 	return mText;
 }
 
-void TextEditComponent::update(int deltaTime)
+void DynamicTextComponent::update(int deltaTime)
 {
 	GuiComponent::update(deltaTime);
 }
