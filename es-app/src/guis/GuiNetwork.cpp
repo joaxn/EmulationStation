@@ -44,7 +44,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	mMenu.addWithLabel("ENABLE WIFI", wifi_enabled);
-	addSaveFunc([this,wifi_enabled,updateIP,updateStat] {
+	addSaveFunc([this] {
 		if (wifi_enabled->getState()){
 			// enable wifi
 			system("sudo ifconfig wlan0 up");
@@ -236,16 +236,16 @@ void GuiNetwork::connect() {
 	save();
 	mState = 1;
 	mTrys = 0;
-	updateStat->setText("TRYING TO CONNECT");
+	updateStat->setValue("TRYING TO CONNECT");
 }
 
 void GuiNetwork::update(int deltaTime) {
 	mTimer += deltaTime;
 	if (mTimer > 2000 && mState == 1){
-		updateStat->setText(getNetStatus());
-		updateIP->setText(getIP());
-		if(updateStat->getText() == "NOT CONNECTED"){
-			updateStat->setText("TRYING TO CONNECT");
+		updateStat->setValue(getNetStatus());
+		updateIP->setValue(getIP());
+		if(updateStat->getValue() == "NOT CONNECTED"){
+			updateStat->setValue("TRYING TO CONNECT");
 			mTimer = 0;
 			if(mTrys > 3){
 				mState = 0;
