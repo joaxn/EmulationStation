@@ -236,26 +236,33 @@ void GuiNetwork::connect() {
 	save();
 	mState = 1;
 	mTrys = 0;
+	mTimer = 0;
 	updateStat->setValue("TRYING TO CONNECT");
 }
 
 void GuiNetwork::update(int deltaTime) {
 	mTimer += deltaTime;
-	if (mTimer > 2000 && mState == 1){
-		updateStat->setValue(getNetStatus());
-		updateIP->setValue(getIP());
-		if(updateStat->getValue() == "NOT CONNECTED"){
-			updateStat->setValue("TRYING TO CONNECT");
-			mTimer = 0;
-			if(mTrys > 3){
+	if (mTimer > 1000 && mState == 1){
+		mTrys += 1;
+		std::string trying = "TRYING TO CONNECT ";
+		std::string status = getNetStatus();
+		std::string ip = getIP();
+		if(status() == "NOT CONNECTED"){
+			if(mTrys > 15){
 				mState = 0;
 				Window* window = mWindow;
 				window->pushGui(new GuiMsgBox(window, "WIFI CONNECTION FAILED"));
 			}else{
-				mTrys += 1;
+				std::stringstream sTrys;
+				sTrys << trying << mTrys;
+				updateStat->setValue(sTrys.str());
+				mTimer = 0;
 			}
 		}else{
 			mState = 0;
+			mTrys = 0;
+			updateStat->setValue(status);
+			updateIP->setValue(ip);
 			Window* window = mWindow;
 			window->pushGui(new GuiMsgBox(window, "WIFI CONNECTED"));
 		}

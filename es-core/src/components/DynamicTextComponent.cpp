@@ -238,6 +238,7 @@ void DynamicTextComponent::setLineSpacing(float spacing)
 void DynamicTextComponent::setValue(const std::string& value)
 {
 	setText(value);
+	onTextChanged();
 }
 
 std::string DynamicTextComponent::getValue() const
