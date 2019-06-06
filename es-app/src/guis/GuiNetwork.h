@@ -22,6 +22,6 @@ private:
 	void displayNetworkSettings();
 	
 	int mTimer;
-	
+	int mState;
 	MenuComponent mMenu;
 };

@@ -24,13 +24,13 @@
 #include <stdlib.h>
 #include <fstream>
 
-GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTimer(0)
+GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTimer(0), mState(0)
 {
 
 	// STATUS
 	std::string wStatText = getNetStatus();
-	auto show_stat = std::make_shared<DynamicTextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	mMenu.addWithLabel("STATUS", show_stat);
+	auto updateStat = std::make_shared<DynamicTextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	mMenu.addWithLabel("STATUS", updateStat);
 
 	// IP
 	std::string wIP = getIP();
@@ -42,8 +42,9 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	auto wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	mMenu.addWithLabel("ENABLE WIFI", wifi_enabled);
-	addSaveFunc([this,wifi_enabled,updateIP] {
+	addSaveFunc([this,wifi_enabled,updateIP,updateStat] {
 		if (wifi_enabled->getState()){
+			mState = 1;
 			updateIP->setValue("TRYING TO CONNECT");
 			// enable wifi
 			//system("sudo ifconfig wlan0 up");
@@ -55,7 +56,6 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 			//system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*//g' /boot/config.txt");
 		}
 		Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
-		Settings::getInstance()->saveFile();
 	});
 	
 	//SSID
@@ -122,10 +122,9 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	mMenu.addRow(row);
 	
 	// BUTTONS
-	row.elements.clear();
-	row.addButton.addButton("BACK", "go back", [this] { delete this; });
-	row.addButton.addButton("CONNECT", "connect to wifi", [this] { save(); });
-	mMenu.addRow(row);
+	
+	mMenu.addButton("BACK", "go back", [this] { save(); delete this; });
+	mMenu.addButton("CONNECT", "connect to wifi", [this] { save(); });
 
 	addChild(&mMenu);
 	setSize(mMenu.getSize());
