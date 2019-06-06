@@ -65,7 +65,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	auto updateSSID = [this,editSSID](const std::string& newVal) {
 		std::stringstream callSupplicant;
 		callSupplicant << "sudo sed -i 's/ssid=.*/ssid=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
-		editSSID->setValue(newVal);
+		editSSID->setText(newVal);
 		Settings::getInstance()->setString("WifiSSID", newVal);
 		if (wifi_enabled->getState()){
 			system("sudo ifconfig wlan0 down");
@@ -99,7 +99,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 		Settings::getInstance()->setString("WifiKey", newVal);
 		std::string wifiKey = newVal;
 		for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
-		editPass->setValue(wifiKey);
+		editPass->setText(wifiKey);
 		if (wifi_enabled->getState()){
 			system("sudo ifconfig wlan0 down");
 			system("sudo ifconfig wlan0 up");
@@ -237,14 +237,14 @@ void GuiNetwork::connect() {
 	mState = 1;
 	mTrys = 0;
 	mTimer = 0;
-	updateStat->setValue("TRYING TO CONNECT");
+	updateStat->setText("TRYING TO CONNECT");
 }
 
 void GuiNetwork::update(int deltaTime) {
 	mTimer += deltaTime;
 	if (mTimer > 1000 && mState == 1){
 		mTrys += 1;
-		std::string trying = "TRYING TO CONNECT ";
+		std::string trying = "TRYING ";
 		std::string status = getNetStatus();
 		std::string ip = getIP();
 		if(status == "NOT CONNECTED"){
@@ -255,14 +255,14 @@ void GuiNetwork::update(int deltaTime) {
 			}else{
 				std::stringstream sTrys;
 				sTrys << trying << mTrys;
-				updateStat->setValue(sTrys.str());
+				updateStat->setText(sTrys.str());
 				mTimer = 0;
 			}
 		}else{
 			mState = 0;
 			mTrys = 0;
-			updateStat->setValue(status);
-			updateIP->setValue(ip);
+			updateStat->setText(status);
+			updateIP->setText(ip);
 			Window* window = mWindow;
 			window->pushGui(new GuiMsgBox(window, "WIFI CONNECTED"));
 		}
