@@ -247,7 +247,7 @@ void GuiNetwork::update(int deltaTime) {
 		std::string trying = "TRYING TO CONNECT ";
 		std::string status = getNetStatus();
 		std::string ip = getIP();
-		if(status() == "NOT CONNECTED"){
+		if(status == "NOT CONNECTED"){
 			if(mTrys > 15){
 				mState = 0;
 				Window* window = mWindow;
