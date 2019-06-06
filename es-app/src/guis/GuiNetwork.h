@@ -19,9 +19,13 @@ private:
 	std::string getIP();
 	std::string getNetStatus();
 	bool getWifiBool();
-	void displayNetworkSettings();
+	void connect();
 	
 	int mTimer;
 	int mState;
+	int mTrys;
+	std::shared_ptr<DynamicTextComponent> updateStat;
+	std::shared_ptr<DynamicTextComponent> updateIP;
+	std::shared_ptr<SwitchComponent> wifi_enabled;
 	MenuComponent mMenu;
 };
