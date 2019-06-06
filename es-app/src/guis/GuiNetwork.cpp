@@ -120,6 +120,12 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "PASSWORD", "", updatePass, false));
 	});
 	mMenu.addRow(row);
+	
+	// BUTTONS
+	row.elements.clear();
+	row.addButton.addButton("BACK", "go back", [this] { delete this; });
+	row.addButton.addButton("CONNECT", "connect to wifi", [this] { save(); });
+	mMenu.addRow(row);
 
 	addChild(&mMenu);
 	setSize(mMenu.getSize());
