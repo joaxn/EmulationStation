@@ -31,7 +31,6 @@ private:
 	std::shared_ptr<TextComponent> mMsg;
 	std::vector< std::shared_ptr<ButtonComponent> > mButtons;
 	std::shared_ptr<ComponentGrid> mButtonGrid;
-	std::function<void()> mAcceleratorFunc;
 };
 
 #endif // ES_CORE_GUIS_GUI_MSG_BOX_H

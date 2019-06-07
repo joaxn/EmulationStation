@@ -49,6 +49,9 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	//if (isFullUI)
 	//	addEntry("OTHER SETTINGS", 0x777777FF, true, [this] { openOtherSettings(); });
 
+	if(isFullUI)
+		addEntry("SCREENSAVER SETTINGS", 0x777777FF, true, [this] { openScreensaverOptions(); });
+
 	if (isFullUI)
 		addEntry("CONFIGURE INPUT", 0x777777FF, true, [this] { openConfigInput(); });
 

@@ -11,6 +11,7 @@
 #include "guis/GuiKeyboard.h"
 #include "guis/GuiTextEditPopupKeyboard.h"
 #include "guis/GuiSettings.h"
+#include "guis/GuiWifiConnect.h"
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
 #include "Scripting.h"
@@ -218,6 +219,7 @@ void GuiNetwork::save() {
 }
 
 void GuiNetwork::connect() {
+	/*
 	updateStat->setText("TRYING TO CONNECT");
 	wifi_enabled->setState(true);
 	save();
@@ -226,6 +228,8 @@ void GuiNetwork::connect() {
 	mTimer = 0;
 	system("sudo systemctl daemon-reload");
 	system("sudo systemctl restart dhcpcd &");
+	*/
+	window->pushGui(new GuiWifiConnect(window));
 }
 
 void GuiNetwork::writeNetworkSettings() {
@@ -241,6 +245,7 @@ void GuiNetwork::writeNetworkSettings() {
 }
 
 void GuiNetwork::update(int deltaTime) {
+	/*
 	mTimer += deltaTime;
 	if (mTimer > 1000 && mState == 1){
 		mTrys += 1;
@@ -269,4 +274,5 @@ void GuiNetwork::update(int deltaTime) {
 		
 	}
 	GuiComponent::update(deltaTime);
+	*/
 }
