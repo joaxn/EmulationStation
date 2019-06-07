@@ -31,7 +31,7 @@ GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mBackgrou
 	addChild(&mGrid);
 }
 
-std::string GuiNetwork::getIP()
+std::string GuiWifiConnect::getIP()
 {
 	FILE *wIPP;
 	char wip[1035];
