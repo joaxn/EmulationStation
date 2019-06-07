@@ -19,8 +19,6 @@ GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mGrid(win
 {
 
 	float width = Renderer::getScreenWidth() * 0.6f; // max width
-
-	ComponentListRow row;
 	
 	mTitle = std::make_shared<TextComponent>(mWindow, "CONNECTING", Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
 	mGrid.setEntry(mTitle, Vector2i(0, 0), false, true);
