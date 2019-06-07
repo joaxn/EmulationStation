@@ -81,7 +81,7 @@ void GuiWifiConnect::update(int deltaTime) {
 		mTimer = 0;
 		mTrys += 1;
 		if(mState == 0){
-			mSate = 1;
+			mState = 1;
 			mTrys = 0;
 			mText->setText("RESTARTING NETWORK");
 			system("sudo systemctl daemon-reload");
