@@ -218,16 +218,14 @@ void GuiNetwork::save() {
 }
 
 void GuiNetwork::connect() {
+	updateStat->setText("TRYING TO CONNECT");
 	wifi_enabled->setState(true);
 	save();
 	mState = 1;
 	mTrys = 0;
 	mTimer = 0;
-	system("sudo ifconfig wlan0 down");
-	system("sudo dhclient -r wlan0");
-	system("sudo ifconfig wlan0 up");
-	system("sudo dhclient wlan0");
-	updateStat->setText("TRYING TO CONNECT");
+	system("sudo systemctl daemon-reload");
+	system("sudo systemctl restart dhcpcd &");
 }
 
 void GuiNetwork::writeNetworkSettings() {
