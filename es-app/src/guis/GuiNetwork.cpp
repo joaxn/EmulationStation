@@ -26,40 +26,34 @@
 
 GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTimer(0), mState(0)
 {
-
+	ComponentListRow row;
+	
 	// STATUS
+	auto title = std::make_shared<TextComponent>(mWindow, "STATUS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	std::string wStatText = getNetStatus();
 	updateStat = std::make_shared<DynamicTextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	updateStat->setHorizontalAlignment(ALIGN_RIGHT);
-	mMenu.addWithLabel("STATUS", updateStat);
+	row.addElement(title, true);
+	row.addElement(updateStat, true);
+	mMenu.addRow(row);
 
 	// IP
+	title = std::make_shared<TextComponent>(mWindow, "IP ADDRESS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	std::string wIP = getIP();
 	updateIP = std::make_shared<DynamicTextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	updateIP->setHorizontalAlignment(ALIGN_RIGHT);
-	mMenu.addWithLabel("IP ADDRESS", updateIP);
+	row.addElement(title, true);
+	row.addElement(updateIP, true);
+	mMenu.addRow(row);
 	
 	// WIFI ON OFF
 	bool flagWifi = getWifiBool();
 	wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	mMenu.addWithLabel("ENABLE WIFI", wifi_enabled);
-	addSaveFunc([this] {
-		if (wifi_enabled->getState()){
-			// enable wifi
-			system("sudo ifconfig wlan0 up");
-			system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*/#/g' /boot/config.txt");
-		} else{
-			// disable wifi
-			system("sudo ifconfig wlan0 down");
-			system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*//g' /boot/config.txt");
-		}
-		Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
-	});
 	
 	//SSID
-	ComponentListRow row;
-	auto title = std::make_shared<TextComponent>(mWindow, "SSID", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	title = std::make_shared<TextComponent>(mWindow, "SSID", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updateSSID = [this,editSSID](const std::string& newVal) {
@@ -82,10 +76,10 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	mMenu.addRow(row);
 	
 	//PASSWORD
+	title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	row.elements.clear();
 	std::string wifiKey = Settings::getInstance()->getString("WifiKey");
 	for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
-	title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto editPass = std::make_shared<TextComponent>(mWindow, wifiKey, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updatePass = [this,editPass](const std::string& newVal) {
@@ -213,13 +207,16 @@ std::vector<HelpPrompt> GuiNetwork::getHelpPrompts()
 }
 
 void GuiNetwork::save() {
-	mState = 0;
-	if (mSaveFuncs.empty()) {
-		return;
+	if (wifi_enabled->getState()){
+		// enable wifi
+		system("sudo ifconfig wlan0 up");
+		//system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*/#/g' /boot/config.txt");
+	} else{
+		// disable wifi
+		system("sudo ifconfig wlan0 down");
+		//system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*//g' /boot/config.txt");
 	}
-	for (auto it = mSaveFuncs.begin(); it != mSaveFuncs.end(); it++) {
-		(*it)();
-	}
+	Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
 	Settings::getInstance()->saveFile();
 }
 
@@ -238,7 +235,7 @@ void GuiNetwork::update(int deltaTime) {
 	mTimer += deltaTime;
 	if (mTimer > 1000 && mState == 1){
 		mTrys += 1;
-		std::string trying = "TRYING ";
+		std::string trying = "TRYING TO CONNECT ";
 		std::string status = getNetStatus();
 		std::string ip = getIP();
 		if(status == "NOT CONNECTED"){
