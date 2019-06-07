@@ -26,10 +26,10 @@ GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mGrid(win
 	mText = std::make_shared<TextComponent>(mWindow, "TRYING TO CONNECT", Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_CENTER);
 	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1), GridFlags::BORDER_TOP | GridFlags::BORDER_BOTTOM);
 
-	animationGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(3, 1));
+	animationGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(5, 1));
 	mAnimation = std::make_shared<AnimatedImageComponent>(mWindow);
 	mAnimation->load(&WIFICON_ANIMATION_DEF);
-	animationGrid.addEntry(mAnimation,Vector(1,0),true,false);
+	animationGrid.setEntry(mAnimation,Vector(3,0),true,false);
 	animationGrid->setSize(0, mTitle->getFont()->getHeight());
 	mGrid.setEntry(animationGrid, Vector2i(0, 2), true, false, Vector2i(1, 1));
 
