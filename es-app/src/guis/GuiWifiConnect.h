@@ -12,13 +12,11 @@ public:
 	GuiWifiConnect(Window* window);
 
 	void update(int deltaTime) override;
-	void onSizeChanged() override;
 
 private:
 	std::string getIP();
 
-	NinePatchComponent mBackground;
-	ComponentGrid mGrid;
+	MenuComponent mMenu;
 
 	int mTimer;
 	int mTrys;

@@ -15,20 +15,25 @@ AnimationFrame WIFICON_ANIMATION_FRAMES[] = {
 };
 const AnimationDef WIFICON_ANIMATION_DEF = { WIFICON_ANIMATION_FRAMES, 4, true };
 
-GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mBackground(window, ":/frame.png"), mGrid(window, Vector2i(5, 3)), mTrys(0), mTimer(0), mState(0)
+GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTrys(0), mTimer(0), mState(0)
 {
 
+	ComponentListRow row;
+
 	mText = std::make_shared<TextComponent>(mWindow, "TRYING TO CONNECT", Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_CENTER);
-	mGrid.setEntry(mText, Vector2i(0, 0), false, false);
+	row.addElement(mText, true);
+	mMenu.addRow(row);
+	row.elements.clear();
 
 	mAnimation = std::make_shared<AnimatedImageComponent>(mWindow);
 	mAnimation->load(&WIFICON_ANIMATION_DEF);
+	row.addElement(mAnimation, true);
+	mMenu.addRow(row);
+	row.elements.clear();
 
-	mGrid.setEntry(mAnimation, Vector2i(1, 1), false, true);
-	mGrid.setEntry(mText, Vector2i(3, 1), false, true);
-
-	addChild(&mBackground);
-	addChild(&mGrid);
+	addChild(&mMenu);
+	setSize(mMenu.getSize());
+	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
 }
 
 std::string GuiWifiConnect::getIP()
@@ -51,28 +56,6 @@ std::string GuiWifiConnect::getIP()
 		}
 	}
 	return wIP;
-}
-
-void GuiWifiConnect::onSizeChanged()
-{
-	mGrid.setSize(mSize);
-
-	if(mSize.x() == 0 || mSize.y() == 0)
-		return;
-
-	const float middleSpacerWidth = 0.01f * Renderer::getScreenWidth();
-	const float textHeight = mText->getFont()->getLetterHeight();
-	mText->setSize(0, textHeight);
-	const float textWidth = mText->getSize().x() + 4;
-
-	mGrid.setColWidthPerc(1, textHeight / mSize.x()); // animation is square
-	mGrid.setColWidthPerc(2, middleSpacerWidth / mSize.x());
-	mGrid.setColWidthPerc(3, textWidth / mSize.x());
-
-	mGrid.setRowHeightPerc(1, textHeight / mSize.y());
-	
-	mBackground.fitTo(Vector2f(mGrid.getColWidth(1) + mGrid.getColWidth(2) + mGrid.getColWidth(3), textHeight + 2),
-		mAnimation->getPosition(), Vector2f(0, 0));
 }
 
 void GuiWifiConnect::update(int deltaTime) {
