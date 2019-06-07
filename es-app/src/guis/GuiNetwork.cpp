@@ -229,6 +229,7 @@ void GuiNetwork::connect() {
 	system("sudo systemctl daemon-reload");
 	system("sudo systemctl restart dhcpcd &");
 	*/
+	Window* window = mWindow;
 	window->pushGui(new GuiWifiConnect(window));
 }
 
