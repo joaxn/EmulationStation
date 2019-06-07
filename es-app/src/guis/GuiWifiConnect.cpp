@@ -15,7 +15,7 @@ AnimationFrame BUSY_ANIMATION_FRAMES[] = {
 };
 const AnimationDef BUSY_ANIMATION_DEF = { BUSY_ANIMATION_FRAMES, 4, true };
 
-GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mBackground(window, ":/frame.png"), mGrid(window, Vector2i(5, 3), mTrys(0), mTimer(0), mState(0))
+GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mBackground(window, ":/frame.png"), mGrid(window, Vector2i(5, 3)), mTrys(0), mTimer(0), mState(0)
 {
 
 	mText = std::make_shared<TextComponent>(mWindow, "TRYING TO CONNECT", Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_CENTER);
