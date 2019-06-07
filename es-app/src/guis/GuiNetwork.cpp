@@ -36,6 +36,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	row.addElement(title, true);
 	row.addElement(updateStat, true);
 	mMenu.addRow(row);
+	row.elements.clear();
 
 	// IP
 	title = std::make_shared<TextComponent>(mWindow, "IP ADDRESS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
@@ -45,6 +46,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	row.addElement(title, true);
 	row.addElement(updateIP, true);
 	mMenu.addRow(row);
+	row.elements.clear();
 	
 	// WIFI ON OFF
 	bool flagWifi = getWifiBool();
@@ -57,10 +59,9 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updateSSID = [this,editSSID](const std::string& newVal) {
-		std::stringstream callSupplicant;
-		callSupplicant << "sudo sed -i 's/ssid=.*/ssid=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
 		editSSID->setText(newVal);
 		Settings::getInstance()->setString("WifiSSID", newVal);
+		writeNetworkSettings();
 	};
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
 	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
@@ -69,41 +70,37 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	row.addElement(editSSID, true);
 	row.addElement(spacer, false);
 	row.addElement(makeArrow(mWindow), false);
-
 	row.makeAcceptInputHandler( [this, editSSID, updateSSID] {
 		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "SSID", editSSID->getValue(), updateSSID, false));
 	});
 	mMenu.addRow(row);
+	row.elements.clear();
 	
 	//PASSWORD
 	title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	row.elements.clear();
 	std::string wifiKey = Settings::getInstance()->getString("WifiKey");
 	for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
 	auto editPass = std::make_shared<TextComponent>(mWindow, wifiKey, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updatePass = [this,editPass](const std::string& newVal) {
-		std::stringstream callSupplicant;
-		callSupplicant << "sudo sed -i 's/psk=.*/psk=\"" << newVal << "\"/' /etc/wpa_supplicant/wpa_supplicant.conf";
-		system(callSupplicant.str().c_str());
 		Settings::getInstance()->setString("WifiKey", newVal);
 		std::string wifiKey = newVal;
 		for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
 		editPass->setText(wifiKey);
+		writeNetworkSettings();
 	};
 	
 	row.addElement(title, true);
 	row.addElement(editPass, true);
 	row.addElement(spacer, false);
 	row.addElement(makeArrow(mWindow), false);
-
 	row.makeAcceptInputHandler( [this, editPass, updatePass] {
 		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "PASSWORD", "", updatePass, false));
 	});
 	mMenu.addRow(row);
+	row.elements.clear();
 	
 	// BUTTONS
-	
 	mMenu.addButton("BACK", "go back", [this] { save(); delete this; });
 	mMenu.addButton("CONNECT", "connect to wifi", [this] { connect(); });
 
@@ -227,8 +224,22 @@ void GuiNetwork::connect() {
 	mTrys = 0;
 	mTimer = 0;
 	system("sudo ifconfig wlan0 down");
+	system("sudo dhclient -r wlan0");
 	system("sudo ifconfig wlan0 up");
+	system("sudo dhclient wlan0");
 	updateStat->setText("TRYING TO CONNECT");
+}
+
+void GuiNetwork::writeNetworkSettings() {
+	std::ofstream wpaconf;
+	wpaconf.open ("/etc/wpa_supplicant/wpa_supplicant.conf");
+	wpaconf << "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev" << "\n";
+	wpaconf << "country=AT" << "\n";
+	wpaconf << "network={" << "\n";
+	wpaconf << "ssid=\"" << Settings::getInstance()->getString("WifiSSID") << "\"" << "\n";
+	wpaconf << "psk=\"" << Settings::getInstance()->getString("WifiKey") << "\"" << "\n";
+	wpaconf << "}" << "\n";
+	wpaconf.close();
 }
 
 void GuiNetwork::update(int deltaTime) {
