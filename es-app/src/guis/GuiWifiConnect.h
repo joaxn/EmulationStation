@@ -1,6 +1,5 @@
 #include "components/BusyComponent.h"
 #include "components/ComponentGrid.h"
-#include "components/MenuComponent.h"
 #include "components/NinePatchComponent.h"
 #include "GuiComponent.h"
 

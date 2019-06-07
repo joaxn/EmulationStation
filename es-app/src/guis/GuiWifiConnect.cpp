@@ -15,7 +15,7 @@ AnimationFrame WIFICON_ANIMATION_FRAMES[] = {
 };
 const AnimationDef WIFICON_ANIMATION_DEF = { WIFICON_ANIMATION_FRAMES, 4, true };
 
-GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mGrid(window, Vector2i(1, 3), mBackground(window, ":/frame.png"), mTrys(0), mTimer(0), mState(0)
+GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mGrid(window, Vector2i(1, 3)), mBackground(window, ":/frame.png"), mTrys(0), mTimer(0), mState(0)
 {
 
 	float width = Renderer::getScreenWidth() * 0.6f; // max width
