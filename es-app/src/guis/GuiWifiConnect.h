@@ -20,7 +20,7 @@ private:
 	NinePatchComponent mBackground;
 	ComponentGrid mGrid;
 	std::shared_ptr<TextComponent> mTitle;
-	std::shared_ptr<ComponentGrid> animationGrid;
+	std::shared_ptr<ComponentGrid> mAnimationGrid;
 	std::shared_ptr<AnimatedImageComponent> mAnimation;
 	std::shared_ptr<TextComponent> mText;
 	

@@ -1,9 +1,12 @@
 #include "guis/GuiWifiConnect.h"
 
 #include "components/AnimatedImageComponent.h"
+#include "components/MenuComponent.h"
 #include "components/ImageComponent.h"
 #include "components/TextComponent.h"
 #include "components/ButtonComponent.h"
+
+#include "utils/StringUtil.h"
 
 #define HORIZONTAL_PADDING_PX 20
 
@@ -26,17 +29,17 @@ GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mGrid(win
 	mText = std::make_shared<TextComponent>(mWindow, "TRYING TO CONNECT", Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_CENTER);
 	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1), GridFlags::BORDER_TOP | GridFlags::BORDER_BOTTOM);
 
-	animationGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(5, 1));
+	mAnimationGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(5, 1));
 	mAnimation = std::make_shared<AnimatedImageComponent>(mWindow);
 	mAnimation->load(&WIFICON_ANIMATION_DEF);
-	animationGrid.setEntry(mAnimation,Vector(3,0),true,false);
-	animationGrid->setSize(0, mTitle->getFont()->getHeight());
-	mGrid.setEntry(animationGrid, Vector2i(0, 2), true, false, Vector2i(1, 1));
+	mAnimationGrid.setEntry(mAnimation,Vector(3,0),true,false);
+	mAnimationGrid->setSize(0, mTitle->getFont()->getHeight());
+	mGrid.setEntry(mAnimationGrid, Vector2i(0, 2), true, false, Vector2i(1, 1));
 
 	addChild(&mBackground);
 	addChild(&mGrid);
 	
-	setSize(Renderer::getScreenWidth() * 0.6f + HORIZONTAL_PADDING_PX*2, mTitle->getFont()->getHeight() + mText->getFont()->getHeight() + animationGrid->getSize().y() + 40);
+	setSize(Renderer::getScreenWidth() * 0.6f + HORIZONTAL_PADDING_PX*2, mTitle->getFont()->getHeight() + mText->getFont()->getHeight() + mAnimationGrid->getSize().y() + 40);
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, (Renderer::getScreenHeight() - mSize.y()) / 2);
 }
 
@@ -46,12 +49,12 @@ void GuiWifiConnect::onSizeChanged()
 
 	mText->setSize(mSize.x() - 40, mText->getSize().y());
 
-	float fullHeight = mTitle->getFont()->getHeight() + mText->getSize().y() + animationGrid->getSize().y();
+	float fullHeight = mTitle->getFont()->getHeight() + mText->getSize().y() + mAnimationGrid->getSize().y();
 
 	// update grid
 	mGrid.setRowHeightPerc(0, mTitle->getFont()->getHeight() / fullHeight);
 	mGrid.setRowHeightPerc(1, mText->getSize().y() / fullHeight);
-	mGrid.setRowHeightPerc(2, animationGrid->getSize().y() / fullHeight);
+	mGrid.setRowHeightPerc(2, mAnimationGrid->getSize().y() / fullHeight);
 
 	mGrid.setSize(mSize);
 }
