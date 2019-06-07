@@ -7,13 +7,13 @@
 
 #define HORIZONTAL_PADDING_PX 20
 
-AnimationFrame BUSY_ANIMATION_FRAMES[] = {
+AnimationFrame WIFICON_ANIMATION_FRAMES[] = {
 	{":/busy_0.svg", 300},
 	{":/busy_1.svg", 300},
 	{":/busy_2.svg", 300},
 	{":/busy_3.svg", 300},
 };
-const AnimationDef BUSY_ANIMATION_DEF = { BUSY_ANIMATION_FRAMES, 4, true };
+const AnimationDef WIFICON_ANIMATION_DEF = { WIFICON_ANIMATION_FRAMES, 4, true };
 
 GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mBackground(window, ":/frame.png"), mGrid(window, Vector2i(5, 3)), mTrys(0), mTimer(0), mState(0)
 {
@@ -22,7 +22,7 @@ GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mBackgrou
 	mGrid.setEntry(mText, Vector2i(0, 0), false, false);
 
 	mAnimation = std::make_shared<AnimatedImageComponent>(mWindow);
-	mAnimation->load(&BUSY_ANIMATION_DEF);
+	mAnimation->load(&WIFICON_ANIMATION_DEF);
 
 	mGrid.setEntry(mAnimation, Vector2i(1, 1), false, true);
 	mGrid.setEntry(mText, Vector2i(3, 1), false, true);
