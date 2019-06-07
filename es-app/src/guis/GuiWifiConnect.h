@@ -9,7 +9,7 @@ class TextComponent;
 class GuiWifiConnect : public GuiComponent
 {
 public:
-	GuiWifiConnect(Window* window, const std::function<void()>& func1 = nullptr);
+	GuiWifiConnect(Window* window);
 
 	void update(int deltaTime) override;
 	void onSizeChanged() override;
