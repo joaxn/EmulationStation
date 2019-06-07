@@ -15,25 +15,47 @@ AnimationFrame WIFICON_ANIMATION_FRAMES[] = {
 };
 const AnimationDef WIFICON_ANIMATION_DEF = { WIFICON_ANIMATION_FRAMES, 4, true };
 
-GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTrys(0), mTimer(0), mState(0)
+GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mGrid(window, Vector2i(1, 3), mBackground(window, ":/frame.png"), mTrys(0), mTimer(0), mState(0)
 {
 
+	float width = Renderer::getScreenWidth() * 0.6f; // max width
+
 	ComponentListRow row;
+	
+	mTitle = std::make_shared<TextComponent>(mWindow, "CONNECTING", Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
+	mGrid.setEntry(mTitle, Vector2i(0, 0), false, true);
 
 	mText = std::make_shared<TextComponent>(mWindow, "TRYING TO CONNECT", Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_CENTER);
-	row.addElement(mText, true);
-	mMenu.addRow(row);
-	row.elements.clear();
+	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1), GridFlags::BORDER_TOP | GridFlags::BORDER_BOTTOM);
 
+	animationGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(3, 1));
 	mAnimation = std::make_shared<AnimatedImageComponent>(mWindow);
 	mAnimation->load(&WIFICON_ANIMATION_DEF);
-	row.addElement(mAnimation, true);
-	mMenu.addRow(row);
-	row.elements.clear();
+	animationGrid.addEntry(mAnimation,Vector(1,0),true,false);
+	animationGrid->setSize(0, mTitle->getFont()->getHeight());
+	mGrid.setEntry(animationGrid, Vector2i(0, 2), true, false, Vector2i(1, 1));
 
-	addChild(&mMenu);
-	setSize(mMenu.getSize());
-	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
+	addChild(&mBackground);
+	addChild(&mGrid);
+	
+	setSize(Renderer::getScreenWidth() * 0.6f + HORIZONTAL_PADDING_PX*2, mTitle->getFont()->getHeight() + mText->getFont()->getHeight() + animationGrid->getSize().y() + 40);
+	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, (Renderer::getScreenHeight() - mSize.y()) / 2);
+}
+
+void GuiWifiConnect::onSizeChanged()
+{
+	mBackground.fitTo(mSize, Vector3f::Zero(), Vector2f(-32, -32));
+
+	mText->setSize(mSize.x() - 40, mText->getSize().y());
+
+	float fullHeight = mTitle->getFont()->getHeight() + mText->getSize().y() + animationGrid->getSize().y();
+
+	// update grid
+	mGrid.setRowHeightPerc(0, mTitle->getFont()->getHeight() / fullHeight);
+	mGrid.setRowHeightPerc(1, mText->getSize().y() / fullHeight);
+	mGrid.setRowHeightPerc(2, animationGrid->getSize().y() / fullHeight);
+
+	mGrid.setSize(mSize);
 }
 
 std::string GuiWifiConnect::getIP()
