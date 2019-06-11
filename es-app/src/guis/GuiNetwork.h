@@ -14,9 +14,6 @@ public:
 	std::vector<HelpPrompt> getHelpPrompts() override;
 
 private:
-	std::string getIP();
-	std::string getNetStatus();
-	bool getWifiBool();
 	void connect();
 	void writeNetworkSettings();
 	

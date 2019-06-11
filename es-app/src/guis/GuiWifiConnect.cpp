@@ -6,6 +6,7 @@
 #include "components/TextComponent.h"
 #include "components/ButtonComponent.h"
 
+#include "utils/NetworkUtil.h"
 #include "utils/StringUtil.h"
 
 #define HORIZONTAL_PADDING_PX 20
@@ -59,43 +60,30 @@ void GuiWifiConnect::onSizeChanged()
 	mGrid.setSize(mSize);
 }
 
-std::string GuiWifiConnect::getIP()
-{
-	FILE *wIPP;
-	char wip[1035];
-	std::string currentLine;
-	std::size_t found;
-	
-	std::string wIP;
-	wIPP = popen("hostname -I", "r");
-	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
-		wIP = wip;
-		found = wIP.find(".");
-		if (found != std::string::npos) {
-			int trim = wIP.find("\n");
-			wIP = wIP.substr(0, trim-1);
-		}else{
-			wIP = "";
-		}
-	}
-	return wIP;
-}
-
 void GuiWifiConnect::update(int deltaTime) {
 	mTimer += deltaTime;
-	if (mTimer > 1000){
+	if (mState == 0){
+		mState = 1;
+		mTimer = 0;
+		mTrys = 0;
+		mText->setText("TRYING TO CONNECT");
+		system("ip addr flush dev wlan0");
+		system("sudo systemctl daemon-reload");
+		system("sudo systemctl restart dhcpcd &");
+	}
+	else if (mState == 1 && mTimer > 1000){
 		mTimer = 0;
 		mTrys += 1;
-		if(mState == 0){
-			mState = 1;
-			mTrys = 0;
-			mText->setText("RESTARTING NETWORK");
-			system("sudo systemctl daemon-reload");
-			system("sudo systemctl restart dhcpcd &");
+		if(Utils::Network::isIP()){
+			mText->setText("SUCESSFULLY CONNECTED");
+			mState == 2;
+		} else if (mTrys > 15){
+			mText->setText("ERROR CONNECTING TO NETWORK");
+			mState == 2;
 		}
-		if(mState == 1 && mTrys > 20){
-			delete this;
-		}
+	}
+	else if (mState == 2 && mTimer > 3000){
+		delete this;
 	}
 	GuiComponent::update(deltaTime);
 }

@@ -15,7 +15,6 @@ public:
 	void onSizeChanged() override;
 
 private:
-	std::string getIP();
 	
 	NinePatchComponent mBackground;
 	ComponentGrid mGrid;

@@ -14,6 +14,7 @@
 #include "guis/GuiWifiConnect.h"
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
+#include "utils/NetworkUtil.h"
 #include "Scripting.h"
 #include "SystemData.h"
 #include "Log.h"
@@ -31,7 +32,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	
 	// STATUS
 	auto title = std::make_shared<TextComponent>(mWindow, "STATUS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	std::string wStatText = getNetStatus();
+	std::string wStatText = Utils::Network::getStatus();
 	updateStat = std::make_shared<DynamicTextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	updateStat->setHorizontalAlignment(ALIGN_RIGHT);
 	row.addElement(title, true);
@@ -41,7 +42,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 
 	// IP
 	title = std::make_shared<TextComponent>(mWindow, "IP ADDRESS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	std::string wIP = getIP();
+	std::string wIP = Utils::Network::getIP();
 	updateIP = std::make_shared<DynamicTextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	updateIP->setHorizontalAlignment(ALIGN_RIGHT);
 	row.addElement(title, true);
@@ -50,7 +51,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	row.elements.clear();
 	
 	// WIFI ON OFF
-	bool flagWifi = getWifiBool();
+	bool flagWifi = Utils::Network::isWifi();
 	wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
 	wifi_enabled->setState(flagWifi);
 	mMenu.addWithLabel("ENABLE WIFI", wifi_enabled);
@@ -110,68 +111,6 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
 }
 
-std::string GuiNetwork::getIP()
-{
-	FILE *wIPP;
-	char wip[1035];
-	std::string currentLine;
-	std::size_t found;
-	
-	std::string wIP;
-	wIPP = popen("hostname -I", "r");
-	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
-		wIP = wip;
-		found = wIP.find(".");
-		if (found != std::string::npos) {
-			int trim = wIP.find("\n");
-			wIP = wIP.substr(0, trim-1);
-		}else{
-			wIP = "NOT CONNECTED";
-		}
-	}
-	return wIP;
-}
-
-std::string GuiNetwork::getNetStatus()
-{
-	FILE *wIPP;
-	char wip[1035];
-	
-	std::string wStat;
-	std::string wStatText;
-	wIPP = popen("hostname -I", "r");
-	while (fgets(wip, sizeof(wip), wIPP) != NULL) {
-		wStat = wip;
-		int trim = wStat.find("\n");
-		wStat = wStat.substr(0, trim);
-		if(wStat == "" | wStat == " "){
-			wStatText = "NOT CONNECTED";
-		}else{
-			wStatText = "CONNECTED";
-		}
-	}
-	return wStatText;
-}
-
-bool GuiNetwork::getWifiBool()
-{
-	FILE *wifiOnOff;
-	char wi[1035];
-	bool flagWifi;
-	std::string currentLine;
-	std::size_t found;
-	flagWifi = false;
-	wifiOnOff = popen("ifconfig wlan0 | grep 'flags='", "r");
-	while (fgets(wi, sizeof(wi), wifiOnOff) != NULL) {
-		currentLine = wi;
-		found = currentLine.find("RUNNING");
-		if (found != std::string::npos) {
-			flagWifi = true;
-		}
-	}
-	return flagWifi;
-}
-
 bool GuiNetwork::input(InputConfig* config, Input input)
 {
 	if(config->isMappedTo("b", input) && input.value != 0)
@@ -219,16 +158,7 @@ void GuiNetwork::save() {
 }
 
 void GuiNetwork::connect() {
-	/*
-	updateStat->setText("TRYING TO CONNECT");
-	wifi_enabled->setState(true);
 	save();
-	mState = 1;
-	mTrys = 0;
-	mTimer = 0;
-	system("sudo systemctl daemon-reload");
-	system("sudo systemctl restart dhcpcd &");
-	*/
 	Window* window = mWindow;
 	window->pushGui(new GuiWifiConnect(window));
 }
@@ -274,6 +204,7 @@ void GuiNetwork::update(int deltaTime) {
 		}
 		
 	}
-	GuiComponent::update(deltaTime);
 	*/
+	GuiComponent::update(deltaTime);
+	
 }
