@@ -32,31 +32,28 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	bool isFullUI = UIModeController::getInstance()->isUIModeFull();
 
 	if (isFullUI)
-		addEntry("SCRAPER", 0x777777FF, true, [this] { openScraperSettings(); });
+		addEntry("NETWORK SETTINGS", ":/menu/controller.svg", 0x777777FF, true, [this] { openNetworkSettings(); });
 	
 	if (isFullUI)
-		addEntry("NETWORK SETTINGS", 0x777777FF, true, [this] { openNetworkSettings(); });
-
-	//if (isFullUI)
-	//	addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
+		addEntry("UPDATE", ":/menu/controller.svg", 0x777777FF, true, [this] { openUpdate(); });
+	
+	if (isFullUI)
+		addEntry("SCRAPER", ":/menu/controller.svg", 0x777777FF, true, [this] { openScraperSettings(); });
 
 	if (isFullUI)
-		addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
-
-	//if (isFullUI)
-	//	addEntry("GAME COLLECTION SETTINGS", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
+		addEntry("UI SETTINGS", ":/menu/controller.svg", 0x777777FF, true, [this] { openUISettings(); });
 
 	//if (isFullUI)
 	//	addEntry("OTHER SETTINGS", 0x777777FF, true, [this] { openOtherSettings(); });
 
 	if(isFullUI)
-		addEntry("SCREENSAVER SETTINGS", 0x777777FF, true, [this] { openScreensaverOptions(); });
+		addEntry("SCREENSAVER SETTINGS", ":/menu/screensaver.svg", 0x777777FF, true, [this] { openScreensaverOptions(); });
 
 	if (isFullUI)
-		addEntry("CONFIGURE INPUT", 0x777777FF, true, [this] { openConfigInput(); });
+		addEntry("CONFIGURE INPUT", ":/menu/controller.svg", 0x777777FF, true, [this] { openConfigInput(); });
 
 	if (isFullUI)
-		addEntry("QUIT", 0x777777FF, true, [this] {openQuitMenu(); });
+		addEntry("QUIT", ":/menu/controller.svg", 0x777777FF, true, [this] {openQuitMenu(); });
 
 	addChild(&mMenu);
 	addVersionInfo();
@@ -69,6 +66,17 @@ void GuiMenu::openNetworkSettings()
 	
 	Window* window = mWindow;
 	window->pushGui(new GuiNetwork(window));
+}
+
+void GuiMenu::openUpdate()
+{
+	Window* window = mWindow;
+	std::string msg = "This may take some minutes.\n";
+	msg += "Are you sure you want to update?";
+	window->pushGui(new GuiMsgBox(window, msg, 
+		"YES", [] {
+			// code here
+	}, "NO",nullptr));
 }
 
 
@@ -582,12 +590,24 @@ void GuiMenu::onSizeChanged()
 	mVersion.setPosition(0, mSize.y() - mVersion.getSize().y());
 }
 
-void GuiMenu::addEntry(const char* name, unsigned int color, bool add_arrow, const std::function<void()>& func)
+void GuiMenu::addEntry(const char* name, const char* icon, unsigned int color, bool add_arrow, const std::function<void()>& func)
 {
 	std::shared_ptr<Font> font = Font::get(FONT_SIZE_MEDIUM);
 
 	// populate the list
 	ComponentListRow row;
+	
+	auto icon = std::make_shared<ImageComponent>(mWindow);
+	icon->setImage(icon);
+	icon->setColorShift(color);
+	icon->setResize(0, Font::get(FONT_SIZE_MEDIUM)->getLetterHeight() * 1.25f);
+	row.addElement(icon, false);
+
+	// spacer between icon and text
+	auto spacer = std::make_shared<GuiComponent>(mWindow);
+	spacer->setSize(16, 0);
+	row.addElement(spacer, false);
+	
 	row.addElement(std::make_shared<TextComponent>(mWindow, name, font, color), true);
 
 	if(add_arrow)

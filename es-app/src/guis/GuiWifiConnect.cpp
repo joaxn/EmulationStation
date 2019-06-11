@@ -36,15 +36,18 @@ GuiWifiConnect::GuiWifiConnect(Window* window, const std::function<void()>& call
 	mAnimationGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(5, 1));
 	mAnimation = std::make_shared<AnimatedImageComponent>(mWindow);
 	mAnimation->load(&WIFICON_ANIMATION_DEF);
-	mAnimation->setSize(mText->getFont()->getHeight(), mText->getFont()->getHeight());
 	mAnimationGrid->setEntry(mAnimation,Vector2i(2,0),true,false);
-	mAnimationGrid->setSize(0, mText->getFont()->getHeight());
 	mGrid.setEntry(mAnimationGrid, Vector2i(0, 2), true, false, Vector2i(1, 1));
 
 	addChild(&mBackground);
 	addChild(&mGrid);
 	
-	setSize(Renderer::getScreenWidth() * 0.6f + HORIZONTAL_PADDING_PX*2, mTitle->getFont()->getHeight() + mText->getFont()->getHeight() + mAnimationGrid->getSize().y() + 40);
+	mTitle->setSize(mSize.x() - 40, mTitle->getFont()->getHeight());
+	mText->setSize(mSize.x() - 40, mText->getFont()->getHeight());
+	mAnimation->setSize(mText->getFont()->getHeight(), mText->getFont()->getHeight());
+	mAnimationGrid->setSize(0, mText->getFont()->getHeight());
+	
+	setSize(Renderer::getScreenWidth() * 0.6f + HORIZONTAL_PADDING_PX*2, mTitle->getSize().y() + mText->getSize().y() + mAnimationGrid->getSize().y() + 40);
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, (Renderer::getScreenHeight() - mSize.y()) / 2);
 }
 
@@ -58,8 +61,8 @@ void GuiWifiConnect::onSizeChanged()
 	float fullHeight = mTitle->getFont()->getHeight() + mText->getSize().y() + mAnimationGrid->getSize().y();
 
 	// update grid
-	mGrid.setRowHeightPerc(0, mTitle->getFont()->getHeight() / fullHeight);
-	mGrid.setRowHeightPerc(1, mText->getFont()->getHeight() / fullHeight);
+	mGrid.setRowHeightPerc(0, mTitle->getSize().y() / fullHeight);
+	mGrid.setRowHeightPerc(1, mText->getSize().y() / fullHeight);
 	mGrid.setRowHeightPerc(2, mAnimationGrid->getSize().y() / fullHeight);
 
 	mGrid.setSize(mSize);
@@ -71,7 +74,6 @@ void GuiWifiConnect::update(int deltaTime) {
 		mState = 1;
 		mTimer = 0;
 		mTrys = 0;
-		mText->setText("RESTARTING NETWORK");
 		system("sudo ip addr flush dev wlan0");
 		system("sudo systemctl daemon-reload");
 		system("sudo systemctl restart dhcpcd &");
@@ -79,7 +81,6 @@ void GuiWifiConnect::update(int deltaTime) {
 	else if (mState == 1 && mTimer > 1000){
 		mTimer = 0;
 		mTrys += 1;
-		mText->setText("TRYING TO CONNECT");
 		if(Utils::Network::isIP() == true){
 			mText->setText("SUCESSFULLY CONNECTED");
 			mState = 2;
