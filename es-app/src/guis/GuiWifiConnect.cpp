@@ -49,6 +49,7 @@ void GuiWifiConnect::onSizeChanged()
 {
 	mBackground.fitTo(mSize, Vector3f::Zero(), Vector2f(-32, -32));
 
+	mTitle->setSize(mSize.x() - 40, mTitle->getSize().y());
 	mText->setSize(mSize.x() - 40, mText->getSize().y());
 
 	float fullHeight = mTitle->getFont()->getHeight() + mText->getSize().y() + mAnimationGrid->getSize().y();
@@ -70,12 +71,13 @@ void GuiWifiConnect::update(int deltaTime) {
 		mText->setText("RESTARTING NETWORK");
 		system("sudo ip addr flush dev wlan0");
 		system("sudo systemctl daemon-reload");
-		system("sudo systemctl restart dhcpcd &");
+		system("sudo systemctl restart dhcpcd > /tmp/networkrestart.txt");
 	}
 	else if (mState == 1 && mTimer > 1000){
 		mTimer = 0;
 		mTrys += 1;
-		if(Utils::Network::isIP()){
+		mText->setText("TRYING TO CONNECT");
+		if(Utils::Network::isIP() == true){
 			mText->setText("SUCESSFULLY CONNECTED");
 			mState = 2;
 		} else if (mTrys > 15){

@@ -147,11 +147,9 @@ void GuiNetwork::save() {
 	if (wifi_enabled->getState()){
 		// enable wifi
 		system("sudo ifconfig wlan0 up");
-		//system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*/#/g' /boot/config.txt");
 	} else{
 		// disable wifi
 		system("sudo ifconfig wlan0 down");
-		//system("sudo sed -i '/dtoverlay=pi3-disable-wifi/s/^#*//g' /boot/config.txt");
 	}
 	Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
 	Settings::getInstance()->saveFile();
@@ -176,35 +174,13 @@ void GuiNetwork::writeNetworkSettings() {
 }
 
 void GuiNetwork::update(int deltaTime) {
-	/*
 	mTimer += deltaTime;
-	if (mTimer > 1000 && mState == 1){
-		mTrys += 1;
-		std::string trying = "TRYING TO CONNECT ";
-		std::string status = getNetStatus();
-		std::string ip = getIP();
-		if(status == "NOT CONNECTED"){
-			if(mTrys > 15){
-				mState = 0;
-				Window* window = mWindow;
-				window->pushGui(new GuiMsgBox(window, "WIFI CONNECTION FAILED"));
-			}else{
-				std::stringstream sTrys;
-				sTrys << trying << mTrys;
-				updateStat->setText(sTrys.str());
-				mTimer = 0;
-			}
-		}else{
-			mState = 0;
-			mTrys = 0;
-			updateStat->setText(status);
-			updateIP->setText(ip);
-			Window* window = mWindow;
-			window->pushGui(new GuiMsgBox(window, "WIFI CONNECTED"));
-		}
+	if (mTimer > 1000){
+		updateStat->setText(Utils::Network::getStatus());
+		updateIP->setText(Utils::Network::getIP());
+		mTimer = 0;
 		
 	}
-	*/
 	GuiComponent::update(deltaTime);
 	
 }
