@@ -109,7 +109,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 
 void GuiNetwork::connect() {
 	Window* window = mWindow;
-	window->pushGui(new GuiWifiConnect(window,[this,updateStat,updateIP] {
+	window->pushGui(new GuiWifiConnect(window,[this] {
 		updateStat->setText(Utils::Network::getStatus());
 		updateIP->setText(Utils::Network::getIP());
 	}));
