@@ -78,9 +78,9 @@ void GuiMenu::openUpdate()
 		msg += "Are you sure you want to proceed?";
 		window->pushGui(new GuiMsgBox(window, msg, 
 			"YES", [this] {
-			system("./systemupdate.sh");
 			Scripting::fireEvent("quit");
-			quitES("");
+			if(quitES("/tmp/es-update") != 0)
+				LOG(LogWarning) << "Update terminated with non-zero result!";
 		}, "NO",nullptr));
 	}
 	else{

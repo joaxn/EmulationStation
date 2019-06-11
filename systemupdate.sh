@@ -1,2 +1,4 @@
 #!/bin/sh
-echo Hallo, Welt!
+echo "Updating Setup Script"
+cd /home/pi/Retropie-Setup/
+git pull >/dev/null
