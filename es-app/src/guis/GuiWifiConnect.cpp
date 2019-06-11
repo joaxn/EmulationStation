@@ -6,6 +6,7 @@
 #include "components/TextComponent.h"
 #include "components/ButtonComponent.h"
 
+#include "PowerSaver.h"
 #include "utils/NetworkUtil.h"
 #include "utils/StringUtil.h"
 
@@ -21,6 +22,8 @@ const AnimationDef WIFICON_ANIMATION_DEF = { WIFICON_ANIMATION_FRAMES, 4, true }
 
 GuiWifiConnect::GuiWifiConnect(Window* window, const std::function<void()>& callback) : GuiComponent(window), mGrid(window, Vector2i(1, 3)), mBackground(window, ":/frame.png"), mTrys(0), mTimer(0), mState(0)
 {
+	PowerSaver::pause();
+	
 	okCallback = callback;
 	float width = Renderer::getScreenWidth() * 0.6f; // max width
 	
@@ -87,9 +90,10 @@ void GuiWifiConnect::update(int deltaTime) {
 	}
 	else if (mState == 2 && mTimer > 3000)
 	{
-		delete this;
 		if(okCallback)
 			okCallback();
+		PowerSaver::resume();
+		delete this;
 	}
 	GuiComponent::update(deltaTime);
 }
