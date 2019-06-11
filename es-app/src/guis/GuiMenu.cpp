@@ -516,7 +516,7 @@ void GuiMenu::openQuitMenu()
 			window->pushGui(new GuiMsgBox(window, "REALLY RESTART?", "YES",
 				[] {
 				Scripting::fireEvent("quit");
-				quitES("/tmp/es-restart")
+				if(quitES("/tmp/es-restart") != 0)
 					LOG(LogWarning) << "Restart terminated with non-zero result!";
 			}, "NO", nullptr));
 		});
