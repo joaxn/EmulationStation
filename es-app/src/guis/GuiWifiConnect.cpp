@@ -53,7 +53,7 @@ void GuiWifiConnect::onSizeChanged()
 	mBackground.fitTo(mSize, Vector3f::Zero(), Vector2f(-32, -32));
 
 	mTitle->setSize(mSize.x() - 40, mTitle->getFont()->getHeight());
-	mText->setSize(mSize.x() - 40, mText-->getFont()->getHeight());
+	mText->setSize(mSize.x() - 40, mText->getFont()->getHeight());
 
 	float fullHeight = mTitle->getFont()->getHeight() + mText->getSize().y() + mAnimationGrid->getSize().y();
 
