@@ -6,7 +6,7 @@ namespace Utils
 {
 	namespace FileSystem
 	{
-		std::string GuiNetwork::getIP()
+		std::string getIP()
 		{
 			FILE *wIPP;
 			char wip[1035];
@@ -28,7 +28,7 @@ namespace Utils
 			return wIP;
 		}
 
-		std::string GuiNetwork::getStatus()
+		std::string getStatus()
 		{
 			bool ip;
 			std::string wStatText;
@@ -42,7 +42,7 @@ namespace Utils
 			return wStatText;
 		}
 		
-		bool GuiNetwork::isIP()
+		bool isIP()
 		{
 			FILE *wIPP;
 			char wip[1035];
@@ -62,7 +62,7 @@ namespace Utils
 			return false;
 		}
 
-		bool GuiNetwork::isWifi()
+		bool isWifi()
 		{
 			FILE *wifiOnOff;
 			char wi[1035];
@@ -80,3 +80,5 @@ namespace Utils
 			}
 			return flagWifi;
 		}
+	}
+}
