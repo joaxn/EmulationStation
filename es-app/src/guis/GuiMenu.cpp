@@ -590,7 +590,7 @@ void GuiMenu::onSizeChanged()
 	mVersion.setPosition(0, mSize.y() - mVersion.getSize().y());
 }
 
-void GuiMenu::addEntry(const char* name, const char* icon, unsigned int color, bool add_arrow, const std::function<void()>& func)
+void GuiMenu::addEntry(const char* name, const char* iconpath, unsigned int color, bool add_arrow, const std::function<void()>& func)
 {
 	std::shared_ptr<Font> font = Font::get(FONT_SIZE_MEDIUM);
 
@@ -598,7 +598,7 @@ void GuiMenu::addEntry(const char* name, const char* icon, unsigned int color, b
 	ComponentListRow row;
 	
 	auto icon = std::make_shared<ImageComponent>(mWindow);
-	icon->setImage(icon);
+	icon->setImage(iconpath);
 	icon->setColorShift(color);
 	icon->setResize(0, Font::get(FONT_SIZE_MEDIUM)->getLetterHeight() * 1.25f);
 	row.addElement(icon, false);
