@@ -47,7 +47,7 @@ GuiWifiConnect::GuiWifiConnect(Window* window, const std::function<void()>& call
 	mAnimation->setSize(mText->getFont()->getHeight(), mText->getFont()->getHeight());
 	mAnimationGrid->setSize(0, mText->getFont()->getHeight());
 	
-	setSize(Renderer::getScreenWidth() * 0.6f + HORIZONTAL_PADDING_PX*2, mTitle->getSize().y() + mText->getSize().y() + mAnimationGrid->getSize().y() + 40);
+	setSize(Renderer::getScreenWidth() * 0.6f + HORIZONTAL_PADDING_PX*2, mTitle->getSize().y() + mText->getSize().y() + mAnimationGrid->getSize().y() + 80);
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, (Renderer::getScreenHeight() - mSize.y()) / 2);
 }
 

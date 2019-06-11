@@ -14,6 +14,7 @@
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
 #include "CollectionSystemManager.h"
+#include "utils/NetworkUtil.h"
 #include "EmulationStation.h"
 #include "Scripting.h"
 #include "SystemData.h"
@@ -70,13 +71,23 @@ void GuiMenu::openNetworkSettings()
 
 void GuiMenu::openUpdate()
 {
+	
 	Window* window = mWindow;
-	std::string msg = "This may take some minutes.\n";
-	msg += "Are you sure you want to update?";
-	window->pushGui(new GuiMsgBox(window, msg, 
-		"YES", [] {
-			// code here
-	}, "NO",nullptr));
+	if(Utils::Network::isIP()){
+		std::string msg = "The update may take some minutes.\n";
+		msg += "Are you sure you want to proceed?";
+		window->pushGui(new GuiMsgBox(window, msg, 
+			"YES", [this] { 
+			Scripting::fireEvent("quit");
+			if(quitES("/tmp/es-update") != 0)
+				LOG(LogWarning) << "Update terminated with non-zero result!";
+		}, "NO",nullptr));
+	}
+	else{
+		std::string msg = "No internet connection!\n";
+		msg += "Please connect to a wifi network.";
+		window->pushGui(new GuiMsgBox(window, msg, "OK", nullptr));
+	}
 }
 
 
