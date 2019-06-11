@@ -7,11 +7,6 @@ class GuiNetwork : public GuiComponent
 public:
 	GuiNetwork(Window* window);
 	
-	void save();
-	
-	bool input(InputConfig* config, Input input) override;
-	void update(int deltaTime) override;
-	std::vector<HelpPrompt> getHelpPrompts() override;
 
 private:
 	void connect();

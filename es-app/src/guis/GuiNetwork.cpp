@@ -50,20 +50,15 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	mMenu.addRow(row);
 	row.elements.clear();
 	
-	// WIFI ON OFF
-	bool flagWifi = Utils::Network::isWifi();
-	wifi_enabled = std::make_shared<SwitchComponent>(mWindow);
-	wifi_enabled->setState(flagWifi);
-	mMenu.addWithLabel("ENABLE WIFI", wifi_enabled);
-	
 	//SSID
-	title = std::make_shared<TextComponent>(mWindow, "SSID", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	title = std::make_shared<TextComponent>(mWindow, "NETWORK (SSID)", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updateSSID = [this,editSSID](const std::string& newVal) {
 		editSSID->setText(newVal);
 		Settings::getInstance()->setString("WifiSSID", newVal);
 		writeNetworkSettings();
+		Settings::getInstance()->saveFile();
 	};
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
 	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
@@ -90,6 +85,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 		for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
 		editPass->setText(wifiKey);
 		writeNetworkSettings();
+		Settings::getInstance()->saveFile();
 	};
 	
 	row.addElement(title, true);
@@ -103,7 +99,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	row.elements.clear();
 	
 	// BUTTONS
-	mMenu.addButton("BACK", "go back", [this] { save(); delete this; });
+	mMenu.addButton("BACK", "go back", [this] { delete this; });
 	mMenu.addButton("CONNECT", "connect to wifi", [this] { connect(); });
 
 	addChild(&mMenu);
@@ -111,54 +107,12 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
 }
 
-bool GuiNetwork::input(InputConfig* config, Input input)
-{
-	if(config->isMappedTo("b", input) && input.value != 0)
-	{
-		save();
-		delete this;
-		return true;
-	}
-
-	if(config->isMappedTo("start", input) && input.value != 0)
-	{
-		// close everything
-		save();
-		Window* window = mWindow;
-		while(window->peekGui() && window->peekGui() != ViewController::get())
-			delete window->peekGui();
-		return true;
-	}
-	
-	return GuiComponent::input(config, input);
-}
-
-std::vector<HelpPrompt> GuiNetwork::getHelpPrompts()
-{
-	std::vector<HelpPrompt> prompts = mMenu.getHelpPrompts();
-
-	prompts.push_back(HelpPrompt("b", "back"));
-	prompts.push_back(HelpPrompt("start", "close"));
-
-	return prompts;
-}
-
-void GuiNetwork::save() {
-	if (wifi_enabled->getState()){
-		// enable wifi
-		system("sudo ifconfig wlan0 up");
-	} else{
-		// disable wifi
-		system("sudo ifconfig wlan0 down");
-	}
-	Settings::getInstance()->setBool("EnableWifi", wifi_enabled->getState());
-	Settings::getInstance()->saveFile();
-}
-
 void GuiNetwork::connect() {
-	save();
 	Window* window = mWindow;
-	window->pushGui(new GuiWifiConnect(window));
+	window->pushGui(new GuiWifiConnect(window,[this,updateStat,updateIP] {
+		updateStat->setText(Utils::Network::getStatus());
+		updateIP->setText(Utils::Network::getIP());
+	}));
 }
 
 void GuiNetwork::writeNetworkSettings() {
@@ -171,16 +125,4 @@ void GuiNetwork::writeNetworkSettings() {
 	wpaconf << "psk=\"" << Settings::getInstance()->getString("WifiKey") << "\"" << "\n";
 	wpaconf << "}" << "\n";
 	wpaconf.close();
-}
-
-void GuiNetwork::update(int deltaTime) {
-	mTimer += deltaTime;
-	if (mTimer > 1000){
-		updateStat->setText(Utils::Network::getStatus());
-		updateIP->setText(Utils::Network::getIP());
-		mTimer = 0;
-		
-	}
-	GuiComponent::update(deltaTime);
-	
 }

@@ -19,9 +19,9 @@ AnimationFrame WIFICON_ANIMATION_FRAMES[] = {
 };
 const AnimationDef WIFICON_ANIMATION_DEF = { WIFICON_ANIMATION_FRAMES, 4, true };
 
-GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mGrid(window, Vector2i(1, 3)), mBackground(window, ":/frame.png"), mTrys(0), mTimer(0), mState(0)
+GuiWifiConnect::GuiWifiConnect(Window* window, const std::function<void()>& callback) : GuiComponent(window), mGrid(window, Vector2i(1, 3)), mBackground(window, ":/frame.png"), mTrys(0), mTimer(0), mState(0)
 {
-
+	okCallback = callback;
 	float width = Renderer::getScreenWidth() * 0.6f; // max width
 	
 	mTitle = std::make_shared<TextComponent>(mWindow, "CONNECTING", Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
@@ -49,14 +49,14 @@ void GuiWifiConnect::onSizeChanged()
 {
 	mBackground.fitTo(mSize, Vector3f::Zero(), Vector2f(-32, -32));
 
-	mTitle->setSize(mSize.x() - 40, mTitle->getSize().y());
-	mText->setSize(mSize.x() - 40, mText->getSize().y());
+	mTitle->setSize(mSize.x() - 40, mTitle->getFont()->getHeight());
+	mText->setSize(mSize.x() - 40, mText-->getFont()->getHeight());
 
 	float fullHeight = mTitle->getFont()->getHeight() + mText->getSize().y() + mAnimationGrid->getSize().y();
 
 	// update grid
 	mGrid.setRowHeightPerc(0, mTitle->getFont()->getHeight() / fullHeight);
-	mGrid.setRowHeightPerc(1, mText->getSize().y() / fullHeight);
+	mGrid.setRowHeightPerc(1, mText->getFont()->getHeight() / fullHeight);
 	mGrid.setRowHeightPerc(2, mAnimationGrid->getSize().y() / fullHeight);
 
 	mGrid.setSize(mSize);
@@ -71,7 +71,7 @@ void GuiWifiConnect::update(int deltaTime) {
 		mText->setText("RESTARTING NETWORK");
 		system("sudo ip addr flush dev wlan0");
 		system("sudo systemctl daemon-reload");
-		system("sudo systemctl restart dhcpcd > /tmp/networkrestart.txt");
+		system("sudo systemctl restart dhcpcd &");
 	}
 	else if (mState == 1 && mTimer > 1000){
 		mTimer = 0;
@@ -85,8 +85,11 @@ void GuiWifiConnect::update(int deltaTime) {
 			mState = 2;
 		}
 	}
-	else if (mState == 2 && mTimer > 3000){
+	else if (mState == 2 && mTimer > 3000)
+	{
 		delete this;
+		if(okCallback)
+			okCallback();
 	}
 	GuiComponent::update(deltaTime);
 }

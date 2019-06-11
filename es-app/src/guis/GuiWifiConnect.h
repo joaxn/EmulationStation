@@ -9,7 +9,7 @@ class TextComponent;
 class GuiWifiConnect : public GuiComponent
 {
 public:
-	GuiWifiConnect(Window* window);
+	GuiWifiConnect(Window* window,const std::function<void()>& callback);
 
 	void update(int deltaTime) override;
 	void onSizeChanged() override;
@@ -22,6 +22,7 @@ private:
 	std::shared_ptr<ComponentGrid> mAnimationGrid;
 	std::shared_ptr<AnimatedImageComponent> mAnimation;
 	std::shared_ptr<TextComponent> mText;
+	std::function<void()> okCallback;
 	
 	int mTimer;
 	int mTrys;

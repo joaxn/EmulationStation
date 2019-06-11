@@ -40,7 +40,7 @@ namespace Utils
 			wifiOnOff = popen("ifconfig wlan0 | grep 'flags='", "r");
 			while (fgets(wi, sizeof(wi), wifiOnOff) != NULL) {
 				currentLine = wi;
-				found = currentLine.find("RUNNING");
+				found = currentLine.find("UP");
 				if (found != std::string::npos) {
 					flagWifi = true;
 				}
