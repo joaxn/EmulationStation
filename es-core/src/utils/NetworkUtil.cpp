@@ -13,17 +13,17 @@ namespace Utils
 		{
 			FILE *wIPP;
 			char wip[1035];
-			
-			std::string wStat;
+			std::size_t found;
+			std::string wIP;
 			wIPP = popen("hostname -I", "r");
-			while (fgets(wip, sizeof(wip), wIPP) != NULL) {
-				wStat = wip;
-				int trim = wStat.find("\n");
-				wStat = wStat.substr(0, trim);
-				if(wStat == "" | wStat == " "){
-					return false;
-				}else{
+			
+			if (fgets(wip, sizeof(wip), wIPP) != NULL) {
+				wIP = wip;
+				found = wIP.find(".");
+				if (found != std::string::npos) {
 					return true;
+				}else{
+					return false;
 				}
 			}
 			return false;
@@ -52,12 +52,11 @@ namespace Utils
 		{
 			FILE *wIPP;
 			char wip[1035];
-			std::string currentLine;
 			std::size_t found;
-			
 			std::string wIP;
 			wIPP = popen("hostname -I", "r");
-			while (fgets(wip, sizeof(wip), wIPP) != NULL) {
+			
+			if (fgets(wip, sizeof(wip), wIPP) != NULL) {
 				wIP = wip;
 				found = wIP.find(".");
 				if (found != std::string::npos) {

@@ -33,7 +33,7 @@ GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mGrid(win
 	mAnimationGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(5, 1));
 	mAnimation = std::make_shared<AnimatedImageComponent>(mWindow);
 	mAnimation->load(&WIFICON_ANIMATION_DEF);
-	mAnimationGrid->setSize(mText->getFont()->getHeight(), mText->getFont()->getHeight());
+	mAnimation->setSize(mText->getFont()->getHeight(), mText->getFont()->getHeight());
 	mAnimationGrid->setEntry(mAnimation,Vector2i(2,0),true,false);
 	mAnimationGrid->setSize(0, mText->getFont()->getHeight());
 	mGrid.setEntry(mAnimationGrid, Vector2i(0, 2), true, false, Vector2i(1, 1));
@@ -68,7 +68,7 @@ void GuiWifiConnect::update(int deltaTime) {
 		mTimer = 0;
 		mTrys = 0;
 		mText->setText("RESTARTING NETWORK");
-		system("ip addr flush dev wlan0");
+		system("sudo ip addr flush dev wlan0");
 		system("sudo systemctl daemon-reload");
 		system("sudo systemctl restart dhcpcd &");
 	}
