@@ -9,10 +9,10 @@ namespace Utils
 	namespace Network
 	{
 
-		std::string getIP();
-		std::string getStatus();
 		bool isIP();
 		bool isWifi();
+		std::string getIP();
+		std::string getStatus();
 
 	} // Network::
 

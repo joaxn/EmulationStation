@@ -6,41 +6,6 @@ namespace Utils
 {
 	namespace FileSystem
 	{
-		std::string getIP()
-		{
-			FILE *wIPP;
-			char wip[1035];
-			std::string currentLine;
-			std::size_t found;
-			
-			std::string wIP;
-			wIPP = popen("hostname -I", "r");
-			while (fgets(wip, sizeof(wip), wIPP) != NULL) {
-				wIP = wip;
-				found = wIP.find(".");
-				if (found != std::string::npos) {
-					int trim = wIP.find("\n");
-					wIP = wIP.substr(0, trim-1);
-				}else{
-					wIP = "NOT CONNECTED";
-				}
-			}
-			return wIP;
-		}
-
-		std::string getStatus()
-		{
-			bool ip;
-			std::string wStatText;
-			ip = isIP();
-			
-			if(ip){
-				wStatText = "CONNECTED";
-			}else{
-				wStatText = "NOT CONNECTED";
-			}
-			return wStatText;
-		}
 		
 		bool isIP()
 		{
@@ -79,6 +44,42 @@ namespace Utils
 				}
 			}
 			return flagWifi;
+		}
+		
+		std::string getIP()
+		{
+			FILE *wIPP;
+			char wip[1035];
+			std::string currentLine;
+			std::size_t found;
+			
+			std::string wIP;
+			wIPP = popen("hostname -I", "r");
+			while (fgets(wip, sizeof(wip), wIPP) != NULL) {
+				wIP = wip;
+				found = wIP.find(".");
+				if (found != std::string::npos) {
+					int trim = wIP.find("\n");
+					wIP = wIP.substr(0, trim-1);
+				}else{
+					wIP = "NOT CONNECTED";
+				}
+			}
+			return wIP;
+		}
+
+		std::string getStatus()
+		{
+			bool ip;
+			std::string wStatText;
+			ip = isIP();
+			
+			if(ip){
+				wStatText = "CONNECTED";
+			}else{
+				wStatText = "NOT CONNECTED";
+			}
+			return wStatText;
 		}
 	}
 }
