@@ -6,7 +6,7 @@
 
 namespace Utils
 {
-	namespace FileSystem
+	namespace Network
 	{
 		
 		bool isIP()
