@@ -1,6 +1,8 @@
 #include "utils/NetworkUtil.h"
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 
 namespace Utils
 {
