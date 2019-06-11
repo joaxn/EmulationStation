@@ -77,10 +77,10 @@ void GuiMenu::openUpdate()
 		std::string msg = "The update may take some minutes.\n";
 		msg += "Are you sure you want to proceed?";
 		window->pushGui(new GuiMsgBox(window, msg, 
-			"YES", [this] { 
+			"YES", [this] {
+			system("./systemupdate.sh");
 			Scripting::fireEvent("quit");
-			if(quitES("/tmp/es-update") != 0)
-				LOG(LogWarning) << "Update terminated with non-zero result!";
+			quitES("");
 		}, "NO",nullptr));
 	}
 	else{
@@ -516,7 +516,7 @@ void GuiMenu::openQuitMenu()
 			window->pushGui(new GuiMsgBox(window, "REALLY RESTART?", "YES",
 				[] {
 				Scripting::fireEvent("quit");
-				if(quitES("/tmp/es-restart") != 0)
+				quitES("/tmp/es-restart")
 					LOG(LogWarning) << "Restart terminated with non-zero result!";
 			}, "NO", nullptr));
 		});
