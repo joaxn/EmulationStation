@@ -28,13 +28,14 @@ GuiWifiConnect::GuiWifiConnect(Window* window) : GuiComponent(window), mGrid(win
 	mGrid.setEntry(mTitle, Vector2i(0, 0), false, true);
 
 	mText = std::make_shared<TextComponent>(mWindow, "TRYING TO CONNECT", Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_CENTER);
-	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1), GridFlags::BORDER_TOP | GridFlags::BORDER_BOTTOM);
+	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1));
 
 	mAnimationGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(5, 1));
 	mAnimation = std::make_shared<AnimatedImageComponent>(mWindow);
 	mAnimation->load(&WIFICON_ANIMATION_DEF);
-	mAnimationGrid->setEntry(mAnimation,Vector2i(3,0),true,false);
-	mAnimationGrid->setSize(0, mTitle->getFont()->getHeight());
+	mAnimationGrid->setSize(mText->getFont()->getHeight(), mText->getFont()->getHeight());
+	mAnimationGrid->setEntry(mAnimation,Vector2i(2,0),true,false);
+	mAnimationGrid->setSize(0, mText->getFont()->getHeight());
 	mGrid.setEntry(mAnimationGrid, Vector2i(0, 2), true, false, Vector2i(1, 1));
 
 	addChild(&mBackground);
@@ -76,10 +77,10 @@ void GuiWifiConnect::update(int deltaTime) {
 		mTrys += 1;
 		if(Utils::Network::isIP()){
 			mText->setText("SUCESSFULLY CONNECTED");
-			mState == 2;
+			mState = 2;
 		} else if (mTrys > 15){
 			mText->setText("ERROR CONNECTING TO NETWORK");
-			mState == 2;
+			mState = 2;
 		}
 	}
 	else if (mState == 2 && mTimer > 3000){
