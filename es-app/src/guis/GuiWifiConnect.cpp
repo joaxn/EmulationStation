@@ -66,7 +66,7 @@ void GuiWifiConnect::update(int deltaTime) {
 		mState = 1;
 		mTimer = 0;
 		mTrys = 0;
-		mText->setText("TRYING TO CONNECT");
+		mText->setText("RESTARTING NETWORK");
 		system("ip addr flush dev wlan0");
 		system("sudo systemctl daemon-reload");
 		system("sudo systemctl restart dhcpcd &");
