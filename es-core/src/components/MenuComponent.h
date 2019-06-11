@@ -6,7 +6,6 @@
 #include "components/ComponentList.h"
 #include "components/NinePatchComponent.h"
 #include "components/TextComponent.h"
-#include "components/DynamicTextComponent.h"
 #include "utils/StringUtil.h"
 #include "Renderer.h"
 
