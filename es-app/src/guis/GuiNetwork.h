@@ -20,8 +20,8 @@ private:
 	int mTimer;
 	int mState;
 	int mTrys;
-	std::shared_ptr<DynamicTextComponent> updateStat;
-	std::shared_ptr<DynamicTextComponent> updateIP;
+	std::shared_ptr<TextComponent> updateStat;
+	std::shared_ptr<TextComponent> updateIP;
 	std::shared_ptr<SwitchComponent> wifi_enabled;
 	MenuComponent mMenu;
 };
