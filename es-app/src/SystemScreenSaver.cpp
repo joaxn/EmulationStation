@@ -150,26 +150,7 @@ void SystemScreenSaver::startScreenSaver()
 		mImageScreensaver->setOrigin(0.5f, 0.5f);
 		mImageScreensaver->setPosition(Renderer::getScreenWidth() / 2.0f, Renderer::getScreenHeight() / 2.0f);
 
-		if (Settings::getInstance()->getBool("SlideshowScreenSaverStretch"))
-		{
-			mImageScreensaver->setResize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
-		}
-		else
-		{
-			mImageScreensaver->setMaxSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
-		}
-
-		std::string bg_audio_file = Settings::getInstance()->getString("SlideshowScreenSaverBackgroundAudioFile");
-		if ((!mBackgroundAudio) && (bg_audio_file != ""))
-		{
-			if (Utils::FileSystem::exists(bg_audio_file))
-			{
-				// paused PS so that the background audio keeps playing
-				PowerSaver::pause();
-				mBackgroundAudio = Sound::get(bg_audio_file);
-				mBackgroundAudio->play();
-			}
-		}
+		mImageScreensaver->setMaxSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 
 		PowerSaver::runningScreenSaver(true);
 		mTimer = 0;
@@ -367,12 +348,12 @@ void SystemScreenSaver::pickRandomGameListImage(std::string& path)
 
 void SystemScreenSaver::pickRandomCustomImage(std::string& path)
 {
-	std::string imageDir = Settings::getInstance()->getString("SlideshowScreenSaverImageDir");
+	std::string imageDir = "/home/pi/RetroPie/screensaver";
 	if ((imageDir != "") && (Utils::FileSystem::exists(imageDir)))
 	{
-		std::string                   imageFilter = Settings::getInstance()->getString("SlideshowScreenSaverImageFilter");
-		std::vector<std::string>      matchingFiles;
-		Utils::FileSystem::stringList dirContent  = Utils::FileSystem::getDirContent(imageDir, Settings::getInstance()->getBool("SlideshowScreenSaverRecurse"));
+		std::string imageFilter = "jpg,png,jpeg";
+		std::vector<std::string> matchingFiles;
+		Utils::FileSystem::stringList dirContent  = Utils::FileSystem::getDirContent(imageDir, false);
 
 		for(Utils::FileSystem::stringList::const_iterator it = dirContent.cbegin(); it != dirContent.cend(); ++it)
 		{

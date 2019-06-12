@@ -20,48 +20,65 @@ GuiGeneralScreensaverOptions::GuiGeneralScreensaverOptions(Window* window, const
 	});
 	
 	// Allow ScreenSaver Controls - ScreenSaverControls
-	/*
 	auto ss_controls = std::make_shared<SwitchComponent>(mWindow);
 	ss_controls->setState(Settings::getInstance()->getBool("ScreenSaverControls"));
 	addWithLabel("SCREENSAVER CONTROLS", ss_controls);
 	addSaveFunc([ss_controls] { Settings::getInstance()->setBool("ScreenSaverControls", ss_controls->getState()); });
-	*/
 
 	// screensaver behavior
 	auto screensaver_behavior = std::make_shared< OptionListComponent<std::string> >(mWindow, "SCREENSAVER STYLE", false);
 	std::vector<std::string> screensavers;
 	screensavers.push_back("dim");
 	screensavers.push_back("black");
-	screensavers.push_back("random video");
 	screensavers.push_back("slideshow");
 	for(auto it = screensavers.cbegin(); it != screensavers.cend(); it++)
 		screensaver_behavior->add(*it, *it, Settings::getInstance()->getString("ScreenSaverBehavior") == *it);
 	addWithLabel("SCREENSAVER STYLE", screensaver_behavior);
 	addSaveFunc([this, screensaver_behavior] {
-		if (Settings::getInstance()->getString("ScreenSaverBehavior") != "random video" && screensaver_behavior->getSelected() == "random video") {
-			// if before it wasn't risky but now there's a risk of problems, show warning
-			mWindow->pushGui(new GuiMsgBox(mWindow,
-			"The \"Random Video\" screensaver shows videos.\n\nIf you do not have videos it will default to black.\n\nMore options in the \"UI Settings\" > \"Video Screensaver\" menu.",
-				"OK", [] { return; }));
-		}
 		Settings::getInstance()->setString("ScreenSaverBehavior", screensaver_behavior->getSelected());
 		PowerSaver::updateTimeouts();
 	});
 
 	ComponentListRow row;
+	
+	// image duration (seconds)
+	row.elements.clear();
+	row.addElement(std::make_shared<TextComponent>(mWindow, "SWAP IMAGE AFTER (SECS)", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	auto sss_image_sec = std::make_shared<SliderComponent>(mWindow, 1.f, 60.f, 1.f, "s");
+	sss_image_sec->setValue((float)(Settings::getInstance()->getInt("ScreenSaverSwapImageTimeout") / (1000)));
+	row.addElement(sss_image_sec, false, true);
+	addSaveFunc([sss_image_sec] {
+		int playNextTimeout = (int)Math::round(sss_image_sec->getValue()) * (1000);
+		Settings::getInstance()->setInt("ScreenSaverSwapImageTimeout", playNextTimeout);
+		PowerSaver::updateTimeouts();
+	});
+	addRow(row);
+	
+	// image source
+	row.elements.clear();
+	row.addElement(std::make_shared<TextComponent>(mWindow, "USE CUSTOM IMAGES", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	auto sss_custom_source = std::make_shared<SwitchComponent>(mWindow);
+	sss_custom_source->setState(Settings::getInstance()->getBool("SlideshowScreenSaverCustomImageSource"));
+	row.addElement(sss_custom_source, false, true);
+	addSaveFunc([sss_custom_source] { Settings::getInstance()->setBool("SlideshowScreenSaverCustomImageSource", sss_custom_source->getState()); });
+	addRow(row);
+
 
 	// show filtered menu
+	/*
 	row.elements.clear();
 	row.addElement(std::make_shared<TextComponent>(mWindow, "VIDEO SCREENSAVER SETTINGS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
 	row.makeAcceptInputHandler(std::bind(&GuiGeneralScreensaverOptions::openVideoScreensaverOptions, this));
 	addRow(row);
-
+	*/
+	/*
 	row.elements.clear();
 	row.addElement(std::make_shared<TextComponent>(mWindow, "SLIDESHOW SCREENSAVER SETTINGS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
 	row.makeAcceptInputHandler(std::bind(&GuiGeneralScreensaverOptions::openSlideshowScreensaverOptions, this));
 	addRow(row);
+	*/
 }
 
 GuiGeneralScreensaverOptions::~GuiGeneralScreensaverOptions()

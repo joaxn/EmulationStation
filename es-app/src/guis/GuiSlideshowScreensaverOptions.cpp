@@ -22,19 +22,23 @@ GuiSlideshowScreensaverOptions::GuiSlideshowScreensaverOptions(Window* window, c
 	});
 
 	// stretch
+	/*
 	auto sss_stretch = std::make_shared<SwitchComponent>(mWindow);
 	sss_stretch->setState(Settings::getInstance()->getBool("SlideshowScreenSaverStretch"));
 	addWithLabel(row, "STRETCH IMAGES", sss_stretch);
 	addSaveFunc([sss_stretch] {
 		Settings::getInstance()->setBool("SlideshowScreenSaverStretch", sss_stretch->getState());
 	});
+	*/
 
 	// background audio file
+	/*
 	auto sss_bg_audio_file = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_SMALL), 0x777777FF);
 	addEditableTextComponent(row, "BACKGROUND AUDIO", sss_bg_audio_file, Settings::getInstance()->getString("SlideshowScreenSaverBackgroundAudioFile"));
 	addSaveFunc([sss_bg_audio_file] {
 		Settings::getInstance()->setString("SlideshowScreenSaverBackgroundAudioFile", sss_bg_audio_file->getValue());
 	});
+	*/
 
 	// image source
 	auto sss_custom_source = std::make_shared<SwitchComponent>(mWindow);
@@ -43,11 +47,13 @@ GuiSlideshowScreensaverOptions::GuiSlideshowScreensaverOptions(Window* window, c
 	addSaveFunc([sss_custom_source] { Settings::getInstance()->setBool("SlideshowScreenSaverCustomImageSource", sss_custom_source->getState()); });
 
 	// custom image directory
+	/*
 	auto sss_image_dir = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_SMALL), 0x777777FF);
 	addEditableTextComponent(row, "CUSTOM IMAGE DIR", sss_image_dir, Settings::getInstance()->getString("SlideshowScreenSaverImageDir"));
 	addSaveFunc([sss_image_dir] {
 		Settings::getInstance()->setString("SlideshowScreenSaverImageDir", sss_image_dir->getValue());
 	});
+	*/
 
 	// recurse custom image directory
 	auto sss_recurse = std::make_shared<SwitchComponent>(mWindow);
@@ -58,11 +64,13 @@ GuiSlideshowScreensaverOptions::GuiSlideshowScreensaverOptions(Window* window, c
 	});
 
 	// custom image filter
+	/*
 	auto sss_image_filter = std::make_shared<TextComponent>(mWindow, "", Font::get(FONT_SIZE_SMALL), 0x777777FF);
 	addEditableTextComponent(row, "CUSTOM IMAGE FILTER", sss_image_filter, Settings::getInstance()->getString("SlideshowScreenSaverImageFilter"));
 	addSaveFunc([sss_image_filter] {
 		Settings::getInstance()->setString("SlideshowScreenSaverImageFilter", sss_image_filter->getValue());
 	});
+	*/
 }
 
 GuiSlideshowScreensaverOptions::~GuiSlideshowScreensaverOptions()
