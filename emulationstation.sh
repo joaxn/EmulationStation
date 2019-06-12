@@ -1,6 +1,7 @@
 #!/bin/sh
 
 esdir="$(dirname $0)"
+export esdir
 while true; do
     rm -f /tmp/es-restart /tmp/es-sysrestart /tmp/es-shutdown /tmp/es-update
     "$esdir/emulationstation" "$@"
@@ -17,8 +18,8 @@ while true; do
         break
     fi
 	if [ -f /tmp/es-update ]; then
-        echo "TEST"
-		touch /tmp/es-dotheupdate
+		echo "update"
+        "$esdir/systemupdate.sh"
         break
     fi
     break

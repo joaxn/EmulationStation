@@ -33,16 +33,16 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	bool isFullUI = UIModeController::getInstance()->isUIModeFull();
 
 	if (isFullUI)
-		addEntry("NETWORK SETTINGS", ":/menu/controller.svg", 0x777777FF, true, [this] { openNetworkSettings(); });
+		addEntry("NETWORK SETTINGS", ":/menu/network.svg", 0x777777FF, true, [this] { openNetworkSettings(); });
 	
 	if (isFullUI)
-		addEntry("UPDATE", ":/menu/controller.svg", 0x777777FF, true, [this] { openUpdate(); });
+		addEntry("UPDATE", ":/menu/update.svg", 0x777777FF, true, [this] { openUpdate(); });
 	
 	if (isFullUI)
-		addEntry("SCRAPER", ":/menu/controller.svg", 0x777777FF, true, [this] { openScraperSettings(); });
+		addEntry("SCRAPER", ":/menu/scraper.svg", 0x777777FF, true, [this] { openScraperSettings(); });
 
-	if (isFullUI)
-		addEntry("UI SETTINGS", ":/menu/controller.svg", 0x777777FF, true, [this] { openUISettings(); });
+	//if (isFullUI)
+	//	addEntry("UI SETTINGS", ":/menu/controller.svg", 0x777777FF, true, [this] { openUISettings(); });
 
 	//if (isFullUI)
 	//	addEntry("OTHER SETTINGS", 0x777777FF, true, [this] { openOtherSettings(); });
@@ -54,7 +54,7 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 		addEntry("CONFIGURE INPUT", ":/menu/controller.svg", 0x777777FF, true, [this] { openConfigInput(); });
 
 	if (isFullUI)
-		addEntry("QUIT", ":/menu/controller.svg", 0x777777FF, true, [this] {openQuitMenu(); });
+		addEntry("QUIT", ":/menu/quit.svg", 0x777777FF, true, [this] {openQuitMenu(); });
 
 	addChild(&mMenu);
 	addVersionInfo();
@@ -78,7 +78,8 @@ void GuiMenu::openUpdate()
 		msg += "Are you sure you want to proceed?";
 		window->pushGui(new GuiMsgBox(window, msg, 
 			"YES", [this] {
-			Scripting::fireEvent("quit");
+			Scripting::fireEvent("quit", "update");
+			Scripting::fireEvent("update");
 			if(quitES("/tmp/es-update") != 0)
 				LOG(LogWarning) << "Update terminated with non-zero result!";
 		}, "NO",nullptr));
