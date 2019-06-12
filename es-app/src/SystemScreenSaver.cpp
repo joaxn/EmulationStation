@@ -350,7 +350,7 @@ void SystemScreenSaver::pickRandomCustomImage(std::string& path)
 {
 	
 	std::string imageDir = Utils::FileSystem::getHomePath();
-	std::string imageDir += "/RetroPie/screensaver";
+	imageDir += "/RetroPie/screensaver";
 	if ((imageDir != "") && (Utils::FileSystem::exists(imageDir)))
 	{
 		
