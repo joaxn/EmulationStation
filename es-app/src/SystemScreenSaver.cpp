@@ -348,10 +348,15 @@ void SystemScreenSaver::pickRandomGameListImage(std::string& path)
 
 void SystemScreenSaver::pickRandomCustomImage(std::string& path)
 {
-	std::string imageDir = "/home/pi/RetroPie/screensaver";
+	
+	std::string imageDir = Utils::FileSystem::getHomePath();
+	std::string imageDir += "/RetroPie/screensaver";
 	if ((imageDir != "") && (Utils::FileSystem::exists(imageDir)))
 	{
-		std::string imageFilter = "jpg,png,jpeg";
+		
+		LOG(LogError) << "image dir: "+ imageDir +"\n";
+		
+		std::string imageFilter = ""; //.jpg,.png,.jpeg
 		std::vector<std::string> matchingFiles;
 		Utils::FileSystem::stringList dirContent  = Utils::FileSystem::getDirContent(imageDir, false);
 
@@ -366,6 +371,9 @@ void SystemScreenSaver::pickRandomCustomImage(std::string& path)
 				{
 					matchingFiles.push_back(*it);
 				}
+			}
+			else{
+				LOG(LogError) << "file not regular\n";
 			}
 		}
 
