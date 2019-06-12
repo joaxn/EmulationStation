@@ -18,7 +18,6 @@ while true; do
         break
     fi
 	if [ -f /tmp/es-update ]; then
-		echo "update"
         "$esdir/systemupdate.sh"
         break
     fi

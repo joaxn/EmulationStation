@@ -1,12 +1,26 @@
-#!/bin/sh
-esdir="$(dirname $0)"
-spacer="------------------------------------------\n"
-pl="----  "
-nl="\n"
+#!/bin/bash
 
-echo $spacer
-echo $pl"Updating Setup Script"$nl
-echo $spacer
+cd /home/pi/RetroPie-Setup
+. /home/pi/RetroPie-Setup/retropie_packages.sh
+. /home/pi/RetroPie-Setup/scriptmodules/system.sh
+. /home/pi/RetroPie-Setup/scriptmodules/helpers.sh
+. /home/pi/RetroPie-Setup/scriptmodules/packages.sh
+. /home/pi/RetroPie-Setup/scriptmodules/admin/setup.sh
 
-cd /home/pi/Retropie-Setup/
-git pull >/dev/null
+setup_env
+rp_registerAllModules
+
+function printMsgs() {
+    local type="$1"
+    shift
+    for msg in "$@"; do
+        [[ "$type" == "dialog" ]] && echo "$msg"
+        [[ "$type" == "console" ]] && echo "$msg"
+        [[ "$type" == "heading" ]] && echo -e "\n= = = = = = = = = = = = = = = = = = = = =\n$msg\n= = = = = = = = = = = = = = = = = = = = =\n"
+    done
+}
+
+binaries_setup
+emulationstation
+
+exit
