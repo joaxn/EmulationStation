@@ -131,7 +131,7 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 
 				bool multiLine = iter->type == MD_MULTILINE_STRING;
 				const std::string title = iter->displayPrompt;
-				auto updateVal = [ed](const std::string& newVal) { ed->setText(newVal); }; // ok callback (apply new value to ed)
+				auto updateVal = [ed](const std::string& newVal) { ed->setVale(newVal); }; // ok callback (apply new value to ed)
 				row.makeAcceptInputHandler([this, title, ed, updateVal, multiLine] {
 					mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, title, ed->getValue(), updateVal, multiLine));
 				});
@@ -148,7 +148,7 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
 
 	if(!scraperParams.system->hasPlatformId(PlatformIds::PLATFORM_IGNORE))
-		buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SCRAPE", "scrape", std::bind(&GuiMetaDataEd::fetch, this)));
+		buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DOWNLOAD ART", "scrape", std::bind(&GuiMetaDataEd::fetch, this)));
 
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SAVE", "save", [&] { save(); delete this; }));
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "cancel", [&] { delete this; }));

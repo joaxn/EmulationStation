@@ -39,10 +39,10 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 		addEntry("UPDATE", ":/menu/update.svg", 0x777777FF, true, [this] { openUpdate(); });
 	
 	if (isFullUI)
-		addEntry("SCRAPER", ":/menu/scraper.svg", 0x777777FF, true, [this] { openScraperSettings(); });
+		addEntry("GAME ART", ":/menu/scraper.svg", 0x777777FF, true, [this] { openScraperSettings(); });
 
-	//if (isFullUI)
-	//	addEntry("UI SETTINGS", ":/menu/controller.svg", 0x777777FF, true, [this] { openUISettings(); });
+	if (isFullUI)
+		addEntry("UI SETTINGS", ":/menu/ui.svg", 0x777777FF, true, [this] { openUISettings(); });
 
 	//if (isFullUI)
 	//	addEntry("OTHER SETTINGS", 0x777777FF, true, [this] { openOtherSettings(); });
@@ -95,23 +95,23 @@ void GuiMenu::openUpdate()
 void GuiMenu::openScraperSettings()
 {
 	
-	auto s = new GuiSettings(mWindow, "SCRAPER");
+	auto s = new GuiSettings(mWindow, "GAME ART");
 
 	// scrape from
-	auto scraper_list = std::make_shared< OptionListComponent< std::string > >(mWindow, "SCRAPE FROM", false);
+	auto scraper_list = std::make_shared< OptionListComponent< std::string > >(mWindow, "DOWNLOAD FROM", false);
 	std::vector<std::string> scrapers = getScraperList();
 
 	// Select either the first entry of the one read from the settings, just in case the scraper from settings has vanished.
 	for(auto it = scrapers.cbegin(); it != scrapers.cend(); it++)
 		scraper_list->add(*it, *it, *it == Settings::getInstance()->getString("Scraper"));
 
-	s->addWithLabel("SCRAPE FROM", scraper_list);
+	s->addWithLabel("DOWNLOAD FROM", scraper_list);
 	s->addSaveFunc([scraper_list] { Settings::getInstance()->setString("Scraper", scraper_list->getSelected()); });
 
 	// scrape ratings
 	auto scrape_ratings = std::make_shared<SwitchComponent>(mWindow);
 	scrape_ratings->setState(Settings::getInstance()->getBool("ScrapeRatings"));
-	s->addWithLabel("SCRAPE RATINGS", scrape_ratings);
+	s->addWithLabel("DOWNLOAD RATINGS", scrape_ratings);
 	s->addSaveFunc([scrape_ratings] { Settings::getInstance()->setBool("ScrapeRatings", scrape_ratings->getState()); });
 
 	// scrape now
@@ -121,7 +121,7 @@ void GuiMenu::openScraperSettings()
 	openAndSave = [s, openAndSave] { s->save(); openAndSave(); };
 	row.makeAcceptInputHandler(openAndSave);
 
-	auto scrape_now = std::make_shared<TextComponent>(mWindow, "SCRAPE NOW", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto scrape_now = std::make_shared<TextComponent>(mWindow, "DOWNLOAD NOW", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	auto bracket = makeArrow(mWindow);
 	row.addElement(scrape_now, true);
 	row.addElement(bracket, false);
@@ -251,6 +251,7 @@ void GuiMenu::openUISettings()
 	auto s = new GuiSettings(mWindow, "UI SETTINGS");
 
 	//UI mode
+	/*
 	auto UImodeSelection = std::make_shared< OptionListComponent<std::string> >(mWindow, "UI MODE", false);
 	std::vector<std::string> UImodes = UIModeController::getInstance()->getUIModes();
 	for (auto it = UImodes.cbegin(); it != UImodes.cend(); it++)
@@ -275,12 +276,15 @@ void GuiMenu::openUISettings()
 			}, "NO",nullptr));
 		}
 	});
+	*/
 
 	// quick system select (left/right in game list view)
+	/*
 	auto quick_sys_select = std::make_shared<SwitchComponent>(mWindow);
 	quick_sys_select->setState(Settings::getInstance()->getBool("QuickSystemSelect"));
 	s->addWithLabel("QUICK SYSTEM SELECT", quick_sys_select);
 	s->addSaveFunc([quick_sys_select] { Settings::getInstance()->setBool("QuickSystemSelect", quick_sys_select->getState()); });
+	*/
 
 	// carousel transition option
 	auto move_carousel = std::make_shared<SwitchComponent>(mWindow);
