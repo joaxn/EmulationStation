@@ -117,7 +117,7 @@ void SystemScreenSaver::startScreenSaver()
 			return;
 		}
 	}
-	else if (screensaver_behavior == "slideshow")
+	else if (screensaver_behavior == "slideshow" || screensaver_behavior == "game art")
 	{
 		// Configure to fade out the windows, Skip Fading if Instant mode
 		mState =  PowerSaver::getMode() == PowerSaver::INSTANT
@@ -128,7 +128,7 @@ void SystemScreenSaver::startScreenSaver()
 
 		// Load a random image
 		std::string path = "";
-		if (Settings::getInstance()->getBool("SlideshowScreenSaverCustomImageSource"))
+		if (screensaver_behavior == "slideshow")
 		{
 			pickRandomCustomImage(path);
 			// Custom images are not tied to the game list
@@ -200,7 +200,7 @@ void SystemScreenSaver::renderScreenSaver()
 			mVideoScreensaver->render(transform);
 		}
 	}
-	else if (mImageScreensaver && screensaver_behavior == "slideshow")
+	else if (mImageScreensaver && (screensaver_behavior == "slideshow" || screensaver_behavior == "game art"))
 	{
 		// Render black background
 		Renderer::setMatrix(Transform4x4f::Identity());
@@ -354,9 +354,7 @@ void SystemScreenSaver::pickRandomCustomImage(std::string& path)
 	if ((imageDir != "") && (Utils::FileSystem::exists(imageDir)))
 	{
 		
-		LOG(LogError) << "image dir: "+ imageDir +"\n";
-		
-		std::string imageFilter = ""; //.jpg,.png,.jpeg
+		std::string imageFilter = ".jpg,.png,.jpeg"; //.jpg,.png,.jpeg
 		std::vector<std::string> matchingFiles;
 		Utils::FileSystem::stringList dirContent  = Utils::FileSystem::getDirContent(imageDir, false);
 
@@ -371,9 +369,6 @@ void SystemScreenSaver::pickRandomCustomImage(std::string& path)
 				{
 					matchingFiles.push_back(*it);
 				}
-			}
-			else{
-				LOG(LogError) << "file not regular\n";
 			}
 		}
 
@@ -456,9 +451,6 @@ void SystemScreenSaver::launchGame()
 		ViewController::get()->goToGameList(mCurrentGame->getSystem());
 		IGameListView* view = ViewController::get()->getGameListView(mCurrentGame->getSystem()).get();
 		view->setCursor(mCurrentGame);
-		if (Settings::getInstance()->getBool("ScreenSaverControls"))
-		{
-			view->launch(mCurrentGame);
-		}
+		view->launch(mCurrentGame);
 	}
 }

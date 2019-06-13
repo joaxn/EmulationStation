@@ -10,6 +10,21 @@
 
 GuiGeneralScreensaverOptions::GuiGeneralScreensaverOptions(Window* window, const char* title) : GuiScreensaverOptions(window, title)
 {
+	// screensaver behavior
+	auto screensaver_behavior = std::make_shared< OptionListComponent<std::string> >(mWindow, "SCREENSAVER STYLE", false);
+	std::vector<std::string> screensavers;
+	screensavers.push_back("dim");
+	screensavers.push_back("game art");
+	screensavers.push_back("slideshow");
+	for(auto it = screensavers.cbegin(); it != screensavers.cend(); it++)
+		screensaver_behavior->add(*it, *it, Settings::getInstance()->getString("ScreenSaverBehavior") == *it);
+	addWithLabel("SCREENSAVER STYLE", screensaver_behavior);
+	addSaveFunc([this, screensaver_behavior] {
+		Settings::getInstance()->setString("ScreenSaverBehavior", screensaver_behavior->getSelected());
+		PowerSaver::updateTimeouts();
+	});
+	
+	
 	// screensaver time
 	auto screensaver_time = std::make_shared<SliderComponent>(mWindow, 0.f, 30.f, 1.f, "m");
 	screensaver_time->setValue((float)(Settings::getInstance()->getInt("ScreenSaverTime") / (1000 * 60)));
@@ -20,24 +35,12 @@ GuiGeneralScreensaverOptions::GuiGeneralScreensaverOptions(Window* window, const
 	});
 	
 	// Allow ScreenSaver Controls - ScreenSaverControls
+	/*
 	auto ss_controls = std::make_shared<SwitchComponent>(mWindow);
 	ss_controls->setState(Settings::getInstance()->getBool("ScreenSaverControls"));
 	addWithLabel("SCREENSAVER CONTROLS", ss_controls);
 	addSaveFunc([ss_controls] { Settings::getInstance()->setBool("ScreenSaverControls", ss_controls->getState()); });
-
-	// screensaver behavior
-	auto screensaver_behavior = std::make_shared< OptionListComponent<std::string> >(mWindow, "SCREENSAVER STYLE", false);
-	std::vector<std::string> screensavers;
-	screensavers.push_back("dim");
-	screensavers.push_back("black");
-	screensavers.push_back("slideshow");
-	for(auto it = screensavers.cbegin(); it != screensavers.cend(); it++)
-		screensaver_behavior->add(*it, *it, Settings::getInstance()->getString("ScreenSaverBehavior") == *it);
-	addWithLabel("SCREENSAVER STYLE", screensaver_behavior);
-	addSaveFunc([this, screensaver_behavior] {
-		Settings::getInstance()->setString("ScreenSaverBehavior", screensaver_behavior->getSelected());
-		PowerSaver::updateTimeouts();
-	});
+	*/
 
 	ComponentListRow row;
 	
@@ -55,6 +58,7 @@ GuiGeneralScreensaverOptions::GuiGeneralScreensaverOptions(Window* window, const
 	addRow(row);
 	
 	// image source
+	/*
 	row.elements.clear();
 	row.addElement(std::make_shared<TextComponent>(mWindow, "USE CUSTOM IMAGES", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	auto sss_custom_source = std::make_shared<SwitchComponent>(mWindow);
@@ -62,7 +66,7 @@ GuiGeneralScreensaverOptions::GuiGeneralScreensaverOptions(Window* window, const
 	row.addElement(sss_custom_source, false, true);
 	addSaveFunc([sss_custom_source] { Settings::getInstance()->setBool("SlideshowScreenSaverCustomImageSource", sss_custom_source->getState()); });
 	addRow(row);
-
+	*/
 
 	// show filtered menu
 	/*

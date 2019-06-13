@@ -7,9 +7,11 @@
 #include "components/RatingComponent.h"
 #include "components/SwitchComponent.h"
 #include "components/TextComponent.h"
+#include "components/SliderComponent.h"
 #include "guis/GuiGameScraper.h"
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiTextEditPopup.h"
+#include "guis/GuiTextEditPopupKeyboard.h"
 #include "resources/Font.h"
 #include "utils/StringUtil.h"
 #include "views/ViewController.h"
@@ -18,6 +20,24 @@
 #include "FileFilterIndex.h"
 #include "SystemData.h"
 #include "Window.h"
+
+
+auto updateSSID = [this,editSSID](const std::string& newVal) {
+		editSSID->setText(newVal);
+		Settings::getInstance()->setString("WifiSSID", newVal);
+		writeNetworkSettings();
+		Settings::getInstance()->saveFile();
+	};
+	auto spacer = std::make_shared<GuiComponent>(mWindow);
+	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
+
+	row.addElement(title, true);
+	row.addElement(editSSID, true);
+	row.addElement(spacer, false);
+	row.addElement(makeArrow(mWindow), false);
+	row.makeAcceptInputHandler( [this, editSSID, updateSSID] {
+		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "SSID", editSSID->getValue(), updateSSID, false));
+	});
 
 GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams scraperParams,
 	const std::string& /*header*/, std::function<void()> saveCallback, std::function<void()> deleteFunc) : GuiComponent(window),
@@ -85,6 +105,12 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 
 				break;
 			}
+		case MD_INT:
+			{
+				ed = std::make_shared<SliderComponent>(window, 0.f, 4.f, 1.f, "");
+				row.addElement(ed, false, true);
+				break;
+			}
 		case MD_DATE:
 			{
 				ed = std::make_shared<DateTimeEditComponent>(window);
@@ -123,9 +149,9 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 
 				bool multiLine = iter->type == MD_MULTILINE_STRING;
 				const std::string title = iter->displayPrompt;
-				auto updateVal = [ed](const std::string& newVal) { ed->setValue(newVal); }; // ok callback (apply new value to ed)
+				auto updateVal = [ed](const std::string& newVal) { ed->setText(newVal); }; // ok callback (apply new value to ed)
 				row.makeAcceptInputHandler([this, title, ed, updateVal, multiLine] {
-					mWindow->pushGui(new GuiTextEditPopup(mWindow, title, ed->getValue(), updateVal, multiLine));
+					mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, title, ed->getValue(), updateVal, multiLine));
 				});
 				break;
 			}

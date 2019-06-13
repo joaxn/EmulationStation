@@ -196,7 +196,7 @@ bool SystemView::input(InputConfig* config, Input input)
 			config->isMappedLike("up", input) ||
 			config->isMappedLike("down", input))
 			listInput(0);
-		if(!UIModeController::getInstance()->isUIModeKid() && config->isMappedTo("select", input) && Settings::getInstance()->getBool("ScreenSaverControls"))
+		if(config->isMappedTo("select", input))
 		{
 			mWindow->startScreenSaver();
 			mWindow->renderScreenSaver();
