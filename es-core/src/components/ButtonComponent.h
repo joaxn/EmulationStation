@@ -53,7 +53,7 @@ private:
 	std::string mText;
 	std::string mHelpText;
 	std::unique_ptr<TextCache> mTextCache;
-	std::unique_ptr<ImageComponent> mIcon;
+	std::shared_ptr<ImageComponent> mIcon;
 	NinePatchComponent mBox;
 };
 

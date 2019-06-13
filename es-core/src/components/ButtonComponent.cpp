@@ -45,7 +45,7 @@ void ButtonComponent::setText(const std::string& text, const std::string& helpTe
 {
 	if(mIconPath != ""){
 		Window* window = mWindow;
-		mIcon = std::unique_ptr<ImageComponent>(mWindow);
+		mIcon = std::make_shared<ImageComponent>(mWindow);
 		mIcon->setImage(mIconPath);
 		mIcon->setResize(Vector2f(0, mFont()->getLetterHeight()));
 	}
