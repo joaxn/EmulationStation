@@ -6,7 +6,7 @@ class GuiNetwork : public GuiComponent
 {
 public:
 	GuiNetwork(Window* window);
-	
+	bool input(InputConfig* config, Input input) override;
 
 private:
 	void connect();

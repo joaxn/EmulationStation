@@ -3,6 +3,7 @@
 #define ES_CORE_COMPONENTS_BUTTON_COMPONENT_H
 
 #include "components/NinePatchComponent.h"
+#include "components/ImageComponent.h"
 #include "GuiComponent.h"
 
 class TextCache;
@@ -10,7 +11,7 @@ class TextCache;
 class ButtonComponent : public GuiComponent
 {
 public:
-	ButtonComponent(Window* window, const std::string& text = "", const std::string& helpText = "", const std::function<void()>& func = nullptr, bool upperCase = true, const std::string& minText = "DELETE");
+	ButtonComponent(Window* window, const std::string& text = "", const std::string& helpText = "", const std::function<void()>& func = nullptr, bool upperCase = true, const std::string& minText = "DELETE", const char* iconPath = "");
 
 	void setPressedFunc(std::function<void()> f);
 
@@ -40,6 +41,7 @@ private:
 	bool mFocused;
 	bool mEnabled;
 	bool mNewColor = false;
+	const char* mIconPath;
 	
 	unsigned int mTextColorFocused;
 	unsigned int mTextColorUnfocused;
@@ -51,6 +53,7 @@ private:
 	std::string mText;
 	std::string mHelpText;
 	std::unique_ptr<TextCache> mTextCache;
+	std::unique_ptr<ImageComponent> mIcon;
 	NinePatchComponent mBox;
 };
 

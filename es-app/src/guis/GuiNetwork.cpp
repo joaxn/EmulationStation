@@ -115,6 +115,25 @@ void GuiNetwork::connect() {
 	}));
 }
 
+bool GuiNetwork::input(InputConfig* config, Input input)
+{
+	if(config->isMappedTo("b", input) && input.value != 0)
+	{
+		delete this;
+		return true;
+	}
+
+	if(config->isMappedTo("start", input) && input.value != 0)
+	{
+		// close everything
+		Window* window = mWindow;
+		while(window->peekGui() && window->peekGui() != ViewController::get())
+			delete window->peekGui();
+		return true;
+	}
+	return GuiComponent::input(config, input);
+}
+
 void GuiNetwork::writeNetworkSettings() {
 	std::ofstream wpaconf;
 	wpaconf.open ("/etc/wpa_supplicant/wpa_supplicant.conf");

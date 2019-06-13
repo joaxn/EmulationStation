@@ -1,15 +1,18 @@
 #include "components/ButtonComponent.h"
+#include "components/ImageComponent.h"
 
 #include "resources/Font.h"
 #include "utils/StringUtil.h"
 #include "Renderer.h"
 
-ButtonComponent::ButtonComponent(Window* window, const std::string& text, const std::string& helpText, const std::function<void()>& func, bool upperCase, const std::string& minText) : GuiComponent(window),
+ButtonComponent::ButtonComponent(Window* window, const std::string& text, const std::string& helpText, const std::function<void()>& func, bool upperCase, const std::string& minText, const char* iconPath) : GuiComponent(window),
 	mBox(window, ":/button.png"),
 	mFont(Font::get(FONT_SIZE_MEDIUM)), 
 	mFocused(false), 
 	mEnabled(true), 
-	mTextColorFocused(0xFFFFFFFF), mTextColorUnfocused(0x777777FF)
+	mTextColorFocused(0xFFFFFFFF),
+	mTextColorUnfocused(0x777777FF),
+	mIconPath(iconPath)
 {
 	setPressedFunc(func);
 	setText(text, helpText, upperCase, minText);
@@ -40,6 +43,12 @@ bool ButtonComponent::input(InputConfig* config, Input input)
 
 void ButtonComponent::setText(const std::string& text, const std::string& helpText, bool upperCase, const std::string& minText)
 {
+	if(mIconPath != ""){
+		mIcon = std::make_shared<ImageComponent>(mWindow);
+		mIcon->setImage(mIconPath);
+		mIcon->setResize(Vector2f(0, mFont()->getLetterHeight()));
+	}
+	
 	mText = upperCase ? Utils::String::toUpper(text) : text;
 	mHelpText = helpText;
 	
@@ -47,7 +56,7 @@ void ButtonComponent::setText(const std::string& text, const std::string& helpTe
 
 	float minWidth = mFont->sizeText(minText).x() + 16;
 	setSize(Math::max(mTextCache->metrics.size.x() + 16, minWidth), mTextCache->metrics.size.y());
-
+	
 	updateHelpPrompts();
 }
 
@@ -98,8 +107,15 @@ void ButtonComponent::render(const Transform4x4f& parentTrans)
 	
 	mBox.render(trans);
 
-	if(mTextCache)
-	{
+	if(mIcon){
+		Vector3f centerOffset((mSize.x() - mIcon->getSize().x()) / 2, (mSize.y() - mIcon->getSize().y()) / 2, 0);
+		centerOffset.round();
+		trans = trans.translate(centerOffset);
+		Renderer::setMatrix(trans);
+		mIcon->setColorShift(getCurTextColor());
+		trans = trans.translate(-centerOffset);
+
+	}else if(mTextCache){
 		Vector3f centerOffset((mSize.x() - mTextCache->metrics.size.x()) / 2, (mSize.y() - mTextCache->metrics.size.y()) / 2, 0);
 		centerOffset.round();
 		trans = trans.translate(centerOffset);

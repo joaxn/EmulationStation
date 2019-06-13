@@ -78,16 +78,13 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		mKeyboardGrid->setSize(gridWidth, gridHeight);
 		mGrid.setEntry(mKeyboardGrid, Vector2i(0, 2), true, false);
 	}
-	
-	
-	
 
 	// Accept/Cancel buttons
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, acceptBtnText, acceptBtnText, [this, okCallback] { okCallback(mText->getValue()); delete this; },true,"DELETE"));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; },true,"DELETE"));
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SPACE", "SPACE", [this] {mText->startEditing();mText->textInput(" ");mText->stopEditing();},true,"DELETE"));
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DELETE", "DELETE A CHAR", [this] {mText->startEditing();mText->textInput("\b");mText->stopEditing();},true,"DELETE"));
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; },true,"DELETE"));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, acceptBtnText, acceptBtnText, [this, okCallback] { okCallback(mText->getValue()); delete this; },true,"DELETE"));
 
 	// Add a/c buttons
 	mButtonGrid->setEntry(buttons[0], Vector2i(0, 0), true, false);
@@ -149,6 +146,15 @@ bool GuiTextEditPopupKeyboard::input(InputConfig* config, Input input)
 	if (config->isMappedTo("b", input) && input.value)
 	{
 		delete this;
+		return true;
+	}
+	
+	if(config->isMappedTo("start", input) && input.value != 0)
+	{
+		// close everything
+		Window* window = mWindow;
+		while(window->peekGui() && window->peekGui() != ViewController::get())
+			delete window->peekGui();
 		return true;
 	}
 
