@@ -44,7 +44,8 @@ bool ButtonComponent::input(InputConfig* config, Input input)
 void ButtonComponent::setText(const std::string& text, const std::string& helpText, bool upperCase, const std::string& minText)
 {
 	if(mIconPath != ""){
-		mIcon = std::make_shared<ImageComponent>(mWindow);
+		Window* window = mWindow;
+		mIcon = std::unique_ptr<ImageComponent>(mWindow);
 		mIcon->setImage(mIconPath);
 		mIcon->setResize(Vector2f(0, mFont()->getLetterHeight()));
 	}
