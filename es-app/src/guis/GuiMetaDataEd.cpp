@@ -21,24 +21,6 @@
 #include "SystemData.h"
 #include "Window.h"
 
-
-auto updateSSID = [this,editSSID](const std::string& newVal) {
-		editSSID->setText(newVal);
-		Settings::getInstance()->setString("WifiSSID", newVal);
-		writeNetworkSettings();
-		Settings::getInstance()->saveFile();
-	};
-	auto spacer = std::make_shared<GuiComponent>(mWindow);
-	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
-
-	row.addElement(title, true);
-	row.addElement(editSSID, true);
-	row.addElement(spacer, false);
-	row.addElement(makeArrow(mWindow), false);
-	row.makeAcceptInputHandler( [this, editSSID, updateSSID] {
-		mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "SSID", editSSID->getValue(), updateSSID, false));
-	});
-
 GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams scraperParams,
 	const std::string& /*header*/, std::function<void()> saveCallback, std::function<void()> deleteFunc) : GuiComponent(window),
 	mScraperParams(scraperParams),
