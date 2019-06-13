@@ -60,24 +60,27 @@ void GuiGamelistFilter::addFiltersToMenu()
 	for (std::vector<FilterDataDecl>::const_iterator it = decls.cbegin(); it != decls.cend()-skip; ++it ) {
 
 		FilterIndexType type = (*it).type; // type of filter
-		std::map<std::string, int>* allKeys = (*it).allIndexKeys; // all possible filters for this type
-		std::string menuLabel = (*it).menuLabel; // text to show in menu
-		std::shared_ptr< OptionListComponent<std::string> > optionList;
+		//dont show kidgame filters
+		if(type != KIDGAME_FILTER){
+			std::map<std::string, int>* allKeys = (*it).allIndexKeys; // all possible filters for this type
+			std::string menuLabel = (*it).menuLabel; // text to show in menu
+			std::shared_ptr< OptionListComponent<std::string> > optionList;
 
 
-		// add filters (with first one selected)
-		ComponentListRow row;
+			// add filters (with first one selected)
+			ComponentListRow row;
 
-		// add genres
-		optionList = std::make_shared< OptionListComponent<std::string> >(mWindow, menuLabel, true);
-		for(auto it: *allKeys)
-		{
-			optionList->add(it.first, it.first, mFilterIndex->isKeyBeingFilteredBy(it.first, type));
+			// add genres
+			optionList = std::make_shared< OptionListComponent<std::string> >(mWindow, menuLabel, true);
+			for(auto it: *allKeys)
+			{
+				optionList->add(it.first, it.first, mFilterIndex->isKeyBeingFilteredBy(it.first, type));
+			}
+			if (allKeys->size() > 0)
+				mMenu.addWithLabel(menuLabel, optionList);
+
+			mFilterOptions[type] = optionList;
 		}
-		if (allKeys->size() > 0)
-			mMenu.addWithLabel(menuLabel, optionList);
-
-		mFilterOptions[type] = optionList;
 	}
 }
 
