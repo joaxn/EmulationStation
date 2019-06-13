@@ -109,10 +109,12 @@ void GuiMenu::openScraperSettings()
 	s->addSaveFunc([scraper_list] { Settings::getInstance()->setString("Scraper", scraper_list->getSelected()); });
 
 	// scrape ratings
+	/*
 	auto scrape_ratings = std::make_shared<SwitchComponent>(mWindow);
 	scrape_ratings->setState(Settings::getInstance()->getBool("ScrapeRatings"));
 	s->addWithLabel("DOWNLOAD RATINGS", scrape_ratings);
 	s->addSaveFunc([scrape_ratings] { Settings::getInstance()->setBool("ScrapeRatings", scrape_ratings->getState()); });
+	*/
 
 	// scrape now
 	ComponentListRow row;

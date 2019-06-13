@@ -226,6 +226,7 @@ void ScreenScraperRequest::processGame(const pugi::xml_document& xmldoc, std::ve
 		result.mdl.set("players", game.child("joueurs").text().get());
 
 		// TODO: Validate rating
+		/*
 		if (Settings::getInstance()->getBool("ScrapeRatings") && game.child("note"))
 		{
 			float ratingVal = (game.child("note").text().as_int() / 20.0f);
@@ -233,6 +234,7 @@ void ScreenScraperRequest::processGame(const pugi::xml_document& xmldoc, std::ve
 			ss << ratingVal;
 			result.mdl.set("rating", ss.str());
 		}
+		*/
 
 		// Media super-node
 		pugi::xml_node media_list = game.child("medias");
