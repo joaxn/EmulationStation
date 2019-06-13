@@ -9,7 +9,7 @@
 #include "SystemData.h"
 
 GuiScraperStart::GuiScraperStart(Window* window) : GuiComponent(window),
-	mMenu(window, "SCRAPE NOW")
+	mMenu(window, "DOWNLOAD GAME ART")
 {
 	addChild(&mMenu);
 

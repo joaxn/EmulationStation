@@ -6,8 +6,8 @@
 #define MOVE_REPEAT_DELAY 500
 #define MOVE_REPEAT_RATE 40
 
-SliderComponent::SliderComponent(Window* window, float min, float max, float increment, const std::string& suffix) : GuiComponent(window),
-	mMin(min), mMax(max), mSingleIncrement(increment), mMoveRate(0), mKnob(window), mSuffix(suffix)
+SliderComponent::SliderComponent(Window* window, float min, float max, float increment, const std::string& suffix, bool forceSuffix) : GuiComponent(window),
+	mMin(min), mMax(max), mSingleIncrement(increment), mMoveRate(0), mKnob(window), mSuffix(suffix), mforceSuffix(forceSuffix)
 {
 	assert((min - max) != 0);
 
@@ -99,7 +99,7 @@ float SliderComponent::getValue()
 
 void SliderComponent::onSizeChanged()
 {
-	if(!mSuffix.empty())
+	if(!mSuffix.empty() || mforceSuffix)
 		mFont = Font::get((int)(mSize.y()), FONT_PATH_LIGHT);
 	
 	onValueChanged();

@@ -15,7 +15,7 @@ struct InputConfigStructure
 	const char* icon;
 };
 
-static const int inputCount = 26;
+static const int inputCount = 17;
 static const InputConfigStructure GUI_INPUT_CONFIG_LIST[inputCount] =
 {
 	{ "Up",               false, "D-PAD UP",           ":/help/dpad_up.svg" },
@@ -28,20 +28,20 @@ static const InputConfigStructure GUI_INPUT_CONFIG_LIST[inputCount] =
 	{ "B",                true,  "BUTTON B / SOUTH",   ":/help/buttons_south.svg" },
 	{ "X",                true,  "BUTTON X / NORTH",   ":/help/buttons_north.svg" },
 	{ "Y",                true,  "BUTTON Y / WEST",    ":/help/buttons_west.svg" },
-	{ "LeftShoulder",     true,  "LEFT SHOULDER",      ":/help/button_l.svg" },
-	{ "RightShoulder",    true,  "RIGHT SHOULDER",     ":/help/button_r.svg" },
-	{ "LeftTrigger",      true,  "LEFT TRIGGER",       ":/help/button_lt.svg" },
-	{ "RightTrigger",     true,  "RIGHT TRIGGER",      ":/help/button_rt.svg" },
-	{ "LeftThumb",        true,  "LEFT THUMB",         ":/help/analog_thumb.svg" },
-	{ "RightThumb",       true,  "RIGHT THUMB",        ":/help/analog_thumb.svg" },
-	{ "LeftAnalogUp",     true,  "LEFT ANALOG UP",     ":/help/analog_up.svg" },
-	{ "LeftAnalogDown",   true,  "LEFT ANALOG DOWN",   ":/help/analog_down.svg" },
-	{ "LeftAnalogLeft",   true,  "LEFT ANALOG LEFT",   ":/help/analog_left.svg" },
-	{ "LeftAnalogRight",  true,  "LEFT ANALOG RIGHT",  ":/help/analog_right.svg" },
-	{ "RightAnalogUp",    true,  "RIGHT ANALOG UP",    ":/help/analog_up.svg" },
-	{ "RightAnalogDown",  true,  "RIGHT ANALOG DOWN",  ":/help/analog_down.svg" },
-	{ "RightAnalogLeft",  true,  "RIGHT ANALOG LEFT",  ":/help/analog_left.svg" },
-	{ "RightAnalogRight", true,  "RIGHT ANALOG RIGHT", ":/help/analog_right.svg" },
+	{ "LeftShoulder",     true,  "LEFT FLIPPER",       ":/help/flipper_l.svg" },
+	{ "RightShoulder",    true,  "RIGHT FLIPPER",      ":/help/flipper_r.svg" },
+	{ "LeftTrigger",      true,  "1 PLAYER",           ":/help/player1.svg" },
+	{ "RightTrigger",     true,  "2 PLAYERS",      	   ":/help/player2.svg" },
+	{ "LeftThumb",        true,  "COIN",               ":/help/coin.svg" },
+//	{ "RightThumb",       true,  "RIGHT THUMB",        ":/help/analog_thumb.svg" },
+//	{ "LeftAnalogUp",     true,  "LEFT ANALOG UP",     ":/help/analog_up.svg" },
+//	{ "LeftAnalogDown",   true,  "LEFT ANALOG DOWN",   ":/help/analog_down.svg" },
+//	{ "LeftAnalogLeft",   true,  "LEFT ANALOG LEFT",   ":/help/analog_left.svg" },
+//	{ "LeftAnalogRight",  true,  "LEFT ANALOG RIGHT",  ":/help/analog_right.svg" },
+//	{ "RightAnalogUp",    true,  "RIGHT ANALOG UP",    ":/help/analog_up.svg" },
+//	{ "RightAnalogDown",  true,  "RIGHT ANALOG DOWN",  ":/help/analog_down.svg" },
+//	{ "RightAnalogLeft",  true,  "RIGHT ANALOG LEFT",  ":/help/analog_left.svg" },
+//	{ "RightAnalogRight", true,  "RIGHT ANALOG RIGHT", ":/help/analog_right.svg" },
 	{ "Lock",             true,  "LOCK MENU",          ":/help/button_lock.svg" },
 	{ "HotKeyEnable",     true,  "HOTKEY ENABLE",      ":/help/button_hotkey.svg" }
 };

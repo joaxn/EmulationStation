@@ -89,7 +89,7 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 			}
 		case MD_INT:
 			{
-				ed = std::make_shared<SliderComponent>(window, 0.f, 4.f, 1.f, "");
+				ed = std::make_shared<SliderComponent>(window, 0.f, 4.f, 1.f, "", true);
 				row.addElement(ed, false, true);
 				break;
 			}
@@ -165,7 +165,7 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 
 	// resize + center	
 	float width = (float)Math::min(Renderer::getScreenHeight(), (int)(Renderer::getScreenWidth() * 0.90f));
-	setSize(width, Renderer::getScreenHeight() * 0.82f);
+	setSize(width, mGrid->getSize().y() + 40);
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, (Renderer::getScreenHeight() - mSize.y()) / 2);
 }
 

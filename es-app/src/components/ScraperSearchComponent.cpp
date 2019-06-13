@@ -42,7 +42,7 @@ ScraperSearchComponent::ScraperSearchComponent(Window* window, SearchType type) 
 	auto font = Font::get(FONT_SIZE_SMALL); // this gets replaced in onSizeChanged() so its just a placeholder
 	const unsigned int mdColor = 0x777777FF;
 	const unsigned int mdLblColor = 0x666666FF;
-	mMD_Rating = std::make_shared<RatingComponent>(mWindow);
+	//mMD_Rating = std::make_shared<RatingComponent>(mWindow);
 	mMD_ReleaseDate = std::make_shared<DateTimeEditComponent>(mWindow);
 	mMD_ReleaseDate->setColor(mdColor);
 	mMD_Developer = std::make_shared<TextComponent>(mWindow, "", font, mdColor);
@@ -50,7 +50,7 @@ ScraperSearchComponent::ScraperSearchComponent(Window* window, SearchType type) 
 	mMD_Genre = std::make_shared<TextComponent>(mWindow, "", font, mdColor);
 	mMD_Players = std::make_shared<TextComponent>(mWindow, "", font, mdColor);
 
-	mMD_Pairs.push_back(MetaDataPair(std::make_shared<TextComponent>(mWindow, "RATING:", font, mdLblColor), mMD_Rating, false));
+	//mMD_Pairs.push_back(MetaDataPair(std::make_shared<TextComponent>(mWindow, "RATING:", font, mdLblColor), mMD_Rating, false));
 	mMD_Pairs.push_back(MetaDataPair(std::make_shared<TextComponent>(mWindow, "RELEASED:", font, mdLblColor), mMD_ReleaseDate));
 	mMD_Pairs.push_back(MetaDataPair(std::make_shared<TextComponent>(mWindow, "DEVELOPER:", font, mdLblColor), mMD_Developer));
 	mMD_Pairs.push_back(MetaDataPair(std::make_shared<TextComponent>(mWindow, "PUBLISHER:", font, mdLblColor), mMD_Publisher));
@@ -159,7 +159,7 @@ void ScraperSearchComponent::resizeMetadata()
 		mMD_Grid->setColWidthPerc(0, maxLblWidth / mMD_Grid->getSize().x());
 
 		// rating is manually sized
-		mMD_Rating->setSize(mMD_Grid->getColWidth(1), fontLbl->getHeight() * 0.65f);
+		//mMD_Rating->setSize(mMD_Grid->getColWidth(1), fontLbl->getHeight() * 0.65f);
 		mMD_Grid->onSizeChanged();
 
 		// make result font follow label font
@@ -317,7 +317,7 @@ void ScraperSearchComponent::updateInfoPane()
 		}
 
 		// metadata
-		mMD_Rating->setValue(Utils::String::toUpper(res.mdl.get("rating")));
+		//mMD_Rating->setValue(Utils::String::toUpper(res.mdl.get("rating")));
 		mMD_ReleaseDate->setValue(Utils::String::toUpper(res.mdl.get("releasedate")));
 		mMD_Developer->setText(Utils::String::toUpper(res.mdl.get("developer")));
 		mMD_Publisher->setText(Utils::String::toUpper(res.mdl.get("publisher")));
@@ -330,7 +330,7 @@ void ScraperSearchComponent::updateInfoPane()
 		mResultThumbnail->setImage("");
 
 		// metadata
-		mMD_Rating->setValue("");
+		//mMD_Rating->setValue("");
 		mMD_ReleaseDate->setValue("");
 		mMD_Developer->setText("");
 		mMD_Publisher->setText("");
@@ -455,7 +455,7 @@ void ScraperSearchComponent::openInputScreen(ScraperSearchParams& params)
 	};
 
 	stop();
-	mWindow->pushGui(new GuiTextEditPopup(mWindow, "SEARCH FOR", 
+	mWindow->pushGui(new GuiTextEditPopupKeyboard(mWindow, "SEARCH FOR", 
 		// initial value is last search if there was one, otherwise the clean path name
 		params.nameOverride.empty() ? params.game->getCleanName() : params.nameOverride, 
 		searchForFunc, false, "SEARCH"));
