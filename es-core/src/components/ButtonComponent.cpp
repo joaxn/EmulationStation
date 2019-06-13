@@ -43,20 +43,19 @@ bool ButtonComponent::input(InputConfig* config, Input input)
 
 void ButtonComponent::setText(const std::string& text, const std::string& helpText, bool upperCase, const std::string& minText)
 {
+	
+	mText = upperCase ? Utils::String::toUpper(text) : text;
+	mHelpText = helpText;
+	mTextCache = std::unique_ptr<TextCache>(mFont->buildTextCache(mText, 0, 0, getCurTextColor()));
+	float minWidth = mFont->sizeText(minText).x() + 16;
+	setSize(Math::max(mTextCache->metrics.size.x() + 16, minWidth), mTextCache->metrics.size.y());
+	
 	if(mIconPath != ""){
 		Window* window = mWindow;
 		mIcon = std::make_shared<ImageComponent>(mWindow);
 		mIcon->setImage(mIconPath);
 		mIcon->setResize(Vector2f(0, mFont()->getLetterHeight()));
 	}
-	
-	mText = upperCase ? Utils::String::toUpper(text) : text;
-	mHelpText = helpText;
-	
-	mTextCache = std::unique_ptr<TextCache>(mFont->buildTextCache(mText, 0, 0, getCurTextColor()));
-
-	float minWidth = mFont->sizeText(minText).x() + 16;
-	setSize(Math::max(mTextCache->metrics.size.x() + 16, minWidth), mTextCache->metrics.size.y());
 	
 	updateHelpPrompts();
 }
