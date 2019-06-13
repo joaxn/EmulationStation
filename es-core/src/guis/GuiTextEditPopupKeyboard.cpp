@@ -148,15 +148,6 @@ bool GuiTextEditPopupKeyboard::input(InputConfig* config, Input input)
 		delete this;
 		return true;
 	}
-	
-	if(config->isMappedTo("start", input) && input.value != 0)
-	{
-		// close everything
-		Window* window = mWindow;
-		while(window->peekGui() && window->peekGui() != ViewController::get())
-			delete window->peekGui();
-		return true;
-	}
 
 	// For deleting a chara (Left Top Button)
 	if (config->isMappedTo("lefttop", input) && input.value) {
