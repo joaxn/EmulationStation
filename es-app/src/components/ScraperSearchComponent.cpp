@@ -8,6 +8,7 @@
 #include "components/TextComponent.h"
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiTextEditPopup.h"
+#include "guis/GuiTextEditPopupKeyboard.h"
 #include "resources/Font.h"
 #include "utils/StringUtil.h"
 #include "FileData.h"
