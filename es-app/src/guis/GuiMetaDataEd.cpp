@@ -22,7 +22,7 @@
 #include "Window.h"
 
 GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams scraperParams,
-	const std::string& /*header*/, std::function<void()> saveCallback, std::function<void()> deleteFunc, bool scrapenow) : GuiComponent(window),
+	const std::string& /*header*/, std::function<void()> saveCallback, std::function<void()> deleteFunc) : GuiComponent(window),
 	mScraperParams(scraperParams),
 
 	mBackground(window, ":/frame.png"),
@@ -143,10 +143,6 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 		mList->addRow(row);
 		ed->setValue(mMetaData->get(iter->key));
 		mEditors.push_back(ed);
-		
-		if(scrapenow){
-			fetch();
-		}
 	}
 
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
@@ -158,11 +154,9 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 		auto deleteBtnFunc = [this, deleteFileAndSelf] { mWindow->pushGui(new GuiMsgBox(mWindow, "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\nARE YOU SURE?", "YES", deleteFileAndSelf, "NO", nullptr)); };
 		buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DELETE", "delete", deleteBtnFunc));
 	}
-	/*
 	if(!scraperParams.system->hasPlatformId(PlatformIds::PLATFORM_IGNORE)){
 		buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DOWNLOAD GAME INFO", "scrape", std::bind(&GuiMetaDataEd::fetch, this)));
 	}
-	*/
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SAVE", "save", [&] { save(); delete this; }));
 
 	mButtons = makeButtonGrid(mWindow, buttons);

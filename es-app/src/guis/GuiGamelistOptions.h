@@ -23,7 +23,6 @@ public:
 private:
 	void openGamelistFilter();
 	void openMetaDataEd();
-	void openMetaDataEdScraper();
 	void startEditMode();
 	void exitEditMode();
 	void jumpToLetter();
