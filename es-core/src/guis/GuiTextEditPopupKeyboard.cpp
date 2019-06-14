@@ -216,7 +216,7 @@ void GuiTextEditPopupKeyboard::specialKeys() {
 void GuiTextEditPopupKeyboard::updateKeys(){
 	for (int y = 0; y < ROWS; y++) {
 		for (int x = 0; x < COLUMNS; x++) {
-			if (std:strlen(arr_ptr)charArray[y][x] != "sft" && charArray[y][x] != "chr" && charArray[y][x] != "cul" && charArray[y][x] != "cur"){
+			if (charArray[y][x] != "sft" && charArray[y][x] != "chr" && charArray[y][x] != "cul" && charArray[y][x] != "cur"){
 				if (mSpecial){
 					buttonList.at(y).at(x)->setText(charArraySpecial[y][x],charArraySpecial[y][x],false,minText);
 				}else if(mShift){
