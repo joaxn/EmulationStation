@@ -116,9 +116,13 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	}
 	
 	ScraperSearchParams scraperParams;
-	if(!scraperParams.system->hasPlatformId(PlatformIds::PLATFORM_IGNORE))
-		buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DOWNLOAD GAME INFO", "scrape", std::bind(&GuiMetaDataEd::fetch, this)));
-
+	if(!scraperParams.system->hasPlatformId(PlatformIds::PLATFORM_IGNORE)){
+		row.elements.clear();
+		row.addElement(std::make_shared<TextComponent>(mWindow, "DOWNLOAD GAME INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		row.addElement(makeArrow(mWindow), false);
+		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openMetaDataEdScraper, this));
+		mMenu.addRow(row);
+	}
 
 	mMenu.addButton("BACK", "back", [&] { delete this; });
 
@@ -206,6 +210,33 @@ void GuiGamelistOptions::openMetaDataEd()
 
 	mWindow->pushGui(new GuiMetaDataEd(mWindow, &file->metadata, file->metadata.getMDD(), p, Utils::FileSystem::getFileName(file->getPath()),
 		std::bind(&IGameListView::onFileChanged, ViewController::get()->getGameListView(file->getSystem()).get(), file, FILE_METADATA_CHANGED), deleteBtnFunc));
+}
+
+void GuiGamelistOptions::openMetaDataEdScraper()
+{
+	// open metadata editor
+	// get the FileData that hosts the original metadata
+	FileData* file = getGamelist()->getCursor()->getSourceFileData();
+	ScraperSearchParams p;
+	p.game = file;
+	p.system = file->getSystem();
+
+	std::function<void()> deleteBtnFunc;
+
+	if (file->getType() == FOLDER)
+	{
+		deleteBtnFunc = NULL;
+	}
+	else
+	{
+		deleteBtnFunc = [this, file] {
+			CollectionSystemManager::get()->deleteCollectionFiles(file);
+			ViewController::get()->getGameListView(file->getSystem()).get()->remove(file, true);
+		};
+	}
+
+	mWindow->pushGui(new GuiMetaDataEd(mWindow, &file->metadata, file->metadata.getMDD(), p, Utils::FileSystem::getFileName(file->getPath()),
+		std::bind(&IGameListView::onFileChanged, ViewController::get()->getGameListView(file->getSystem()).get(), file, FILE_METADATA_CHANGED), deleteBtnFunc, true));
 }
 
 void GuiGamelistOptions::jumpToLetter()
