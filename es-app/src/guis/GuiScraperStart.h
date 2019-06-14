@@ -28,11 +28,13 @@ public:
 private:
 	void pressedStart();
 	void start();
+	void save();
 	std::queue<ScraperSearchParams> getSearches(std::vector<SystemData*> systems, GameFilterFunc selector);
 
+	std::shared_ptr<SwitchComponent> mApproveResults;
 	std::shared_ptr< OptionListComponent<GameFilterFunc> > mFilters;
 	std::shared_ptr< OptionListComponent<SystemData*> > mSystems;
-	std::shared_ptr<SwitchComponent> mApproveResults;
+	std::shared_ptr< OptionListComponent< std::string > > mSource;
 
 	MenuComponent mMenu;
 };

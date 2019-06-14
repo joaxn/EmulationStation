@@ -12,6 +12,13 @@ GuiScraperStart::GuiScraperStart(Window* window) : GuiComponent(window),
 	mMenu(window, "DOWNLOAD GAME INFO")
 {
 	addChild(&mMenu);
+	
+	mSource = std::make_shared< OptionListComponent< std::string > >(mWindow, "DOWNLOAD FROM", false);
+	std::vector<std::string> scrapers = getScraperList();
+	for(auto it = scrapers.cbegin(); it != scrapers.cend(); it++)
+		mSource->add(*it, *it, *it == Settings::getInstance()->getString("Scraper"));
+	mMenu.addWithLabel("DOWNLOAD FROM", scraper_list);
+	
 
 	// add filters (with first one selected)
 	mFilters = std::make_shared< OptionListComponent<GameFilterFunc> >(mWindow, "FETCH THESE GAMES", false);
@@ -34,7 +41,7 @@ GuiScraperStart::GuiScraperStart(Window* window) : GuiComponent(window),
 	mApproveResults->setState(true);
 	mMenu.addWithLabel("User decides on conflicts", mApproveResults);
 	
-	mMenu.addButton("BACK", "back", [&] { delete this; });
+	mMenu.addButton("BACK", "back", [&] { save(); delete this; });
 	mMenu.addButton("START", "start", std::bind(&GuiScraperStart::pressedStart, this));
 
 	mMenu.setPosition((Renderer::getScreenWidth() - mMenu.getSize().x()) / 2, Renderer::getScreenHeight() * 0.15f);
@@ -54,12 +61,13 @@ void GuiScraperStart::pressedStart()
 			return;
 		}
 	}
-
+	
 	start();
 }
 
 void GuiScraperStart::start()
 {
+	save();
 	std::queue<ScraperSearchParams> searches = getSearches(mSystems->getSelectedObjects(), mFilters->getSelected());
 
 	if(searches.empty())
@@ -71,6 +79,12 @@ void GuiScraperStart::start()
 		mWindow->pushGui(gsm);
 		delete this;
 	}
+}
+
+void GuiScraperStart::save()
+{
+	Settings::getInstance()->setString("Scraper", mSource->getSelected());
+	Settings::getInstance()->saveFile();
 }
 
 std::queue<ScraperSearchParams> GuiScraperStart::getSearches(std::vector<SystemData*> systems, GameFilterFunc selector)
@@ -103,13 +117,14 @@ bool GuiScraperStart::input(InputConfig* config, Input input)
 	
 	if(input.value != 0 && config->isMappedTo("b", input))
 	{
+		save();
 		delete this;
 		return true;
 	}
 
 	if(config->isMappedTo("start", input) && input.value != 0)
 	{
-		// close everything
+		save();
 		Window* window = mWindow;
 		while(window->peekGui() && window->peekGui() != ViewController::get())
 			delete window->peekGui();
