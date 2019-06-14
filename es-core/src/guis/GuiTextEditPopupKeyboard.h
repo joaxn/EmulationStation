@@ -44,24 +44,24 @@ private:
 		{"1","2","3","4","5","6","7","8","9","0","ß"},
 		{ "q","w","e","r","t","z","u","i","o","p","ü"},
 		{ "a","s","d","f","g","h","j","k","l","ö","ä"},
-		{ "SHIFT","#+=","y","x","c","v","b","n","m",",","."}
+		{ "sft","chr","y","x","c","v","b","n","m","cul","cur"}
 	};
 	const char* charArrayUp[4][11] = {
 		{"1","2","3","4","5","6","7","8","9","0","ß"},
 		{ "Q","W","E","R","T","Z","U","I","O","P","Ü"},
 		{ "A","S","D","F","G","H","J","K","L","Ö","Ä"},
-		{ "SHIFT","#+=","Y","X","C","V","B","N","M",";",":"}
+		{ "sft","chr","Y","X","C","V","B","N","M","cul","cur"}
 	};
 	const char* charArraySpecial[4][11] = {
 		{ "+","×","÷","=","%","/","\\","$","€","£","@"},
 		{ "*","!","#",":",";","&","_","(",")","-","'"},
 		{ "\"",",",".","?","<",">","[","]","{","}","~"},
-		{ "SHIFT","#+=","§","|","^","°","©","¿","¢","¬","¦"}
+		{ "sft","chr","§","|","^","°","©","¿","¢","cul","cur"}
 	};
 	
 	
 	std::string charList = "abcdefghijklmnopqrstuvwxyzüöä";
-	std::string minText = "SHIFT";
+	std::string minText = "SFT";
 
 	int mxIndex = 0;		// Stores the X index and makes every grid the same.
 

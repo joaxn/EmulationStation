@@ -36,6 +36,11 @@ public:
 	
 	void startEditing();
 	void stopEditing();
+	
+	void moveCursorRight();
+	void moveCursorLeft();
+	
+	void forceCursor(bool force);
 
 private:
 
@@ -52,6 +57,7 @@ private:
 	std::string mText;
 	bool mFocused;
 	bool mEditing;
+	bool mForceCursor;
 	unsigned int mCursor; // cursor position in characters
 
 	int mCursorRepeatTimer;

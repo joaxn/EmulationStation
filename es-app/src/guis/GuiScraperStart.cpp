@@ -9,12 +9,12 @@
 #include "SystemData.h"
 
 GuiScraperStart::GuiScraperStart(Window* window) : GuiComponent(window),
-	mMenu(window, "DOWNLOAD GAME ART")
+	mMenu(window, "DOWNLOAD GAME INFO")
 {
 	addChild(&mMenu);
 
 	// add filters (with first one selected)
-	mFilters = std::make_shared< OptionListComponent<GameFilterFunc> >(mWindow, "SCRAPE THESE GAMES", false);
+	mFilters = std::make_shared< OptionListComponent<GameFilterFunc> >(mWindow, "FETCH THESE GAMES", false);
 	mFilters->add("All Games", 
 		[](SystemData*, FileData*) -> bool { return true; }, false);
 	mFilters->add("Only missing image", 
@@ -22,7 +22,7 @@ GuiScraperStart::GuiScraperStart(Window* window) : GuiComponent(window),
 	mMenu.addWithLabel("Filter", mFilters);
 
 	//add systems (all with a platformid specified selected)
-	mSystems = std::make_shared< OptionListComponent<SystemData*> >(mWindow, "SCRAPE THESE SYSTEMS", true);
+	mSystems = std::make_shared< OptionListComponent<SystemData*> >(mWindow, "FETCH THESE SYSTEMS", true);
 	for(auto it = SystemData::sSystemVector.cbegin(); it != SystemData::sSystemVector.cend(); it++)
 	{
 		if(!(*it)->hasPlatformId(PlatformIds::PLATFORM_IGNORE))
@@ -33,9 +33,9 @@ GuiScraperStart::GuiScraperStart(Window* window) : GuiComponent(window),
 	mApproveResults = std::make_shared<SwitchComponent>(mWindow);
 	mApproveResults->setState(true);
 	mMenu.addWithLabel("User decides on conflicts", mApproveResults);
-
-	mMenu.addButton("START", "start", std::bind(&GuiScraperStart::pressedStart, this));
+	
 	mMenu.addButton("BACK", "back", [&] { delete this; });
+	mMenu.addButton("START", "start", std::bind(&GuiScraperStart::pressedStart, this));
 
 	mMenu.setPosition((Renderer::getScreenWidth() - mMenu.getSize().x()) / 2, Renderer::getScreenHeight() * 0.15f);
 }

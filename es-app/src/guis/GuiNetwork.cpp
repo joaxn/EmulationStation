@@ -3,8 +3,6 @@
 #include "components/OptionListComponent.h"
 #include "components/SliderComponent.h"
 #include "components/SwitchComponent.h"
-
-#include "components/OptionListComponent.h"
 #include "components/SliderComponent.h"
 #include "components/SwitchComponent.h"
 #include "guis/GuiMsgBox.h"

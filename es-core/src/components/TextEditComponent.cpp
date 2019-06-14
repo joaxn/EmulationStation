@@ -12,7 +12,7 @@
 
 TextEditComponent::TextEditComponent(Window* window) : GuiComponent(window),
 	mBox(window, ":/textinput_ninepatch.png"), mFocused(false), 
-	mScrollOffset(0.0f, 0.0f), mCursor(0), mEditing(false), mFont(Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT)), 
+	mScrollOffset(0.0f, 0.0f), mCursor(0), mEditing(false), mForceCursor(false), mFont(Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT)), 
 	mCursorRepeatDir(0)
 {
 	addChild(&mBox);
@@ -86,6 +86,11 @@ void TextEditComponent::stopEditing()
 	SDL_StopTextInput();
 	mEditing = false;
 	updateHelpPrompts();
+}
+
+void TextEditComponent::showCursor(bool force)
+{
+	mForceCursor = force;
 }
 
 bool TextEditComponent::input(InputConfig* config, Input input)
@@ -195,6 +200,20 @@ void TextEditComponent::moveCursor(int amt)
 	onCursorChanged();
 }
 
+void TextEditComponent::moveCursorLeft()
+{
+	mCursorRepeatDir = -1;
+	mCursorRepeatTimer = -(CURSOR_REPEAT_START_DELAY - CURSOR_REPEAT_SPEED);
+	moveCursor(mCursorRepeatDir);
+}
+
+void TextEditComponent::moveCursorRight()
+{
+	mCursorRepeatDir = 1;
+	mCursorRepeatTimer = -(CURSOR_REPEAT_START_DELAY - CURSOR_REPEAT_SPEED);
+	moveCursor(mCursorRepeatDir);
+}
+
 void TextEditComponent::setCursor(size_t pos)
 {
 	if(pos == std::string::npos)
@@ -268,7 +287,7 @@ void TextEditComponent::render(const Transform4x4f& parentTrans)
 	Renderer::popClipRect();
 
 	// draw cursor
-	if(mEditing)
+	if(mEditing || mForceCursor)
 	{
 		Vector2f cursorPos;
 		if(isMultiline())

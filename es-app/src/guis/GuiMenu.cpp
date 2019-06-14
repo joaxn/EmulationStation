@@ -39,7 +39,7 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 		addEntry("UPDATE", ":/menu/update.svg", 0x777777FF, true, [this] { openUpdate(); });
 	
 	if (isFullUI)
-		addEntry("GAME ART", ":/menu/scraper.svg", 0x777777FF, true, [this] { openScraperSettings(); });
+		addEntry("DOWNLOAD GAME INFO", ":/menu/scraper.svg", 0x777777FF, true, [this] { openScraperSettings(); });
 
 	if (isFullUI)
 		addEntry("UI SETTINGS", ":/menu/ui.svg", 0x777777FF, true, [this] { openUISettings(); });
@@ -95,7 +95,7 @@ void GuiMenu::openUpdate()
 void GuiMenu::openScraperSettings()
 {
 	
-	auto s = new GuiSettings(mWindow, "GAME ART");
+	auto s = new GuiSettings(mWindow, "DOWNLOAD GAME INFO");
 
 	// scrape from
 	auto scraper_list = std::make_shared< OptionListComponent< std::string > >(mWindow, "DOWNLOAD FROM", false);

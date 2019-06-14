@@ -19,6 +19,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 
 	mText = std::make_shared<TextEditComponent>(mWindow);
 	mText->setValue(initValue);
+	mText->forceCursor(true);
 
 	if(!multiLine)
 		mText->setCursor(initValue.size());
@@ -39,21 +40,31 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 		for (int y = 0; y < ROWS; y++) {
 			std::vector< std::shared_ptr<ButtonComponent> > buttons;
 			for (int x = 0; x < COLUMNS; x++) {
-				if (charArray[y][x] == "SHIFT"){
+				if (charArray[y][x] == "sft"){
 					mShiftButton = std::make_shared<ButtonComponent>(mWindow, charArray[y][x], "SHIFTS FOR UPPER,LOWER, AND SPECIAL", [this] {
 						if (mShift) mShift = false;
 						else mShift = true;
 						shiftKeys();
-					},false,minText);
+					},false,minText,":/kbd/sft.svg");
 					buttons.push_back(mShiftButton);
 	        	}
-				else if (charArray[y][x] == "#+="){
+				else if (charArray[y][x] == "chr"){
 					mSpecialButton = std::make_shared<ButtonComponent>(mWindow, charArray[y][x], "SPECIAL CHARACTERS", [this] {
 						if (mSpecial) mSpecial = false;
 						else mSpecial = true;
 						specialKeys();
-					},false,minText);
+					},false,minText,":/kbd/chr.svg");
 					buttons.push_back(mSpecialButton);
+	        	}
+				else if (charArray[y][x] == "cul"){
+					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, charArray[y][x], charArrayUp[y][x], [this] {
+						mText->moveCursorLeft();
+					},false,minText,":/kbd/cul.svg"));
+	        	}
+				else if (charArray[y][x] == "cur"){
+					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, charArray[y][x], charArrayUp[y][x], [this] {
+						mText->moveCursorRight();
+					},false,minText,":/kbd/cur.svg"));
 	        	}
 	        	else {
 					buttons.push_back(std::make_shared<ButtonComponent>(mWindow, charArray[y][x], charArrayUp[y][x], [this, okCallback, x, y, loc] {
@@ -81,10 +92,10 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 
 	// Accept/Cancel buttons
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; },true,"DELETE"));
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SPACE", "SPACE", [this] {mText->startEditing();mText->textInput(" ");mText->stopEditing();},true,"DELETE"));
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DELETE", "DELETE A CHAR", [this] {mText->startEditing();mText->textInput("\b");mText->stopEditing();},true,"DEL",":/menu/network.svg"));
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, acceptBtnText, acceptBtnText, [this, okCallback] { okCallback(mText->getValue()); delete this; },true,"DELETE"));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "DISCARD CHANGES", [this] { delete this; },true,"CANCEL"));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SPACE", "SPACE", [this] {mText->startEditing();mText->textInput(" ");mText->stopEditing();},true,"CANCEL",":/kbd/spc.svg"));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DELETE", "DELETE A CHAR", [this] {mText->startEditing();mText->textInput("\b");mText->stopEditing();},true,"CANCEL",":/kbd/del.svg"));
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, acceptBtnText, acceptBtnText, [this, okCallback] { okCallback(mText->getValue()); delete this; },true,"CANCEL"));
 
 	// Add a/c buttons
 	mButtonGrid->setEntry(buttons[0], Vector2i(0, 0), true, false);
@@ -205,7 +216,7 @@ void GuiTextEditPopupKeyboard::specialKeys() {
 void GuiTextEditPopupKeyboard::updateKeys(){
 	for (int y = 0; y < ROWS; y++) {
 		for (int x = 0; x < COLUMNS; x++) {
-			if (charArray[y][x] != "SHIFT" && charArray[y][x] != "#+="){
+			if (std:strlen(arr_ptr)charArray[y][x] != "sft" && charArray[y][x] != "chr" && charArray[y][x] != "cul" && charArray[y][x] != "cur"){
 				if (mSpecial){
 					buttonList.at(y).at(x)->setText(charArraySpecial[y][x],charArraySpecial[y][x],false,minText);
 				}else if(mShift){

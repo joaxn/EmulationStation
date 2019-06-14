@@ -109,11 +109,18 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	if (UIModeController::getInstance()->isUIModeFull() && !fromPlaceholder && !(mSystem->isCollection() && file->getType() == FOLDER))
 	{
 		row.elements.clear();
-		row.addElement(std::make_shared<TextComponent>(mWindow, "EDIT THIS GAME'S METADATA", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		row.addElement(std::make_shared<TextComponent>(mWindow, "EDIT GAME INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 		row.addElement(makeArrow(mWindow), false);
 		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openMetaDataEd, this));
 		mMenu.addRow(row);
 	}
+	
+	ScraperSearchParams scraperParams;
+	if(!scraperParams.system->hasPlatformId(PlatformIds::PLATFORM_IGNORE))
+		buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DOWNLOAD GAME INFO", "scrape", std::bind(&GuiMetaDataEd::fetch, this)));
+
+
+	mMenu.addButton("BACK", "back", [&] { delete this; });
 
 	// center the menu
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());

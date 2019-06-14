@@ -132,8 +132,8 @@ void ScraperSearchComponent::resizeMetadata()
 	if(mMD_Grid->getSize().y() > mMD_Pairs.size())
 	{
 		const int fontHeight = (int)(mMD_Grid->getSize().y() / mMD_Pairs.size() * 0.8f);
-		auto fontLbl = Font::get(FONT_SIZE_MEDIUM, FONT_PATH_REGULAR);
-		auto fontComp = Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT);
+		auto fontLbl = Font::get(FONT_SIZE_SMALL, FONT_PATH_REGULAR);
+		auto fontComp = Font::get(FONT_SIZE_SMALL, FONT_PATH_LIGHT);
 
 		// update label fonts
 		float maxLblWidth = 0;
@@ -164,7 +164,7 @@ void ScraperSearchComponent::resizeMetadata()
 		mMD_Grid->onSizeChanged();
 
 		// make result font follow label font
-		mResultDesc->setFont(Font::get(FONT_SIZE_MEDIUM, FONT_PATH_REGULAR));
+		mResultDesc->setFont(Font::get(FONT_SIZE_SMALL, FONT_PATH_REGULAR));
 	}
 }
 
