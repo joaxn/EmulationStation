@@ -88,7 +88,7 @@ void TextEditComponent::stopEditing()
 	updateHelpPrompts();
 }
 
-void TextEditComponent::showCursor(bool force)
+void TextEditComponent::forceCursor(bool force)
 {
 	mForceCursor = force;
 }
