@@ -113,7 +113,7 @@ void ButtonComponent::render(const Transform4x4f& parentTrans)
 		trans = trans.translate(centerOffset);
 		Renderer::setMatrix(trans);
 		mIcon->setColorShift(getCurTextColor());
-		trans = trans.translate(-centerOffset);
+		//trans = trans.translate(-centerOffset);
 		mIcon->render(trans);
 
 	}else if(mTextCache){

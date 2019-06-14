@@ -28,7 +28,7 @@ GuiTextEditPopupKeyboard::GuiTextEditPopupKeyboard(Window* window, const std::st
 	mGrid.setEntry(mTitle, Vector2i(0, 0), false, true);
 
 	// Text edit add
-	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1));
+	mGrid.setEntry(mText, Vector2i(0, 1), false, true, Vector2i(1, 1));
 
 	// Keyboard
 	// Case for if multiline is enabled, then don't create the keyboard.
