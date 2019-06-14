@@ -17,7 +17,7 @@ GuiScraperStart::GuiScraperStart(Window* window) : GuiComponent(window),
 	std::vector<std::string> scrapers = getScraperList();
 	for(auto it = scrapers.cbegin(); it != scrapers.cend(); it++)
 		mSource->add(*it, *it, *it == Settings::getInstance()->getString("Scraper"));
-	mMenu.addWithLabel("DOWNLOAD FROM", scraper_list);
+	mMenu.addWithLabel("DOWNLOAD FROM", mSource);
 	
 
 	// add filters (with first one selected)
