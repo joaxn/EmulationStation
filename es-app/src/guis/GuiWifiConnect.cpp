@@ -31,13 +31,13 @@ GuiWifiConnect::GuiWifiConnect(Window* window, const std::function<void()>& call
 	mGrid.setEntry(mTitle, Vector2i(0, 0), false, true);
 
 	mText = std::make_shared<TextComponent>(mWindow, "TRYING TO CONNECT", Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_CENTER);
-	mGrid.setEntry(mText, Vector2i(0, 1), true, false, Vector2i(1, 1));
+	mGrid.setEntry(mText, Vector2i(0, 1), false, true);
 
 	mAnimationGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(5, 1));
 	mAnimation = std::make_shared<AnimatedImageComponent>(mWindow);
 	mAnimation->load(&WIFICON_ANIMATION_DEF);
-	mAnimationGrid->setEntry(mAnimation,Vector2i(2,0),true,false);
-	mGrid.setEntry(mAnimationGrid, Vector2i(0, 2), true, false, Vector2i(1, 1));
+	mAnimationGrid->setEntry(mAnimation,Vector2i(2,0),false,false);
+	mGrid.setEntry(mAnimationGrid, Vector2i(0, 2), true, false);
 
 	addChild(&mBackground);
 	addChild(&mGrid);

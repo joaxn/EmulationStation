@@ -177,7 +177,8 @@ bool SystemView::input(InputConfig* config, Input input)
 			break;
 		}
 
-		if(config->isMappedTo("a", input))
+		if(config->isMappedTo("a", input) || 
+		  (config->isMappedTo("start", input) && UIModeController::getInstance()->isUIModeKiosk()))
 		{
 			stopScrolling();
 			ViewController::get()->goToGameList(getSelected());
