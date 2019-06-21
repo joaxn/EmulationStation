@@ -117,9 +117,9 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	
 	
 	
-	FileData* file = getGamelist()->getCursor()->getSourceFileData();
-	std::string system = file->getSystem()->getName();
-	std::string name = file->getName();
+	FileData* fp = getGamelist()->getCursor()->getSourceFileData();
+	std::string system = fp->getSystem()->getName();
+	std::string name = fp->getName();
 	
 	row.elements.clear();
 	row.addElement(std::make_shared<TextComponent>(mWindow, system, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
