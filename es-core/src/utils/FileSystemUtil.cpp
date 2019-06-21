@@ -5,6 +5,7 @@
 #include "Settings.h"
 #include <sys/stat.h>
 #include <string.h>
+#include <algorithm> 
 
 #if defined(_WIN32)
 // because windows...
