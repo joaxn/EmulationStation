@@ -120,9 +120,10 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	
 	FileData* fp = getGamelist()->getCursor()->getSourceFileData();
 	std::stringstream stemp;
-	stemp = fp->getSystem()->getName() << "_" << Utils::FileSystem::getCleanFileName(fp->getPath());
+	stemp << fp->getSystem()->getName() << "_" << Utils::FileSystem::getCleanFileName(fp->getPath());
 	std::string romConfigName = stemp.str();
-	stemp = getenv("OLDPWD") << "/" << fp->getSystem()->getName() << "/emulators.cfg";
+	stemp.str("");
+	stemp << getenv("OLDPWD") << "/" << fp->getSystem()->getName() << "/emulators.cfg";
 	std::string romConfigPath = stemp.str();
 	
 	row.elements.clear();
