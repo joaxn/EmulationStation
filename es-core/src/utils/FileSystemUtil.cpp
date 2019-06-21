@@ -381,6 +381,24 @@ namespace Utils
 			return path;
 
 		} // getFileName
+		
+		std::string getCleanFileName(const std::string& _path)
+		{
+			std::string fileName = getFileName(_path);
+			size_t      offset   = std::string::npos;
+
+			// empty fileName
+			if(fileName == ".")
+				return fileName;
+			
+			if((offset = fileName.find_last_of('.')) != std::string::npos)
+				fileName = filename.substr(0, offset);
+			
+			fileName.erase( std::remove_if( fileName.begin(), fileName.end(), []( char c ) { return !std::isalnum(c) ; } ), fileName.end() ) ;
+			
+			return fileName;
+
+		} // getCleanFileName
 
 		std::string getStem(const std::string& _path)
 		{

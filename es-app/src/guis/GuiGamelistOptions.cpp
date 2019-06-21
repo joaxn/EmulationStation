@@ -119,19 +119,13 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	
 	FileData* fp = getGamelist()->getCursor()->getSourceFileData();
 	std::string systemname = fp->getSystem()->getName();
-	std::string gamename = Utils::FileSystem::getFileName(fp->getPath());
+	std::string gamename = Utils::FileSystem::getCleanFileName(fp->getPath());
 	
 	row.elements.clear();
 	row.addElement(std::make_shared<TextComponent>(mWindow, systemname, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
 	mMenu.addRow(row);
 	
-	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, gamename, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	row.addElement(makeArrow(mWindow), false);
-	mMenu.addRow(row);
-	
-	gamename.erase( std::remove_if( gamename.begin(), gamename.end(), []( char c ) { return !std::isalnum(c) ; } ), gamename.end() ) ;
 	row.elements.clear();
 	row.addElement(std::make_shared<TextComponent>(mWindow, gamename, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
