@@ -118,16 +118,16 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	
 	
 	FileData* fp = getGamelist()->getCursor()->getSourceFileData();
-	std::string system = fp->getSystem()->getName();
-	std::string name = fp->getName();
+	std::string systemname = fp->getSystem()->getName();
+	std::string gamename = fp->getName();
 	
 	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, system, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(std::make_shared<TextComponent>(mWindow, systemname, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
 	mMenu.addRow(row);
 	
 	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, name, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(std::make_shared<TextComponent>(mWindow, gamename, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
 	mMenu.addRow(row);
 	
