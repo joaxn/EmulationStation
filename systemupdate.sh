@@ -20,7 +20,8 @@ function printMsgs() {
     done
 }
 
-binaries_setup
+updatescript_setup
+post_update
 emulationstation
 
 exit

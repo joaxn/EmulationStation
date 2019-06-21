@@ -114,6 +114,24 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openMetaDataEd, this));
 		mMenu.addRow(row);
 	}
+	
+	
+	
+	FileData* file = getGamelist()->getCursor()->getSourceFileData();
+	std::string system = file->getSystem()->getName();
+	std::string name = file->getName();
+	
+	row.elements.clear();
+	row.addElement(std::make_shared<TextComponent>(mWindow, system, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(makeArrow(mWindow), false);
+	mMenu.addRow(row);
+	
+	row.elements.clear();
+	row.addElement(std::make_shared<TextComponent>(mWindow, name, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(makeArrow(mWindow), false);
+	mMenu.addRow(row);
+	
+	//d.erase( std::remove_if( d.begin(), d.end(), []( char c ) { return !std::isalnum(c) ; } ), d.end() ) ;
 
 	mMenu.addButton("BACK", "back", [&] { delete this; });
 
