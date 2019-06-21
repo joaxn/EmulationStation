@@ -121,7 +121,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	std::string romConfigName;
 	std::string romConfigPath;
 	romConfigName.append(fp->getSystem()->getName()).append("_").append(Utils::FileSystem::getCleanFileName(fp->getPath()));
-	romConfigPath.append(getenv("OLDPWD")).append("/").append(fp->getSystem()->getName()).append("/emulators.cfg")
+	romConfigPath.append(getenv("OLDPWD")).append("/").append(fp->getSystem()->getName()).append("/emulators.cfg");
 	
 	row.elements.clear();
 	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigName, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
