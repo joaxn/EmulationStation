@@ -10,6 +10,7 @@
 #include "FileSorts.h"
 #include "GuiMetaDataEd.h"
 #include "SystemData.h"
+#include <sstream>
 
 GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : GuiComponent(window),
 	mSystem(system), mMenu(window, "OPTIONS"), fromPlaceholder(false), mFiltersChanged(false)
@@ -118,10 +119,11 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	
 	
 	FileData* fp = getGamelist()->getCursor()->getSourceFileData();
-	std::string romConfigName;
-	std::string romConfigPath;
-	romConfigName.append(fp->getSystem()->getName()).append("_").append(Utils::FileSystem::getCleanFileName(fp->getPath()));
-	romConfigPath.append(getenv("OLDPWD")).append("/").append(fp->getSystem()->getName()).append("/emulators.cfg");
+	std::stringstream stemp;
+	stemp = fp->getSystem()->getName() << "_" << Utils::FileSystem::getCleanFileName(fp->getPath());
+	std::string romConfigName = stemp.str();
+	stemp = getenv("OLDPWD") << "/" << fp->getSystem()->getName() << "/emulators.cfg";
+	std::string romConfigPath = stemp.str();
 	
 	row.elements.clear();
 	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigName, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
