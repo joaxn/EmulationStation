@@ -392,7 +392,7 @@ namespace Utils
 				return fileName;
 			
 			if((offset = fileName.find_last_of('.')) != std::string::npos)
-				fileName = filename.substr(0, offset);
+				fileName = fileName.substr(0, offset);
 			
 			fileName.erase( std::remove_if( fileName.begin(), fileName.end(), []( char c ) { return !std::isalnum(c) ; } ), fileName.end() ) ;
 			
