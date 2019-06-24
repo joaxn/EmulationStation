@@ -670,6 +670,32 @@ namespace Utils
 			return false;
 
 		} // isHidden
+		
+		bool iniSetValue(const std::string& _path, std::string& key, std::string& value)
+		{
+			std::string path = getGenericPath(_path);
+
+		} // iniSetValue
+		
+		std::string iniGetValue(const std::string& _path, std::string& key)
+		{
+			std::string line;
+			std::string value = "";
+			std::string path = getGenericPath(_path);
+			std::ifstream filein(path);
+			
+			if(filein){
+				while (getline( filein, line )){
+					if (line.size() >= key.size() && line.compare(0, key.size(), key) == 0) {
+						std::size_t quote1 = line.find("\"");
+						std::size_t quote2 = line.find("\"",quote1+1);
+						return line.substr(quote1+1,quote2 - quote1 - 1);
+					}
+				}
+				myfile.close();
+			}
+			return value;
+		} // iniGetValue
 
 	} // FileSystem::
 

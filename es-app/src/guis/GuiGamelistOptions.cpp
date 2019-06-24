@@ -10,6 +10,7 @@
 #include "FileSorts.h"
 #include "GuiMetaDataEd.h"
 #include "SystemData.h"
+#include "utils/FileSystemUtil.h"
 #include <sstream>
 
 GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : GuiComponent(window),
@@ -119,20 +120,24 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	
 	
 	FileData* fp = getGamelist()->getCursor()->getSourceFileData();
-	std::stringstream stemp;
-	stemp << fp->getSystem()->getName() << "_" << Utils::FileSystem::getCleanFileName(fp->getPath());
-	std::string romConfigName = stemp.str();
-	stemp.str("");
-	stemp << getenv("OLDPWD") << "/" << fp->getSystem()->getName() << "/emulators.cfg";
-	std::string romConfigPath = stemp.str();
+	std::stringstream romConfigName;
+	std::stringstream romConfigPath;
+	romConfigName << fp->getSystem()->getName() << "_" << Utils::FileSystem::getCleanFileName(fp->getPath());
+	romConfigPath << getenv("OLDPWD") << "/" << fp->getSystem()->getName() << "/emulators.cfg";
+	std::string defemu = Utils::FileSystem::iniGetValue(romConfigPath.str(),"default");
 	
 	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigName, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigName.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
 	mMenu.addRow(row);
 	
 	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigPath, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigPath.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(makeArrow(mWindow), false);
+	mMenu.addRow(row);
+	
+	row.elements.clear();
+	row.addElement(std::make_shared<TextComponent>(mWindow, defemu, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
 	mMenu.addRow(row);
 
