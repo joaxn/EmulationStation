@@ -25,7 +25,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	ComponentListRow row;
 	
 	auto icon = std::make_shared<ImageComponent>(mWindow);
-	icon->setColorShift(color);
+	icon->setColorShift(0x777777FF);
 	icon->setResize(0, Font::get(FONT_SIZE_MEDIUM)->getLetterHeight() * 1.25f);
 
 	// spacer between icon and text
