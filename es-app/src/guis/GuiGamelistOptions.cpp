@@ -32,7 +32,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	if (!fromPlaceholder) {
 		// jump to letter
 		row.elements.clear();
-
+		/*
 		// define supported character range
 		// this range includes all numbers, capital letters, and most reasonable symbols
 		char startChar = '!';
@@ -75,6 +75,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 			return false;
 		};
 		mMenu.addRow(row);
+		*/
 
 		// sort list by
 		mListSort = std::make_shared<SortList>(mWindow, "SORT GAMES BY", false);
@@ -89,7 +90,6 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.addElement(spacer, false);
 		row.addElement(std::make_shared<TextComponent>(mWindow, "SORT GAMES BY", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 		row.addElement(mListSort, false);
-		row.makeAcceptInputHandler(nullptr);
 		mMenu.addRow(row);
 	}
 

@@ -8,15 +8,8 @@
 
 bool IGameListView::input(InputConfig* config, Input input)
 {
-	// select to open screensaver
-	if(config->isMappedTo("select", input) && input.value)
-	{
-		mWindow->startScreenSaver();
-		mWindow->renderScreenSaver();
-		return true;
-	
-	// select to open options
-	}else if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("start", input) && input.value)
+
+	if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("start", input) && input.value)
 	{
 		Sound::getFromTheme(mTheme, getName(), "menuOpen")->play();
 		mWindow->pushGui(new GuiGamelistOptions(mWindow, this->mRoot->getSystem()));
