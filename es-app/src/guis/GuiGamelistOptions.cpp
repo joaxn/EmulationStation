@@ -257,8 +257,13 @@ void GuiGamelistOptions::openScraper()
 	ScraperSearchParams p;
 	p.game = file;
 	p.system = file->getSystem();
-	GuiGameScraper* scr = new GuiGameScraper(mWindow, p, std::bind(&GuiMetaDataEd::fetchDone, this, std::placeholders::_1));
+	GuiGameScraper* scr = new GuiGameScraper(mWindow, p, std::bind(&GuiGamelistOptions::scrapeDone, this, std::placeholders::_1));
 	mWindow->pushGui(scr);
+}
+
+void GuiGamelistOptions::scrapeDone(const ScraperSearchResult& result)
+{
+	
 }
 
 void GuiGamelistOptions::jumpToLetter()

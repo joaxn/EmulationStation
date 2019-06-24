@@ -7,7 +7,7 @@
 MetaDataDecl gameDecls[] = {
 	// key,         type,                   default,            statistic,  name in GuiMetaDataEd,  prompt in GuiMetaDataEd
 	{"name",        MD_STRING,              "",                 false,      "name",                 "enter game name"},
-	{"sortname",    MD_STRING,              "",                 false,       "sortname",             "enter game sort name"},
+	{"sortname",    MD_STRING,              "",                 true,       "sortname",             "enter game sort name"},
 	{"desc",        MD_MULTILINE_STRING,    "",                 true,       "description",          "enter description"},
 	{"image",       MD_PATH,                "",                 true,       "image",                "enter path to image"},
 	{"video",       MD_PATH     ,           "",                 true,       "video",                "enter path to video"},
@@ -29,7 +29,7 @@ const std::vector<MetaDataDecl> gameMDD(gameDecls, gameDecls + sizeof(gameDecls)
 
 MetaDataDecl folderDecls[] = {
 	{"name",        MD_STRING,              "",                 false,      "name",                 "enter game name"},
-	{"sortname",    MD_STRING,              "",                 false,      "sortname",             "enter game sort name"},
+	{"sortname",    MD_STRING,              "",                 true,      "sortname",             "enter game sort name"},
 	{"desc",        MD_MULTILINE_STRING,    "",                 true,      "description",          "enter description"},
 	{"image",       MD_PATH,                "",                 true,      "image",                "enter path to image"},
 	{"thumbnail",   MD_PATH,                "",                 true,      "thumbnail",            "enter path to thumbnail"},

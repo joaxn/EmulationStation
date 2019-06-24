@@ -4,6 +4,7 @@
 
 #include "components/MenuComponent.h"
 #include "components/OptionListComponent.h"
+#include "scrapers/Scraper.h"
 #include "FileData.h"
 #include "GuiComponent.h"
 
@@ -24,6 +25,7 @@ private:
 	void openGamelistFilter();
 	void openMetaDataEd();
 	void openScraper();
+	void scrapeDone(const ScraperSearchResult& result);
 	void startEditMode();
 	void exitEditMode();
 	void jumpToLetter();
