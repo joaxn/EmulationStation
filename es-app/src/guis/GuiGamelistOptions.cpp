@@ -1,6 +1,7 @@
 #include "GuiGamelistOptions.h"
 
 #include "guis/GuiGamelistFilter.h"
+#include "guis/GuiGameScraper.h"
 #include "scrapers/Scraper.h"
 #include "views/gamelist/IGameListView.h"
 #include "views/UIModeController.h"
@@ -22,6 +23,14 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	FileData* file = getGamelist()->getCursor();
 	fromPlaceholder = file->isPlaceHolder();
 	ComponentListRow row;
+	
+	auto icon = std::make_shared<ImageComponent>(mWindow);
+	icon->setColorShift(color);
+	icon->setResize(0, Font::get(FONT_SIZE_MEDIUM)->getLetterHeight() * 1.25f);
+
+	// spacer between icon and text
+	auto spacer = std::make_shared<GuiComponent>(mWindow);
+	spacer->setSize(16, 0);
 
 	if (!fromPlaceholder) {
 		// jump to letter
@@ -52,6 +61,9 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 			}
 		}
 
+		icon->setImage(":/menu/jump.svg");
+		row.addElement(icon, false);
+		row.addElement(spacer, false);
 		row.addElement(std::make_shared<TextComponent>(mWindow, "JUMP TO...", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 		row.addElement(mJumpToLetterList, false);
 		row.input_handler = [&](InputConfig* config, Input input) {
@@ -75,51 +87,19 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 			const FileData::SortType& sort = FileSorts::SortTypes.at(i);
 			mListSort->add(sort.description, &sort, i == 0); // TODO - actually make the sort type persistent
 		}
-
-		mMenu.addWithLabel("SORT GAMES BY", mListSort);
-	}
-	// show filtered menu
-	/*
-	if(!Settings::getInstance()->getBool("ForceDisableFilters"))
-	{
+		
 		row.elements.clear();
-		row.addElement(std::make_shared<TextComponent>(mWindow, "FILTER GAMELIST", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-		row.addElement(makeArrow(mWindow), false);
-		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openGamelistFilter, this));
-		mMenu.addRow(row);		
-	}
-	
-	std::map<std::string, CollectionSystemData> customCollections = CollectionSystemManager::get()->getCustomCollectionSystems();
-
-	if(UIModeController::getInstance()->isUIModeFull() &&
-		((customCollections.find(system->getName()) != customCollections.cend() && CollectionSystemManager::get()->getEditingCollection() != system->getName()) ||
-		CollectionSystemManager::get()->getCustomCollectionsBundle()->getName() == system->getName()))
-	{
-		row.elements.clear();
-		row.addElement(std::make_shared<TextComponent>(mWindow, "ADD/REMOVE GAMES TO THIS GAME COLLECTION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::startEditMode, this));
+		icon->setImage(":/menu/sort.svg");
+		row.addElement(icon, false);
+		row.addElement(spacer, false);
+		row.addElement(std::make_shared<TextComponent>(mWindow, "SORT GAMES BY", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		row.addElement(mListSort, false);
 		mMenu.addRow(row);
 	}
 
-	if(UIModeController::getInstance()->isUIModeFull() && CollectionSystemManager::get()->isEditing())
-	{
-		row.elements.clear();
-		row.addElement(std::make_shared<TextComponent>(mWindow, "FINISH EDITING '" + Utils::String::toUpper(CollectionSystemManager::get()->getEditingCollection()) + "' COLLECTION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::exitEditMode, this));
-		mMenu.addRow(row);
-	}
-	*/
 	if (UIModeController::getInstance()->isUIModeFull() && !fromPlaceholder && !(mSystem->isCollection() && file->getType() == FOLDER))
 	{
-		row.elements.clear();
-		row.addElement(std::make_shared<TextComponent>(mWindow, "EDIT GAME INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-		row.addElement(makeArrow(mWindow), false);
-		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openMetaDataEd, this));
-		mMenu.addRow(row);
-	}
-	
-	if (UIModeController::getInstance()->isUIModeFull() && !fromPlaceholder && !(mSystem->isCollection() && file->getType() == FOLDER))
-	{
+		//EMULATOR
 		FileData* fp = getGamelist()->getCursor()->getSourceFileData();
 		std::string romConfigName = fp->getSystem()->getName() + "_" + Utils::FileSystem::getCleanFileName(fp->getPath());
 		std::string romConfigPath = "/opt/retropie/configs/" + fp->getSystem()->getName() + "/emulators.cfg";
@@ -134,8 +114,53 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 					EmuSelection->add(*it, *it, emulatorDefault == *it);
 				}
 			}
-			mMenu.addWithLabel("EMULATOR", EmuSelection);
+			row.elements.clear();
+			icon->setImage(":/menu/emulator.svg");
+			row.addElement(icon, false);
+			row.addElement(spacer, false);
+			row.addElement(std::make_shared<TextComponent>(mWindow, "SELECT EMULATOR", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+			row.addElement(EmuSelection, false);
+			mMenu.addEntry(row);
 		}
+		
+		//EDIT
+		row.elements.clear();
+		icon->setImage(":/menu/edit.svg");
+		row.addElement(icon, false);
+		row.addElement(spacer, false);
+		row.addElement(std::make_shared<TextComponent>(mWindow, "EDIT GAME INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		row.addElement(makeArrow(mWindow), false);
+		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openMetaDataEd, this));
+		mMenu.addEntry(row);
+		
+		//DOWNLOAD
+		row.elements.clear();
+		icon->setImage(":/menu/scraper.svg");
+		row.addElement(icon, false);
+		row.addElement(spacer, false);
+		row.addElement(std::make_shared<TextComponent>(mWindow, "DOWNLOAD GAME INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		row.addElement(makeArrow(mWindow), false);
+		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openScraper, this));
+		mMenu.addEntry(row);
+		
+		//DELETE
+		std::function<void()> deleteBtnFunc;
+		if (file->getType() == FOLDER){
+			deleteBtnFunc = NULL;
+		}else{
+			deleteBtnFunc = [this, file] {
+				CollectionSystemManager::get()->deleteCollectionFiles(file);
+				ViewController::get()->getGameListView(file->getSystem()).get()->remove(file, true);
+			};
+		}
+		row.elements.clear();
+		icon->setImage(":/menu/delete.svg");
+		row.addElement(icon, false);
+		row.addElement(spacer, false);
+		row.addElement(std::make_shared<TextComponent>(mWindow, "DELETE GAME", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		row.addElement(makeArrow(mWindow), false);
+		row.makeAcceptInputHandler(deleteBtnFunc);
+		mMenu.addEntry(row);
 	}
 
 	mMenu.addButton("BACK", "back", [&] { delete this; });
@@ -224,6 +249,16 @@ void GuiGamelistOptions::openMetaDataEd()
 
 	mWindow->pushGui(new GuiMetaDataEd(mWindow, &file->metadata, file->metadata.getMDD(), p, Utils::FileSystem::getFileName(file->getPath()),
 		std::bind(&IGameListView::onFileChanged, ViewController::get()->getGameListView(file->getSystem()).get(), file, FILE_METADATA_CHANGED), deleteBtnFunc));
+}
+
+void GuiGamelistOptions::openScraper()
+{
+	FileData* file = getGamelist()->getCursor()->getSourceFileData();
+	ScraperSearchParams p;
+	p.game = file;
+	p.system = file->getSystem();
+	GuiGameScraper* scr = new GuiGameScraper(mWindow, p, std::bind(&GuiMetaDataEd::fetchDone, this, std::placeholders::_1));
+	mWindow->pushGui(scr);
 }
 
 void GuiGamelistOptions::jumpToLetter()
