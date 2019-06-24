@@ -108,7 +108,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::exitEditMode, this));
 		mMenu.addRow(row);
 	}
-
+	*/
 	if (UIModeController::getInstance()->isUIModeFull() && !fromPlaceholder && !(mSystem->isCollection() && file->getType() == FOLDER))
 	{
 		row.elements.clear();
@@ -117,24 +117,25 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openMetaDataEd, this));
 		mMenu.addRow(row);
 	}
-	*/
+	
 	if (UIModeController::getInstance()->isUIModeFull() && !fromPlaceholder && !(mSystem->isCollection() && file->getType() == FOLDER))
 	{
 		FileData* fp = getGamelist()->getCursor()->getSourceFileData();
 		std::string romConfigName = fp->getSystem()->getName() + "_" + Utils::FileSystem::getCleanFileName(fp->getPath());
 		std::string romConfigPath = "/opt/retropie/configs/" + fp->getSystem()->getName() + "/emulators.cfg";
-		std::string systemConfigPath = "/opt/retropie/configs/all/emulators.cfg";
+		std::string overrideConfigPath = "/opt/retropie/configs/all/emulators.cfg";
 		std::string emulatorDefault = Utils::FileSystem::iniGetValue(romConfigPath,"default");
 		
 		auto EmuSelection = std::make_shared< OptionListComponent<std::string> >(mWindow, "Emulator", false);
-		std::vector<std::string> Emulators = Utils::FileSystem::iniGetList("romConfigPath");
-		for (auto it = Emulators.cbegin(); it != Emulators.cend(); it++){
-			if(*it != "default"){
-				EmuSelection->add(*it, *it, emulatorDefault == *it);
+		std::vector<std::string> Emulators = Utils::FileSystem::iniGetList(romConfigPath);
+		if(Emulators.size() > 0){
+			for (auto it = Emulators.cbegin(); it != Emulators.cend(); it++){
+				if(*it != "default"){
+					EmuSelection->add(*it, *it, emulatorDefault == *it);
+				}
 			}
+			mMenu.addWithLabel("EMULATOR", EmuSelection);
 		}
-		
-		mMenu.addWithLabel("EMULATOR", EmuSelection);
 	}
 
 	mMenu.addButton("BACK", "back", [&] { delete this; });

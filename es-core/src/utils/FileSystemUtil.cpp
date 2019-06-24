@@ -1,6 +1,7 @@
 #define _FILE_OFFSET_BITS 64
 
 #include "utils/FileSystemUtil.h"
+#include "utils/StringUtil.h"
 
 #include "Settings.h"
 #include <sys/stat.h>
@@ -731,7 +732,7 @@ namespace Utils
 					if (line.size() >= key.size() && line.compare(0, key.size(), key) == 0) {
 						std::size_t quote1 = line.find("\"");
 						std::size_t quote2 = line.find("\"",quote1+1);
-						return line.substr(quote1+1,quote2 - quote1 - 1);
+						return Utils::String::trim(line.substr(quote1+1,quote2 - quote1 - 1));
 					}
 				}
 				filein.close();
@@ -751,7 +752,7 @@ namespace Utils
 				while (getline( filein, line )){
 					eq = line.find("=");
 					if(eq != std::string::npos){
-						map.push_back(line.substr(0,eq - 2));
+						map.push_back(Utils::String::trim(line.substr(0,eq - 1)));
 					}
 				}
 				filein.close();
