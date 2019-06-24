@@ -564,7 +564,7 @@ namespace Utils
 				return false;
 
 			// try to remove file
-			return std::rename(oldPath,newPath);
+			return std::rename(oldPath.c_str(),newPath.c_str());
 
 		} // removeFile
 
