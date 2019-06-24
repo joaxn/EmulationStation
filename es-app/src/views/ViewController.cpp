@@ -360,7 +360,7 @@ bool ViewController::input(InputConfig* config, Input input)
 		return true;
 
 	// open menu
-	if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("start", input) && input.value != 0)
+	if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("start", input) && mState.viewing == SYSTEM_SELECT && input.value != 0)
 	{
 		// open menu
 		mWindow->pushGui(new GuiMenu(mWindow));

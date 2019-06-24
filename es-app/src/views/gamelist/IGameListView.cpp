@@ -9,7 +9,14 @@
 bool IGameListView::input(InputConfig* config, Input input)
 {
 	// select to open GuiGamelistOptions
-	if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("start", input) && input.value)
+	if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("select", input) && input.value)
+	{
+		Sound::getFromTheme(mTheme, getName(), "menuOpen")->play();
+		mWindow->pushGui(new GuiGamelistOptions(mWindow, this->mRoot->getSystem()));
+		return true;
+
+	// Ctrl-R to reload a view when debugging
+	}else if(UIModeController::getInstance()->isUIModeFull() && config->isMappedTo("start", input) && input.value)
 	{
 		Sound::getFromTheme(mTheme, getName(), "menuOpen")->play();
 		mWindow->pushGui(new GuiGamelistOptions(mWindow, this->mRoot->getSystem()));
