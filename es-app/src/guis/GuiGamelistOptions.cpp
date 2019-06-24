@@ -117,29 +117,24 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		mMenu.addRow(row);
 	}
 	
-	
-	
-	FileData* fp = getGamelist()->getCursor()->getSourceFileData();
-	std::string romConfigName;
-	std::string romConfigPath;
-	romConfigName = fp->getSystem()->getName() + "_" + Utils::FileSystem::getCleanFileName(fp->getPath());
-	romConfigPath = "/opt/retropie/configs/" + fp->getSystem()->getName() + "/emulators.cfg";
-	std::string defemu = Utils::FileSystem::iniGetValue(romConfigPath,"default");
-	
-	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigName, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	row.addElement(makeArrow(mWindow), false);
-	mMenu.addRow(row);
-	
-	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigPath, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	row.addElement(makeArrow(mWindow), false);
-	mMenu.addRow(row);
-	
-	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, defemu, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	row.addElement(makeArrow(mWindow), false);
-	mMenu.addRow(row);
+	if (UIModeController::getInstance()->isUIModeFull() && !fromPlaceholder && !(mSystem->isCollection() && file->getType() == FOLDER))
+	{
+		FileData* fp = getGamelist()->getCursor()->getSourceFileData();
+		std::string romConfigName = fp->getSystem()->getName() + "_" + Utils::FileSystem::getCleanFileName(fp->getPath());
+		std::string romConfigPath = "/opt/retropie/configs/" + fp->getSystem()->getName() + "/emulators.cfg";
+		std::string systemConfigPath = "/opt/retropie/configs/all/emulators.cfg";
+		std::string emulatorDefault = Utils::FileSystem::iniGetValue(romConfigPath,"default");
+		
+		auto EmuSelection = std::make_shared< OptionListComponent<std::string> >(mWindow, "Emulator", false);
+		std::vector<std::string> Emulators = Utils::FileSystem::iniGetList("romConfigPath");
+		for (auto it = Emulators.cbegin(); it != Emulators.cend(); it++){
+			if(*it != "default"){
+				EmuSelection->add(*it, *it, emulatorDefault == *it);
+			}
+		}
+		
+		mMenu.addWithLabel("EMULATOR", EmuSelection);
+	}
 
 	mMenu.addButton("BACK", "back", [&] { delete this; });
 

@@ -738,6 +738,26 @@ namespace Utils
 			}
 			return value;
 		} // iniGetValue
+		
+		std::vector<std::string> iniGetList(const std::string& _path)
+		{
+			std::vector<std::string>map;
+			std::string line;
+			std::string path = getGenericPath(_path);
+			std::ifstream filein(path);
+			std::size_t eq;
+			
+			if(filein){
+				while (getline( filein, line )){
+					eq = line.find("=");
+					if(eq != std::string::npos){
+						map.push_back(line.substr(0,eq - 2));
+					}
+				}
+				filein.close();
+			}
+			return map;
+		} // iniGetList
 
 	} // FileSystem::
 
