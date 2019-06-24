@@ -2,6 +2,7 @@
 
 #include "guis/GuiGamelistFilter.h"
 #include "guis/GuiGameScraper.h"
+#include "guis/GuiMsgBox.h"
 #include "scrapers/Scraper.h"
 #include "views/gamelist/IGameListView.h"
 #include "views/UIModeController.h"
@@ -158,7 +159,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		addSaveFunc([emuList,overrideConfigPath,romConfigName] { Utils::FileSystem::iniSetValue(overrideConfigPath,romConfigName,emuList->getSelected()); });
 	}
 
-	mMenu.addButton("BACK", "back", [&] { save(); delete this; });
+	//mMenu.addButton("BACK", "back", [&] { save(); delete this; });
 
 	// center the menu
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
@@ -316,7 +317,7 @@ void GuiGamelistOptions::save()
 
 bool GuiGamelistOptions::input(InputConfig* config, Input input)
 {
-	if((config->isMappedTo("b", input) || config->isMappedTo("select", input)) && input.value)
+	if((config->isMappedTo("b", input) || config->isMappedTo("start", input)) && input.value)
 	{
 		save();
 		delete this;
