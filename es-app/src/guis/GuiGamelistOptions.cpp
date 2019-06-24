@@ -120,19 +120,19 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	
 	
 	FileData* fp = getGamelist()->getCursor()->getSourceFileData();
-	std::stringstream romConfigName;
-	std::stringstream romConfigPath;
-	romConfigName << fp->getSystem()->getName() << "_" << Utils::FileSystem::getCleanFileName(fp->getPath());
-	romConfigPath << getenv("OLDPWD") << "/" << fp->getSystem()->getName() << "/emulators.cfg";
-	std::string defemu = Utils::FileSystem::iniGetValue(romConfigPath.str(),"default");
+	std::string romConfigName;
+	std::string romConfigPath;
+	romConfigName = fp->getSystem()->getName() + "_" + Utils::FileSystem::getCleanFileName(fp->getPath());
+	romConfigPath = "/opt/retropie/configs/" + fp->getSystem()->getName() + "/emulators.cfg";
+	std::string defemu = Utils::FileSystem::iniGetValue(romConfigPath,"default");
 	
 	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigName.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigName, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
 	mMenu.addRow(row);
 	
 	row.elements.clear();
-	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigPath.str(), Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(std::make_shared<TextComponent>(mWindow, romConfigPath, Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	row.addElement(makeArrow(mWindow), false);
 	mMenu.addRow(row);
 	
