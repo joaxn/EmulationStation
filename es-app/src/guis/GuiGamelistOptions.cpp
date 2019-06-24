@@ -24,6 +24,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	FileData* file = getGamelist()->getCursor();
 	fromPlaceholder = file->isPlaceHolder();
 	ComponentListRow row;
+	ComponentListRow reset;
 
 	// spacer between icon and text
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
@@ -32,7 +33,6 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	if (!fromPlaceholder) {
 		// jump to letter
 		row.elements.clear();
-		/*
 		// define supported character range
 		// this range includes all numbers, capital letters, and most reasonable symbols
 		char startChar = '!';
@@ -75,7 +75,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 			return false;
 		};
 		mMenu.addRow(row);
-		*/
+
 
 		// sort list by
 		mListSort = std::make_shared<SortList>(mWindow, "SORT GAMES BY", false);
@@ -85,6 +85,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 			mListSort->add(sort.description, &sort, i == 0); // TODO - actually make the sort type persistent
 		}
 		
+		row = reset;
 		row.elements.clear();
 		row.addElement(getIcon(":/menu/sort.svg"), false);
 		row.addElement(spacer, false);
@@ -115,6 +116,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 					}
 				}
 			}
+			row = reset;
 			row.elements.clear();
 			row.addElement(getIcon(":/menu/emulator.svg"), false);
 			row.addElement(spacer, false);
@@ -124,6 +126,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		}
 		
 		//EDIT
+		row = reset;
 		row.elements.clear();
 		row.addElement(getIcon(":/menu/edit.svg"), false);
 		row.addElement(spacer, false);
@@ -133,6 +136,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		mMenu.addRow(row);
 		
 		//DOWNLOAD
+		row = reset;
 		row.elements.clear();
 		row.addElement(getIcon(":/menu/scraper.svg"), false);
 		row.addElement(spacer, false);
@@ -142,6 +146,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		mMenu.addRow(row);
 		
 		//DELETE
+		row = reset;
 		row.elements.clear();
 		row.addElement(getIcon(":/menu/delete.svg"), false);
 		row.addElement(spacer, false);
