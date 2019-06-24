@@ -6,6 +6,8 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <algorithm> 
+#include <iostream>
+#include <fstream>
 
 #if defined(_WIN32)
 // because windows...
@@ -673,7 +675,32 @@ namespace Utils
 		
 		bool iniSetValue(const std::string& _path, std::string& key, std::string& value)
 		{
+			bool found = false;
+			std::string line;
 			std::string path = getGenericPath(_path);
+			std::string pathtmp = path + ".tmp";
+			std::ifstream filein(path);
+			
+			std::ifstream filein(path); //File to read from
+			std::ofstream fileout(pathtmp); //Temporary file
+			if(filein && fileout){
+				while (getline( filein, line )){
+					if (line.size() >= key.size() && line.compare(0, key.size(), key) == 0) {
+						found = true;
+						fileout << key << " = \"" << value << "\"" << std::endl;
+					}else{
+						fileout << line;
+					}
+				}
+				if(found == false){
+					fileout << key << " = \"" << value << "\"" << std::endl;
+				}
+				filein.close();
+				fileout.close();
+			}else{
+				return false;
+			}
+			return true;
 
 		} // iniSetValue
 		
@@ -692,7 +719,7 @@ namespace Utils
 						return line.substr(quote1+1,quote2 - quote1 - 1);
 					}
 				}
-				myfile.close();
+				filein.close();
 			}
 			return value;
 		} // iniGetValue
