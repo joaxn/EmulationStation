@@ -553,6 +553,20 @@ namespace Utils
 			return (unlink(path.c_str()) == 0);
 
 		} // removeFile
+		
+		bool renameFile(const std::string& _oldPath, const std::string& _newPath)
+		{
+			std::string oldPath = getGenericPath(_oldPath);
+			std::string newPath = getGenericPath(_newPath);
+
+			// don't remove if it doesn't exists
+			if(!exists(oldPath) || exists(newPath))
+				return false;
+
+			// try to remove file
+			return std::rename(oldPath,newPath);
+
+		} // removeFile
 
 		bool createDirectory(const std::string& _path)
 		{
@@ -673,7 +687,7 @@ namespace Utils
 
 		} // isHidden
 		
-		bool iniSetValue(const std::string& _path, std::string& key, std::string& value)
+		bool iniSetValue(const std::string& _path, const std::string& key, const std::string& value)
 		{
 			bool found = false;
 			std::string line;
@@ -695,6 +709,9 @@ namespace Utils
 				}
 				filein.close();
 				fileout.close();
+				
+				//removeFile(path);
+				//renameFile(pathtmp,path);
 			}else{
 				return false;
 			}
@@ -702,7 +719,7 @@ namespace Utils
 
 		} // iniSetValue
 		
-		std::string iniGetValue(const std::string& _path, std::string& key)
+		std::string iniGetValue(const std::string& _path, const std::string& key)
 		{
 			std::string line;
 			std::string value = "";
