@@ -89,6 +89,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.addElement(spacer, false);
 		row.addElement(std::make_shared<TextComponent>(mWindow, "SORT GAMES BY", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 		row.addElement(mListSort, false);
+		row.makeAcceptInputHandler(nullptr);
 		mMenu.addRow(row);
 	}
 
@@ -99,14 +100,19 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		std::string romConfigName = fp->getSystem()->getName() + "_" + Utils::FileSystem::getCleanFileName(fp->getPath());
 		std::string romConfigPath = "/opt/retropie/configs/" + fp->getSystem()->getName() + "/emulators.cfg";
 		std::string overrideConfigPath = "/opt/retropie/configs/all/emulators.cfg";
-		std::string emulatorDefault = Utils::FileSystem::iniGetValue(romConfigPath,"default");
+		std::string emuDefault = Utils::FileSystem::iniGetValue(romConfigPath,"default");
+		std::string emuOverride = Utils::FileSystem::iniGetValue(overrideConfigPath,romConfigName);
 		
 		auto emuList = std::make_shared< OptionListComponent<std::string> >(mWindow, "Emulator", false);
 		std::vector<std::string> Emulators = Utils::FileSystem::iniGetList(romConfigPath);
 		if(Emulators.size() > 0){
 			for (auto it = Emulators.cbegin(); it != Emulators.cend(); it++){
 				if(*it != "default"){
-					emuList->add(*it, *it, emulatorDefault == *it);
+					if(*it == emuDefault){
+						emuList->add("default", *it, emuOverride == *it);
+					}else{
+						emuList->add(*it, *it, emuOverride == *it);
+					}
 				}
 			}
 			row.elements.clear();
