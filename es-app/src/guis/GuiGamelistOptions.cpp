@@ -120,7 +120,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 			row.addElement(spacer, false);
 			row.addElement(std::make_shared<TextComponent>(mWindow, "SELECT EMULATOR", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 			row.addElement(EmuSelection, false);
-			mMenu.addEntry(row);
+			mMenu.addRow(row);
 		}
 		
 		//EDIT
@@ -131,7 +131,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.addElement(std::make_shared<TextComponent>(mWindow, "EDIT GAME INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 		row.addElement(makeArrow(mWindow), false);
 		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openMetaDataEd, this));
-		mMenu.addEntry(row);
+		mMenu.addRow(row);
 		
 		//DOWNLOAD
 		row.elements.clear();
@@ -141,7 +141,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.addElement(std::make_shared<TextComponent>(mWindow, "DOWNLOAD GAME INFO", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 		row.addElement(makeArrow(mWindow), false);
 		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::openScraper, this));
-		mMenu.addEntry(row);
+		mMenu.addRow(row);
 		
 		//DELETE
 		std::function<void()> deleteBtnFunc;
@@ -160,7 +160,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.addElement(std::make_shared<TextComponent>(mWindow, "DELETE GAME", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 		row.addElement(makeArrow(mWindow), false);
 		row.makeAcceptInputHandler(deleteBtnFunc);
-		mMenu.addEntry(row);
+		mMenu.addRow(row);
 	}
 
 	mMenu.addButton("BACK", "back", [&] { delete this; });
