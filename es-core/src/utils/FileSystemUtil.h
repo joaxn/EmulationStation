@@ -4,6 +4,7 @@
 
 #include <list>
 #include <string>
+#include <vector>
 
 namespace Utils
 {
