@@ -679,8 +679,6 @@ namespace Utils
 			std::string line;
 			std::string path = getGenericPath(_path);
 			std::string pathtmp = path + ".tmp";
-			std::ifstream filein(path);
-			
 			std::ifstream filein(path); //File to read from
 			std::ofstream fileout(pathtmp); //Temporary file
 			if(filein && fileout){
