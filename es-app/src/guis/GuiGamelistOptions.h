@@ -31,6 +31,7 @@ private:
 	void startEditMode();
 	void exitEditMode();
 	void jumpToLetter();
+	void deleteGame();
 	std::shared_ptr<ImageComponent> getIcon(const std::string& path);
 
 	MenuComponent mMenu;

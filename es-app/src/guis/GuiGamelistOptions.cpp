@@ -136,23 +136,12 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		mMenu.addRow(row);
 		
 		//DELETE
-		std::function<void()> deleteBtnFunc;
-		if (file->getType() == FOLDER){
-			deleteBtnFunc = NULL;
-		}else{
-			deleteBtnFunc = [this, file] {
-				CollectionSystemManager::get()->deleteCollectionFiles(file);
-				ViewController::get()->getGameListView(file->getSystem()).get()->remove(file, true);
-				delete this;
-			};
-		}
-		
 		row.elements.clear();
 		row.addElement(getIcon(":/menu/delete.svg"), false);
 		row.addElement(spacer, false);
 		row.addElement(std::make_shared<TextComponent>(mWindow, "DELETE GAME", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 		row.addElement(makeArrow(mWindow), false);
-		row.makeAcceptInputHandler(mWindow->pushGui(new GuiMsgBox(mWindow, "THIS WILL DELETE THE ACTUAL GAME FILE!\nARE YOU SURE?", "YES", deleteBtnFunc, "NO", nullptr)););
+		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::deleteGame, this));
 		mMenu.addRow(row);
 		
 		//save
@@ -183,6 +172,24 @@ GuiGamelistOptions::~GuiGamelistOptions()
 		// game is selected
 		ViewController::get()->reloadGameListView(mSystem);
 	}
+}
+
+void GuiGamelistOptions::deleteGame()
+{
+	FileData* file = getGamelist()->getCursor();
+	fromPlaceholder = file->isPlaceHolder();
+	
+	std::function<void()> deleteBtnFunc;
+	if (file->getType() == FOLDER){
+		deleteBtnFunc = NULL;
+	}else{
+		deleteBtnFunc = [this, file] {
+			CollectionSystemManager::get()->deleteCollectionFiles(file);
+			ViewController::get()->getGameListView(file->getSystem()).get()->remove(file, true);
+			delete this;
+		};
+	}
+	mWindow->pushGui(new GuiMsgBox(mWindow, "THIS WILL DELETE THE ACTUAL GAME FILE!\nARE YOU SURE?", "YES", deleteBtnFunc, "NO", nullptr));
 }
 
 void GuiGamelistOptions::openGamelistFilter()
