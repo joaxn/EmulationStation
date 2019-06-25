@@ -714,8 +714,8 @@ namespace Utils
 				filein.close();
 				fileout.close();
 				
-				//removeFile(path);
-				//renameFile(pathtmp,path);
+				removeFile(path);
+				renameFile(pathtmp,path);
 			}else{
 				LOG(LogWarning) << "errror iniset";
 				return false;
