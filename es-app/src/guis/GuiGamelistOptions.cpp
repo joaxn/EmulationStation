@@ -111,9 +111,9 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		LOG(LogWarning) << "emuOverride " << emuOverride;
 		
 		auto emuList = std::make_shared< OptionListComponent<std::string> >(mWindow, "Emulator", false);
-		std::vector<std::string> Emulators = Utils::FileSystem::iniGetList(romConfigPath,"default");
-		if(!Emulators.empty()){
-			for (auto it = Emulators.cbegin(); it != Emulators.cend(); it++){
+		std::vector<std::string> emulators = Utils::FileSystem::iniGetList(romConfigPath,"default");
+		if(!emulators.empty()){
+			for (auto it = emulators.cbegin(); it != emulators.cend(); it++){
 				bool selected = false;
 
 				if(emuOverride == "" && *it == emuDefault){
