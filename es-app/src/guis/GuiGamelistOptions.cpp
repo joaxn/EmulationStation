@@ -2,6 +2,7 @@
 
 #include "guis/GuiGamelistFilter.h"
 #include "guis/GuiGameScraper.h"
+#include "guis/GuiScraperMulti.h"
 #include "guis/GuiMsgBox.h"
 #include "scrapers/Scraper.h"
 #include "views/gamelist/IGameListView.h"
@@ -281,17 +282,26 @@ void GuiGamelistOptions::openMetaDataEd()
 
 void GuiGamelistOptions::openScraper()
 {
+
 	FileData* file = getGamelist()->getCursor()->getSourceFileData();
-	ScraperSearchParams p;
-	p.game = file;
-	p.system = file->getSystem();
-	GuiGameScraper* scr = new GuiGameScraper(mWindow, p, std::bind(&GuiGamelistOptions::scrapeDone, this, std::placeholders::_1));
-	mWindow->pushGui(scr);
+	ScraperSearchParams search;
+	search.game = file;
+	search.system = file->getSystem();
+	std::queue<ScraperSearchParams> searches;
+	searches.push(search);
+
+	if(searches.empty()){
+		mWindow->pushGui(new GuiMsgBox(mWindow,"NO GAMES SELECTED."));
+	}else{
+		GuiScraperMulti* gsm = new GuiScraperMulti(mWindow, searches, true);
+		mWindow->pushGui(gsm);
+		delete this;
+	}
 }
 
-void GuiGamelistOptions::scrapeDone(const ScraperSearchResult& result)
-{
+void GuiGamelistOptions::scrapeDone(const ScraperSearchResult& result){
 	
+
 }
 
 std::shared_ptr<ImageComponent> GuiGamelistOptions::getIcon(const std::string& path)
