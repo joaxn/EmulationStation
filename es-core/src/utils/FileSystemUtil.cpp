@@ -4,6 +4,7 @@
 #include "utils/StringUtil.h"
 
 #include "Settings.h"
+#include "Log.h"
 #include <sys/stat.h>
 #include <string.h>
 #include <algorithm> 
@@ -700,12 +701,14 @@ namespace Utils
 				while (getline( filein, line )){
 					if (line.size() >= key.size() && line.compare(0, key.size(), key) == 0) {
 						found = true;
+						LOG(LogError) << "setfound " << key << value;
 						fileout << key << " = \"" << value << "\"" << std::endl;
 					}else{
 						fileout << line;
 					}
 				}
 				if(found == false){
+					LOG(LogError) << "notfound " << key << value;
 					fileout << key << " = \"" << value << "\"" << std::endl;
 				}
 				filein.close();
@@ -714,6 +717,7 @@ namespace Utils
 				//removeFile(path);
 				//renameFile(pathtmp,path);
 			}else{
+				LOG(LogError) << "errror iniset";
 				return false;
 			}
 			return true;
@@ -740,19 +744,22 @@ namespace Utils
 			return value;
 		} // iniGetValue
 		
-		std::vector<std::string> iniGetList(const std::string& _path)
+		std::vector<std::string> iniGetList(const std::string& _path, const std::string& exclude)
 		{
 			std::vector<std::string>map;
 			std::string line;
 			std::string path = getGenericPath(_path);
 			std::ifstream filein(path);
-			std::size_t eq;
+			std::size_t found;
 			
 			if(filein){
 				while (getline( filein, line )){
-					eq = line.find("=");
-					if(eq != std::string::npos){
-						map.push_back(Utils::String::trim(line.substr(0,eq - 1)));
+					if (line.compare(0, exclude.size(), exclude) != 0) {
+						found = line.find("=");
+						if(found != std::string::npos){
+							LOG(LogError) << "listfound " << Utils::String::trim(line.substr(0,found - 1));
+							map.push_back(Utils::String::trim(line.substr(0,found - 1)));
+						}
 					}
 				}
 				filein.close();

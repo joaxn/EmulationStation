@@ -42,7 +42,7 @@ namespace Utils
 		bool        isDirectory        (const std::string& _path);
 		bool        isSymlink          (const std::string& _path);
 		bool        isHidden           (const std::string& _path);
-		std::vector<std::string> iniGetList(const std::string& _path);
+		std::vector<std::string> iniGetList(const std::string& _path, const std::string& exclude);
 
 	} // FileSystem::
 

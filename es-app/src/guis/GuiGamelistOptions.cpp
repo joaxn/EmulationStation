@@ -13,6 +13,7 @@
 #include "GuiMetaDataEd.h"
 #include "SystemData.h"
 #include "utils/FileSystemUtil.h"
+#include "Log.h"
 #include <sstream>
 
 GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : GuiComponent(window),
@@ -104,9 +105,14 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		std::string emuDefault = Utils::FileSystem::iniGetValue(romConfigPath,"default");
 		std::string emuOverride = Utils::FileSystem::iniGetValue(overrideConfigPath,romConfigName);
 		
+		LOG(LogError) << "romConfigName " << romConfigName;
+		LOG(LogError) << "romConfigPath " << romConfigPath;
+		LOG(LogError) << "emuDefault " << emuDefault;
+		LOG(LogError) << "emuOverride " << emuOverride;
+		
 		auto emuList = std::make_shared< OptionListComponent<std::string> >(mWindow, "Emulator", false);
-		std::vector<std::string> Emulators = Utils::FileSystem::iniGetList(romConfigPath);
-		if(Emulators.size() > 0){
+		std::vector<std::string> Emulators = Utils::FileSystem::iniGetList(romConfigPath,"default");
+		if(!Emulators.empty()){
 			for (auto it = Emulators.cbegin(); it != Emulators.cend(); it++){
 				if(*it != "default"){
 					if(*it == emuDefault){
