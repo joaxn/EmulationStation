@@ -114,13 +114,20 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		std::vector<std::string> Emulators = Utils::FileSystem::iniGetList(romConfigPath,"default");
 		if(!Emulators.empty()){
 			for (auto it = Emulators.cbegin(); it != Emulators.cend(); it++){
-				if(*it != "default"){
-					if(*it == emuDefault){
-						emuList->add("default", *it, emuOverride == *it);
-					}else{
-						emuList->add(*it, *it, emuOverride == *it);
-					}
+				bool selected = false;
+
+				if(emuOverride == "" && *it == emuDefault){
+					selected = true;
+				}else if(emuOverride == *it){
+					selected = true;
 				}
+				
+				if(*it == emuDefault){
+					emuList->add("default", *it, selected);
+				}else{
+					emuList->add(*it, *it, selected);
+				}
+
 			}
 			row = reset;
 			row.elements.clear();
