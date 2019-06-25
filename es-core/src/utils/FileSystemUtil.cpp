@@ -701,14 +701,14 @@ namespace Utils
 				while (getline( filein, line )){
 					if (line.size() >= key.size() && line.compare(0, key.size(), key) == 0) {
 						found = true;
-						LOG(LogWarning) << "setfound " << key << value;
-						fileout << key << " = \"" << value << "\"" << "\n";
+						if(value != ""){
+							fileout << key << " = \"" << value << "\"" << "\n";
+						}
 					}else{
 						fileout << line << "\n";
 					}
 				}
-				if(found == false){
-					LOG(LogWarning) << "notfound " << key << value;
+				if(found == false && value != ""){
 					fileout << key << " = \"" << value << "\"" << "\n";
 				}
 				filein.close();
@@ -757,7 +757,6 @@ namespace Utils
 					if (line.compare(0, exclude.size(), exclude) != 0) {
 						found = line.find("=");
 						if(found != std::string::npos){
-							LOG(LogWarning) << "listfound " << Utils::String::trim(line.substr(0,found - 1));
 							map.push_back(Utils::String::trim(line.substr(0,found - 1)));
 						}
 					}

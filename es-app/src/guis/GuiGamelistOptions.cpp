@@ -105,11 +105,6 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		std::string emuDefault = Utils::FileSystem::iniGetValue(romConfigPath,"default");
 		std::string emuOverride = Utils::FileSystem::iniGetValue(overrideConfigPath,romConfigName);
 		
-		LOG(LogWarning) << "romConfigName " << romConfigName;
-		LOG(LogWarning) << "romConfigPath " << romConfigPath;
-		LOG(LogWarning) << "emuDefault " << emuDefault;
-		LOG(LogWarning) << "emuOverride " << emuOverride;
-		
 		auto emuList = std::make_shared< OptionListComponent<std::string> >(mWindow, "Emulator", false);
 		std::vector<std::string> emulators = Utils::FileSystem::iniGetList(romConfigPath,"default");
 		if(!emulators.empty()){
@@ -170,7 +165,9 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		
 		//save
 		addSaveFunc([emuList,overrideConfigPath,romConfigName,emuDefault] {
-			if(emuList->getSelected() != emuDefault){
+			if(emuList->getSelected() == emuDefault){
+				Utils::FileSystem::iniSetValue(overrideConfigPath,romConfigName,"");
+			}else{
 				Utils::FileSystem::iniSetValue(overrideConfigPath,romConfigName,emuList->getSelected());
 			}
 		});
