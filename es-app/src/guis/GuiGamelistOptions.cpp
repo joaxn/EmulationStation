@@ -169,7 +169,11 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		mMenu.addRow(row);
 		
 		//save
-		addSaveFunc([emuList,overrideConfigPath,romConfigName] { Utils::FileSystem::iniSetValue(overrideConfigPath,romConfigName,emuList->getSelected()); });
+		addSaveFunc([emuList,overrideConfigPath,romConfigName,emuDefault] {
+			if(emuList->getSelected() != emuDefault){
+				Utils::FileSystem::iniSetValue(overrideConfigPath,romConfigName,emuList->getSelected());
+			}
+		});
 	}
 
 	//mMenu.addButton("BACK", "back", [&] { save(); delete this; });

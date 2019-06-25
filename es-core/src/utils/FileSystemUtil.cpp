@@ -702,14 +702,14 @@ namespace Utils
 					if (line.size() >= key.size() && line.compare(0, key.size(), key) == 0) {
 						found = true;
 						LOG(LogWarning) << "setfound " << key << value;
-						fileout << key << " = \"" << value << "\"" << std::endl;
+						fileout << key << " = \"" << value << "\"" << "\n";
 					}else{
-						fileout << line;
+						fileout << line << "\n";
 					}
 				}
 				if(found == false){
 					LOG(LogWarning) << "notfound " << key << value;
-					fileout << key << " = \"" << value << "\"" << std::endl;
+					fileout << key << " = \"" << value << "\"" << "\n";
 				}
 				filein.close();
 				fileout.close();
