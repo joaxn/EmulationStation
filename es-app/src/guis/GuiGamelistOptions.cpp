@@ -105,10 +105,10 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		std::string emuDefault = Utils::FileSystem::iniGetValue(romConfigPath,"default");
 		std::string emuOverride = Utils::FileSystem::iniGetValue(overrideConfigPath,romConfigName);
 		
-		LOG(LogError) << "romConfigName " << romConfigName;
-		LOG(LogError) << "romConfigPath " << romConfigPath;
-		LOG(LogError) << "emuDefault " << emuDefault;
-		LOG(LogError) << "emuOverride " << emuOverride;
+		LOG(LogWarning) << "romConfigName " << romConfigName;
+		LOG(LogWarning) << "romConfigPath " << romConfigPath;
+		LOG(LogWarning) << "emuDefault " << emuDefault;
+		LOG(LogWarning) << "emuOverride " << emuOverride;
 		
 		auto emuList = std::make_shared< OptionListComponent<std::string> >(mWindow, "Emulator", false);
 		std::vector<std::string> Emulators = Utils::FileSystem::iniGetList(romConfigPath,"default");
