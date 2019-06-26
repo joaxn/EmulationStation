@@ -94,7 +94,7 @@ void MenuComponent::onSizeChanged()
 	if(mSubtitle->getValue() != ""){
 		subtitleHeight = SUBTITLE_HEIGHT;
 	}else{
-		subtitleHeight = 1f;
+		subtitleHeight = 1;
 	}
 	
 	// update grid row/col sizes
