@@ -366,6 +366,7 @@ void GuiMenu::openUISettings()
 	s->addSaveFunc([show_help] { Settings::getInstance()->setBool("ShowHelpPrompts", show_help->getState()); });
 
 	// enable filters (ForceDisableFilters)
+	/*
 	auto enable_filter = std::make_shared<SwitchComponent>(mWindow);
 	enable_filter->setState(!Settings::getInstance()->getBool("ForceDisableFilters"));
 	s->addWithLabel("ENABLE FILTERS", enable_filter);
@@ -374,6 +375,7 @@ void GuiMenu::openUISettings()
 		Settings::getInstance()->setBool("ForceDisableFilters", !enable_filter->getState()); 
 		if (enable_filter->getState() != filter_is_enabled) ViewController::get()->ReloadAndGoToStart();
 	});
+	*/
 
 	mWindow->pushGui(s);
 
