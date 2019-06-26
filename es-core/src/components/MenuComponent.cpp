@@ -27,7 +27,7 @@ MenuComponent::MenuComponent(Window* window, const char* title, const std::share
 	mSubtitle = std::make_shared<TextComponent>(mWindow);
 	mSubtitle->setHorizontalAlignment(ALIGN_CENTER);
 	mSubtitle->setColor(0x555555FF);
-	mSubtitle(subtitle, subtitleFont);
+	setSubtitle(subtitle, subtitleFont);
 	mGrid.setEntry(mSubtitle, Vector2i(0, 1), false);
 
 	// set up list which will never change (externally, anyway)
@@ -48,7 +48,7 @@ void MenuComponent::setTitle(const char* title, const std::shared_ptr<Font>& fon
 
 void MenuComponent::setSubtitle(const char* subtitle, const std::shared_ptr<Font>& font)
 {
-	mSubtitle->setText(Utils::String::toUpper(title));
+	mSubtitle->setText(Utils::String::toUpper(subtitle));
 	mSubtitle->setFont(font);
 }
 
