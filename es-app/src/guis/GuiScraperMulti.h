@@ -13,7 +13,7 @@ class TextComponent;
 class GuiScraperMulti : public GuiComponent
 {
 public:
-	GuiScraperMulti(Window* window, const std::queue<ScraperSearchParams>& searches, bool approveResults);
+	GuiScraperMulti(Window* window, const std::queue<ScraperSearchParams>& searches, bool approveResults, bool singleScrape = false);
 	virtual ~GuiScraperMulti();
 
 	void onSizeChanged() override;
@@ -40,6 +40,8 @@ private:
 	std::shared_ptr<TextComponent> mSubtitle;
 	std::shared_ptr<ScraperSearchComponent> mSearchComp;
 	std::shared_ptr<ComponentGrid> mButtonGrid;
+	
+	bool mSingleScrape;
 };
 
 #endif // ES_APP_GUIS_GUI_SCRAPER_MULTI_H

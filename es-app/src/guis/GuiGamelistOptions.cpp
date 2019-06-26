@@ -295,8 +295,8 @@ void GuiGamelistOptions::openScraper()
 	}else{
 		GuiScraperMulti* gsm = new GuiScraperMulti(mWindow, searches, true);
 		mWindow->pushGui(gsm);
-		delete this;
 	}
+	CollectionSystemManager::get()->refreshCollectionSystems(search.game);
 }
 
 void GuiGamelistOptions::scrapeDone(const ScraperSearchResult& result){
