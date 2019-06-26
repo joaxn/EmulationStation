@@ -58,12 +58,11 @@ void GuiWifiConnect::onSizeChanged()
 	mTitle->setSize(mSize.x() - 40, mTitle->getFont()->getHeight());
 	mText->setSize(mSize.x() - 40, mText->getFont()->getHeight());
 
-	float fullHeight = mTitle->getFont()->getHeight() + mText->getSize().y() + mAnimationGrid->getSize().y();
+	float fullHeight = mTitle->getFont()->getHeight() + mText->getFont()->getHeight() + mAnimationGrid->getSize().y() + 40;
 
 	// update grid
 	mGrid.setRowHeightPerc(0, mTitle->getFont()->getHeight() / fullHeight);
 	mGrid.setRowHeightPerc(1, mText->getFont()->getHeight() / fullHeight);
-	mGrid.setRowHeightPerc(2, mText->getFont()->getHeight() / fullHeight);
 
 	mGrid.setSize(mSize);
 }

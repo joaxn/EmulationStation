@@ -28,7 +28,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	ComponentListRow row;
 	ComponentListRow reset;
 
-	mMenu.setSubtitle(Utils::FileSystem::getFileName(file->getSourceFileData()->getPath()).c_str());
+	mMenu.setSubtitle(Utils::FileSystem::getFileNameNoExt(file->getSourceFileData()->getPath()).c_str());
 
 	// spacer between icon and text
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
@@ -295,7 +295,7 @@ void GuiGamelistOptions::openScraper()
 	if(searches.empty()){
 		mWindow->pushGui(new GuiMsgBox(mWindow,"NO GAMES SELECTED."));
 	}else{
-		GuiScraperMulti* gsm = new GuiScraperMulti(mWindow, searches, true);
+		GuiScraperMulti* gsm = new GuiScraperMulti(mWindow, searches, true, true);
 		mWindow->pushGui(gsm);
 	}
 	CollectionSystemManager::get()->refreshCollectionSystems(search.game);

@@ -24,6 +24,7 @@ namespace Utils
 		std::string getAbsolutePath    (const std::string& _path, const std::string& _base = getCWDPath());
 		std::string getParent          (const std::string& _path);
 		std::string getFileName        (const std::string& _path);
+		std::string getFileNameNoExt   (const std::string& _path);
 		std::string getCleanFileName   (const std::string& _path);
 		std::string getStem            (const std::string& _path);
 		std::string getExtension       (const std::string& _path);

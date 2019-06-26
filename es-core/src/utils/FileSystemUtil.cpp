@@ -387,6 +387,22 @@ namespace Utils
 
 		} // getFileName
 		
+		std::string getFileNameNoExt(const std::string& _path)
+		{
+			std::string fileName = getFileName(_path);
+			size_t      offset   = std::string::npos;
+
+			// empty fileName
+			if(fileName == ".")
+				return fileName;
+			
+			if((offset = fileName.find_last_of('.')) != std::string::npos)
+				fileName = fileName.substr(0, offset);
+			
+			return fileName;
+			
+		} // getFileName
+		
 		std::string getCleanFileName(const std::string& _path)
 		{
 			std::string fileName = getFileName(_path);

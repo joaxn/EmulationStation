@@ -90,7 +90,7 @@ void GuiScraperMulti::onSizeChanged()
 	mBackground.fitTo(mSize, Vector3f::Zero(), Vector2f(-32, -32));
 
 	//mGrid.setRowHeightPerc(0, mTitle->getFont()->getLetterHeight() * 1.9725f / mSize.y(), false);
-	mGrid.setRowHeightPerc(0, (mSystem->getFont()->getLetterHeight() + 2) / mSize.y(), false);
+	mGrid.setRowHeightPerc(0, mSystem->getFont()->getLetterHeight() * 1.75f / mSize.y(), false);
 	mGrid.setRowHeightPerc(1, mSubtitle->getFont()->getHeight() * 1.75f / mSize.y(), false);
 	mGrid.setRowHeightPerc(3, mButtonGrid->getSize().y() / mSize.y(), false);
 	mGrid.setSize(mSize);
@@ -106,12 +106,17 @@ void GuiScraperMulti::doNextSearch()
 
 	// update title
 	std::stringstream ss;
-	mSystem->setText(Utils::String::toUpper(mSearchQueue.front().system->getFullName()));
-
-	// update subtitle
-	ss.str(""); // clear
-	ss << "GAME " << (mCurrentGame + 1) << " OF " << mTotalGames << " - " << Utils::String::toUpper(Utils::FileSystem::getFileName(mSearchQueue.front().game->getPath()));
-	mSubtitle->setText(ss.str());
+	if(mSingleScrape){
+		mSystem->setText("DOWNLOADING GAME INFO");
+		ss.str(""); // clear
+		ss << Utils::String::toUpper(Utils::FileSystem::getFileNameNoExt(mSearchQueue.front().game->getPath()));
+		mSubtitle->setText(ss.str());
+	}else{
+		mSystem->setText(Utils::String::toUpper(mSearchQueue.front().system->getFullName()));
+		ss.str(""); // clear
+		ss << "GAME " << (mCurrentGame + 1) << " OF " << mTotalGames << " - " << Utils::String::toUpper(Utils::FileSystem::getFileNameNoExt(mSearchQueue.front().game->getPath()));
+		mSubtitle->setText(ss.str());
+	}
 
 	mSearchComp->search(mSearchQueue.front());
 }
