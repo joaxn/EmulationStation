@@ -37,7 +37,7 @@ public:
 	void addButton(const std::string& label, const std::string& helpText, const std::function<void()>& callback);
 
 	void setTitle(const char* title, const std::shared_ptr<Font>& font);
-	void setSubTitle(const char* subtitle, const std::shared_ptr<Font>& font = Font::get(FONT_SIZE_SMALL));
+	void setSubtitle(const char* subtitle, const std::shared_ptr<Font>& font = Font::get(FONT_SIZE_SMALL));
 
 	inline void setCursorToList() { mGrid.setCursorTo(mList); }
 	inline void setCursorToButtons() { assert(mButtonGrid); mGrid.setCursorTo(mButtonGrid); }
