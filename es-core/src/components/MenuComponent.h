@@ -20,7 +20,7 @@ std::shared_ptr<ImageComponent> makeArrow(Window* window);
 class MenuComponent : public GuiComponent
 {
 public:
-	MenuComponent(Window* window, const char* title, const std::shared_ptr<Font>& titleFont = Font::get(FONT_SIZE_LARGE));
+	MenuComponent(Window* window, const char* title, const std::shared_ptr<Font>& titleFont = Font::get(FONT_SIZE_LARGE), const char* subtitle = "", const std::shared_ptr<Font>& subtitleFont = Font::get(FONT_SIZE_SMALL));
 
 	void onSizeChanged() override;
 
@@ -37,6 +37,7 @@ public:
 	void addButton(const std::string& label, const std::string& helpText, const std::function<void()>& callback);
 
 	void setTitle(const char* title, const std::shared_ptr<Font>& font);
+	void setSubTitle(const char* subtitle, const std::shared_ptr<Font>& font = Font::get(FONT_SIZE_SMALL));
 
 	inline void setCursorToList() { mGrid.setCursorTo(mList); }
 	inline void setCursorToButtons() { assert(mButtonGrid); mGrid.setCursorTo(mButtonGrid); }
@@ -52,6 +53,7 @@ private:
 	ComponentGrid mGrid;
 
 	std::shared_ptr<TextComponent> mTitle;
+	std::shared_ptr<TextComponent> mSubtitle;
 	std::shared_ptr<ComponentList> mList;
 	std::shared_ptr<ComponentGrid> mButtonGrid;
 	std::vector< std::shared_ptr<ButtonComponent> > mButtons;

@@ -6,9 +6,10 @@
 #define BUTTON_GRID_HORIZ_PADDING 10
 
 #define TITLE_HEIGHT (mTitle->getFont()->getLetterHeight() + TITLE_VERT_PADDING)
+#define SUBTITLE_HEIGHT (mSubtitle->getFont()->getLetterHeight() + TITLE_VERT_PADDING)
 
-MenuComponent::MenuComponent(Window* window, const char* title, const std::shared_ptr<Font>& titleFont) : GuiComponent(window),
-	mBackground(window), mGrid(window, Vector2i(1, 3))
+MenuComponent::MenuComponent(Window* window, const char* title, const std::shared_ptr<Font>& titleFont, const char* subtitle, const std::shared_ptr<Font>& subtitleFont) : GuiComponent(window),
+	mBackground(window), mGrid(window, Vector2i(1, 4))
 {
 	addChild(&mBackground);
 	addChild(&mGrid);
@@ -21,10 +22,17 @@ MenuComponent::MenuComponent(Window* window, const char* title, const std::share
 	mTitle->setColor(0x555555FF);
 	setTitle(title, titleFont);
 	mGrid.setEntry(mTitle, Vector2i(0, 0), false);
+	
+	// set up subtitle
+	mSubtitle = std::make_shared<TextComponent>(mWindow);
+	mSubtitle->setHorizontalAlignment(ALIGN_CENTER);
+	mSubtitle->setColor(0x555555FF);
+	mSubtitle(subtitle, subtitleFont);
+	mGrid.setEntry(mSubtitle, Vector2i(0, 1), false);
 
 	// set up list which will never change (externally, anyway)
 	mList = std::make_shared<ComponentList>(mWindow);
-	mGrid.setEntry(mList, Vector2i(0, 1), true);
+	mGrid.setEntry(mList, Vector2i(0, 2), true);
 
 	updateGrid();
 	updateSize();
@@ -38,6 +46,12 @@ void MenuComponent::setTitle(const char* title, const std::shared_ptr<Font>& fon
 	mTitle->setFont(font);
 }
 
+void MenuComponent::setSubtitle(const char* subtitle, const std::shared_ptr<Font>& font)
+{
+	mSubtitle->setText(Utils::String::toUpper(title));
+	mSubtitle->setFont(font);
+}
+
 float MenuComponent::getButtonGridHeight() const
 {
 	return (mButtonGrid ? mButtonGrid->getSize().y() : Font::get(FONT_SIZE_MEDIUM)->getHeight() + BUTTON_GRID_VERT_PADDING);
@@ -46,10 +60,16 @@ float MenuComponent::getButtonGridHeight() const
 void MenuComponent::updateSize()
 {
 	const float maxHeight = Renderer::getScreenHeight() * 0.75f;
-	float height = TITLE_HEIGHT + mList->getTotalRowHeight() + getButtonGridHeight() + 2;
+	float subtitleHeight;
+	if(mSubtitle->getValue() != ""){
+		subtitleHeight = SUBTITLE_HEIGHT;
+	}else{
+		subtitleHeight = 0;
+	}
+	float height = TITLE_HEIGHT + subtitleHeight + mList->getTotalRowHeight() + getButtonGridHeight() + 2;
 	if(height > maxHeight)
 	{
-		height = TITLE_HEIGHT + getButtonGridHeight();
+		height = TITLE_HEIGHT + subtitleHeight + getButtonGridHeight();
 		int i = 0;
 		while(i < mList->size())
 		{
@@ -69,10 +89,18 @@ void MenuComponent::updateSize()
 void MenuComponent::onSizeChanged()
 {
 	mBackground.fitTo(mSize, Vector3f::Zero(), Vector2f(-32, -32));
-
+	
+	float subtitleHeight;
+	if(mSubtitle->getValue() != ""){
+		subtitleHeight = SUBTITLE_HEIGHT;
+	}else{
+		subtitleHeight = 0;
+	}
+	
 	// update grid row/col sizes
 	mGrid.setRowHeightPerc(0, TITLE_HEIGHT / mSize.y());
-	mGrid.setRowHeightPerc(2, getButtonGridHeight() / mSize.y());
+	mGrid.setRowHeightPerc(1, subtitleHeight / mSize.y());
+	mGrid.setRowHeightPerc(3, getButtonGridHeight() / mSize.y());
 
 	mGrid.setSize(mSize);
 }
@@ -94,7 +122,7 @@ void MenuComponent::updateGrid()
 	if(mButtons.size())
 	{
 		mButtonGrid = makeButtonGrid(mWindow, mButtons);
-		mGrid.setEntry(mButtonGrid, Vector2i(0, 2), true, false);
+		mGrid.setEntry(mButtonGrid, Vector2i(0, 3), true, false);
 	}
 }
 

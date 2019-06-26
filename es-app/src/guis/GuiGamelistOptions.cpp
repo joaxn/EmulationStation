@@ -18,7 +18,7 @@
 #include <sstream>
 
 GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : GuiComponent(window),
-	mSystem(system), mMenu(window, "OPTIONS"), fromPlaceholder(false), mFiltersChanged(false)
+	mSystem(system), mMenu(window, "GAME OPTIONS"), fromPlaceholder(false), mFiltersChanged(false)
 {
 	addChild(&mMenu);
 
@@ -27,6 +27,8 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	fromPlaceholder = file->isPlaceHolder();
 	ComponentListRow row;
 	ComponentListRow reset;
+	
+	mMenu.setSubtitle(file->getSourceFileData()->getPath());
 
 	// spacer between icon and text
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
