@@ -27,8 +27,8 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 	fromPlaceholder = file->isPlaceHolder();
 	ComponentListRow row;
 	ComponentListRow reset;
-	
-	mMenu.setSubtitle(file->getSourceFileData()->getPath());
+
+	mMenu.setSubtitle(Utils::FileSystem::getFileName(file->getSourceFileData()->getPath()));
 
 	// spacer between icon and text
 	auto spacer = std::make_shared<GuiComponent>(mWindow);
