@@ -92,14 +92,14 @@ void MenuComponent::onSizeChanged()
 	
 	float subtitleHeight;
 	if(mSubtitle->getValue() != ""){
-		subtitleHeight = SUBTITLE_HEIGHT;
+		subtitleHeight = SUBTITLE_HEIGHT + TITLE_LINE_ADD;
 	}else{
 		subtitleHeight = 1;
 	}
 	
 	// update grid row/col sizes
 	mGrid.setRowHeightPerc(0, TITLE_VERT_PADDING / mSize.y());
-	mGrid.setRowHeightPerc(1, TITLE_HEIGHT / mSize.y());
+	mGrid.setRowHeightPerc(1, (TITLE_HEIGHT + TITLE_LINE_ADD) / mSize.y());
 	mGrid.setRowHeightPerc(2, subtitleHeight / mSize.y());
 	mGrid.setRowHeightPerc(3, TITLE_VERT_PADDING / mSize.y());
 	mGrid.setRowHeightPerc(5, getButtonGridHeight() / mSize.y());

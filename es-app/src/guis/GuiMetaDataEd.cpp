@@ -132,6 +132,10 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 
 	mMenu.addButton("CANCEL", "cancel", [&] { delete this; });
 	mMenu.addButton("SAVE", "save", [&] { save(); delete this; });
+	
+	//center
+	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
+	mMenu.setPosition((mSize.x() - mMenu.getSize().x()) / 2, (mSize.y() - mMenu.getSize().y()) / 2);
 }
 
 void GuiMetaDataEd::save()

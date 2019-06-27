@@ -17,6 +17,7 @@ public:
 	virtual ~GuiScraperMulti();
 
 	void onSizeChanged() override;
+	virtual bool input(InputConfig* config, Input input) override;
 	std::vector<HelpPrompt> getHelpPrompts() override;
 
 private:

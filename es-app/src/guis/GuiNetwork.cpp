@@ -150,7 +150,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	countryMap["QA"] =	"Qatar";
 	countryMap["DZ"] =	"Algeria";
 	for (std::map<std::string, std::string>::iterator it = countryMap.begin(); it != countryMap.end(); ++it ) {
-		wifi_countries->add(it->second, it->first, Settings::getInstance()->getString("WifiCountry") == it->first);
+		wifi_countries->add(it->first, it->first, Settings::getInstance()->getString("WifiCountry") == it->first);
 	}
 	row.addElement(title, true);
 	row.addElement(wifi_countries, true);
