@@ -51,7 +51,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	//WIFI COUNTRY
 	title = std::make_shared<TextComponent>(mWindow, "WIFI COUNTRY", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	wifi_countries = std::make_shared< OptionListComponent<std::string> >(mWindow, "WIFI COUNTRY", false);
-	std::map<std:string,std:string> countryMap;
+	std::map<std::string,std::string> countryMap;
 	countryMap["US"] = "United States";
 	countryMap["CA"] =	"Canada";
 	countryMap["JP3"] =	"Japan";
@@ -149,7 +149,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	countryMap["PK"] =	"Pakistan";
 	countryMap["QA"] =	"Qatar";
 	countryMap["DZ"] =	"Algeria";
-	for (map<string, string>::iterator p = countryMap.begin(); p != countryMap.end(); ++p ) {
+	for (map<std::string, std::string>::iterator p = countryMap.begin(); p != countryMap.end(); ++p ) {
 		wifi_countries->add(p->second, p->first, Settings::getInstance()->getString("WifiCountry") == p->first);
 	}
 	row.addElement(title, true);
