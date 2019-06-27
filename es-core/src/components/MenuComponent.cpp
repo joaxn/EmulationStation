@@ -66,10 +66,10 @@ void MenuComponent::updateSize()
 	}else{
 		subtitleHeight = 0;
 	}
-	float height = TITLE_HEIGHT + subtitleHeight + TITLE_VERT_PADDING * 2 + mList->getTotalRowHeight() + getButtonGridHeight() + 2;
+	float height = TITLE_HEIGHT + TITLE_LINE_ADD + subtitleHeight + TITLE_VERT_PADDING * 2 + mList->getTotalRowHeight() + getButtonGridHeight() + 2;
 	if(height > maxHeight)
 	{
-		height = TITLE_HEIGHT + subtitleHeight + TITLE_VERT_PADDING * 2 + getButtonGridHeight();
+		height = TITLE_HEIGHT + TITLE_LINE_ADD + subtitleHeight + TITLE_VERT_PADDING * 2 + getButtonGridHeight();
 		int i = 0;
 		while(i < mList->size())
 		{
@@ -92,7 +92,7 @@ void MenuComponent::onSizeChanged()
 	
 	float subtitleHeight;
 	if(mSubtitle->getValue() != ""){
-		subtitleHeight = SUBTITLE_HEIGHT + TITLE_LINE_ADD;
+		subtitleHeight = SUBTITLE_HEIGHT;
 	}else{
 		subtitleHeight = 1;
 	}

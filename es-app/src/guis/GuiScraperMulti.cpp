@@ -91,7 +91,7 @@ void GuiScraperMulti::onSizeChanged()
 
 	mGrid.setRowHeightPerc(0, TITLE_VERT_PADDING / mSize.y(), false);
 	mGrid.setRowHeightPerc(1, (mSystem->getFont()->getLetterHeight() + TITLE_LINE_ADD) / mSize.y(), false);
-	mGrid.setRowHeightPerc(2, (mSubtitle->getFont()->getHeight() + TITLE_LINE_ADD) / mSize.y(), false);
+	mGrid.setRowHeightPerc(2, (mSubtitle->getFont()->getHeight()) / mSize.y(), false);
 	mGrid.setRowHeightPerc(3, TITLE_VERT_PADDING / mSize.y(), false);
 	mGrid.setRowHeightPerc(5, mButtonGrid->getSize().y() / mSize.y(), false);
 	mGrid.setSize(mSize);
