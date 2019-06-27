@@ -18,5 +18,6 @@ private:
 	std::shared_ptr<TextComponent> updateStat;
 	std::shared_ptr<TextComponent> updateIP;
 	std::shared_ptr<SwitchComponent> wifi_enabled;
+	std::shared_ptr<OptionListComponent<std::string>> wifi_countries;
 	MenuComponent mMenu;
 };

@@ -98,10 +98,10 @@ void MenuComponent::onSizeChanged()
 	}
 	
 	// update grid row/col sizes
-	mGrid.setRowHeightPerc(0, TITLE_VERT_PADDING / mSize.y());
-	mGrid.setRowHeightPerc(1, TITLE_HEIGHT / mSize.y());
+	mGrid.setRowHeightPerc(0, (TITLE_VERT_PADDING + 1) / mSize.y());
+	mGrid.setRowHeightPerc(1, (TITLE_HEIGHT + 1) / mSize.y());
 	mGrid.setRowHeightPerc(2, subtitleHeight / mSize.y());
-	mGrid.setRowHeightPerc(3, TITLE_VERT_PADDING / mSize.y());
+	mGrid.setRowHeightPerc(3, (TITLE_VERT_PADDING + 1) / mSize.y());
 	mGrid.setRowHeightPerc(5, getButtonGridHeight() / mSize.y());
 
 	mGrid.setSize(mSize);

@@ -9,14 +9,16 @@
 #include "utils/StringUtil.h"
 #include "Renderer.h"
 
-#define TITLE_VERT_PADDING 30
-#define TITLE_LINE_ADD 10
-
 class ButtonComponent;
 class ImageComponent;
 
 std::shared_ptr<ComponentGrid> makeButtonGrid(Window* window, const std::vector< std::shared_ptr<ButtonComponent> >& buttons);
 std::shared_ptr<ImageComponent> makeArrow(Window* window);
+
+#define TITLE_VERT_PADDING 30
+#define TITLE_LINE_ADD 10
+
+#define TITLE_VERT_PADDING (Renderer::getScreenHeight()*0.05f)
 
 class MenuComponent : public GuiComponent
 {

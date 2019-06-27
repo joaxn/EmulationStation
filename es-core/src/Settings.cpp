@@ -162,6 +162,8 @@ void Settings::setDefaults()
 	
 	mStringMap["WifiSSID"] = "";
 	mStringMap["WifiKey"] = "";
+	
+	mStringMap["WifiCountry"] = "AT";
 }
 
 template <typename K, typename V>
