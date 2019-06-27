@@ -168,15 +168,6 @@ void GuiScraperMulti::finish()
 	PowerSaver::resume();
 }
 
-bool GuiScraperMulti::input(InputConfig* config, Input input)
-{
-	if(config->isMappedTo("b", input) && input.value)
-	{
-		finish();
-		return true;
-	}
-}
-
 std::vector<HelpPrompt> GuiScraperMulti::getHelpPrompts()
 {
 	return mGrid.getHelpPrompts();

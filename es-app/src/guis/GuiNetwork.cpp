@@ -31,7 +31,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	// STATUS
 	auto title = std::make_shared<TextComponent>(mWindow, "STATUS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	std::string wStatText = Utils::Network::getStatus();
-	updateStat = std::make_shared<TextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	updateStat = std::make_shared<TextComponent>(mWindow, "" + wStatText, Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
 	updateStat->setHorizontalAlignment(ALIGN_RIGHT);
 	row.addElement(title, true);
 	row.addElement(updateStat, true);
@@ -41,7 +41,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	// IP
 	title = std::make_shared<TextComponent>(mWindow, "IP ADDRESS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	std::string wIP = Utils::Network::getIP();
-	updateIP = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	updateIP = std::make_shared<TextComponent>(mWindow, "" + wIP, Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
 	updateIP->setHorizontalAlignment(ALIGN_RIGHT);
 	row.addElement(title, true);
 	row.addElement(updateIP, true);
@@ -150,17 +150,17 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	countryMap["QA"] =	"Qatar";
 	countryMap["DZ"] =	"Algeria";
 	for (std::map<std::string, std::string>::iterator it = countryMap.begin(); it != countryMap.end(); ++it ) {
-		wifi_countries->add(it->first, it->first, Settings::getInstance()->getString("WifiCountry") == it->first);
+		wifi_countries->add(it->second, it->first, Settings::getInstance()->getString("WifiCountry") == it->first);
 	}
 	row.addElement(title, true);
-	row.addElement(wifi_countries, true);
+	row.addElement(wifi_countries, false, true);
 	mMenu.addRow(row);
 	row.elements.clear();
 		
 	
 	//SSID
 	title = std::make_shared<TextComponent>(mWindow, "NETWORK (SSID)", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto editSSID = std::make_shared<TextComponent>(mWindow, Settings::getInstance()->getString("WifiSSID"), Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
 	editSSID->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updateSSID = [this,editSSID](const std::string& newVal) {
 		editSSID->setText(newVal);
@@ -185,7 +185,7 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	std::string wifiKey = Settings::getInstance()->getString("WifiKey");
 	for(int i = 0; i < wifiKey.length(); ++i) wifiKey[i] = '*';
-	auto editPass = std::make_shared<TextComponent>(mWindow, wifiKey, Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto editPass = std::make_shared<TextComponent>(mWindow, wifiKey, Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
 	editPass->setHorizontalAlignment(ALIGN_RIGHT);
 	auto updatePass = [this,editPass](const std::string& newVal) {
 		Settings::getInstance()->setString("WifiKey", newVal);

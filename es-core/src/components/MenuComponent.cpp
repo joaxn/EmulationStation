@@ -62,7 +62,7 @@ void MenuComponent::updateSize()
 	const float maxHeight = Renderer::getScreenHeight() * 0.75f;
 	float subtitleHeight;
 	if(mSubtitle->getValue() != ""){
-		subtitleHeight = SUBTITLE_HEIGHT;
+		subtitleHeight = SUBTITLE_HEIGHT + TITLE_LINE_ADD;
 	}else{
 		subtitleHeight = 0;
 	}
@@ -92,7 +92,7 @@ void MenuComponent::onSizeChanged()
 	
 	float subtitleHeight;
 	if(mSubtitle->getValue() != ""){
-		subtitleHeight = SUBTITLE_HEIGHT;
+		subtitleHeight = SUBTITLE_HEIGHT + TITLE_LINE_ADD;
 	}else{
 		subtitleHeight = 1;
 	}
