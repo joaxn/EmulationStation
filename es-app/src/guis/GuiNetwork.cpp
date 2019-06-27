@@ -149,8 +149,8 @@ GuiNetwork::GuiNetwork(Window* window) : GuiComponent(window), mMenu(window, "NE
 	countryMap["PK"] =	"Pakistan";
 	countryMap["QA"] =	"Qatar";
 	countryMap["DZ"] =	"Algeria";
-	for (map<std::string, std::string>::iterator p = countryMap.begin(); p != countryMap.end(); ++p ) {
-		wifi_countries->add(p->second, p->first, Settings::getInstance()->getString("WifiCountry") == p->first);
+	for (std::map<std::string, std::string>::iterator it = countryMap.begin(); it != countryMap.end(); ++it ) {
+		wifi_countries->add(it->second, it->first, Settings::getInstance()->getString("WifiCountry") == it->first);
 	}
 	row.addElement(title, true);
 	row.addElement(wifi_countries, true);

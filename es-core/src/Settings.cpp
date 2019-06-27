@@ -70,7 +70,7 @@ void Settings::setDefaults()
 	mBoolMap["VSync"] = true;
 
 	mBoolMap["EnableSounds"] = true;
-	mBoolMap["ShowHelpPrompts"] = true;
+	mBoolMap["ShowHelpPrompts"] = false;
 	mBoolMap["ScrapeRatings"] = true;
 	mBoolMap["IgnoreGamelist"] = false;
 	mBoolMap["HideConsole"] = true;
