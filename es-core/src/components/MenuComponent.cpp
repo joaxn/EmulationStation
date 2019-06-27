@@ -5,8 +5,8 @@
 #define BUTTON_GRID_VERT_PADDING 32
 #define BUTTON_GRID_HORIZ_PADDING 10
 
-#define TITLE_HEIGHT (mTitle->getFont()->getLetterHeight()) + TITLE_LINE_ADD
-#define SUBTITLE_HEIGHT (mSubtitle->getFont()->getLetterHeight()) + TITLE_LINE_ADD
+#define TITLE_HEIGHT (mTitle->getFont()->getLetterHeight())
+#define SUBTITLE_HEIGHT (mSubtitle->getFont()->getLetterHeight())
 
 MenuComponent::MenuComponent(Window* window, const char* title, const std::shared_ptr<Font>& titleFont, const char* subtitle, const std::shared_ptr<Font>& subtitleFont) : GuiComponent(window),
 	mBackground(window), mGrid(window, Vector2i(1, 6))
@@ -98,10 +98,10 @@ void MenuComponent::onSizeChanged()
 	}
 	
 	// update grid row/col sizes
-	mGrid.setRowHeightPerc(0, (TITLE_VERT_PADDING + 1) / mSize.y());
-	mGrid.setRowHeightPerc(1, (TITLE_HEIGHT + 1) / mSize.y());
+	mGrid.setRowHeightPerc(0, TITLE_VERT_PADDING / mSize.y());
+	mGrid.setRowHeightPerc(1, TITLE_HEIGHT / mSize.y());
 	mGrid.setRowHeightPerc(2, subtitleHeight / mSize.y());
-	mGrid.setRowHeightPerc(3, (TITLE_VERT_PADDING + 1) / mSize.y());
+	mGrid.setRowHeightPerc(3, TITLE_VERT_PADDING / mSize.y());
 	mGrid.setRowHeightPerc(5, getButtonGridHeight() / mSize.y());
 
 	mGrid.setSize(mSize);
