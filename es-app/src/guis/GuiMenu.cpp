@@ -547,7 +547,7 @@ void GuiMenu::addVersionInfo()
 {
 	std::string  buildDate = (Settings::getInstance()->getBool("Debug") ? std::string( "   (" + Utils::String::toUpper(PROGRAM_BUILT_STRING) + ")") : (""));
 
-	mVersion.setFont(Font::get(FONT_SIZE_SMALL));
+	mVersion.setFont(Font::get(FONT_SIZE_SMALL,FONT_PATH_LIGHT)));
 	mVersion.setColor(0x5E5E5EFF);
 	mVersion.setText("WORUKAMI V" + Utils::String::toUpper(PROGRAM_VERSION_STRING) + buildDate);
 	mVersion.setHorizontalAlignment(ALIGN_CENTER);

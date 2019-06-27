@@ -102,7 +102,7 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 		default:
 			{
 				// MD_STRING
-				ed = std::make_shared<TextComponent>(window, "", Font::get(FONT_SIZE_SMALL, FONT_PATH_LIGHT), 0x777777FF, ALIGN_RIGHT);
+				ed = std::make_shared<TextComponent>(window, "", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF, ALIGN_RIGHT);
 				row.addElement(ed, true);
 
 				auto spacer = std::make_shared<GuiComponent>(mWindow);
