@@ -1,4 +1,5 @@
 #include "components/MenuComponent.h"
+#include "components/OptionListComponent.h"
 #include "components/SwitchComponent.h"
 #include "GuiComponent.h"
 

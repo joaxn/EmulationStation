@@ -4,7 +4,6 @@
 #include "components/SliderComponent.h"
 #include "components/SwitchComponent.h"
 #include "components/SliderComponent.h"
-#include "components/SwitchComponent.h"
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiKeyboard.h"
 #include "guis/GuiTextEditPopupKeyboard.h"
