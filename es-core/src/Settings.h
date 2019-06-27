@@ -4,9 +4,6 @@
 
 #include <map>
 
-#define TITLE_VERT_PADDING 30
-#define TITLE_LINE_ADD 10
-
 //This is a singleton for storing settings.
 class Settings
 {

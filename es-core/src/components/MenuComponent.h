@@ -9,6 +9,9 @@
 #include "utils/StringUtil.h"
 #include "Renderer.h"
 
+#define TITLE_VERT_PADDING 30
+#define TITLE_LINE_ADD 10
+
 class ButtonComponent;
 class ImageComponent;
 
