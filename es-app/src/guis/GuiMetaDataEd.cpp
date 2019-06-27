@@ -21,34 +21,17 @@
 #include "SystemData.h"
 #include "Window.h"
 
-#define TITLE_HEIGHT (mTitle->getFont()->getLetterHeight()) + 20
-#define SUBTITLE_HEIGHT (mSubtitle->getFont()->getLetterHeight()) + 20
-
-GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams scraperParams,
-	const std::string& /*header*/, std::function<void()> saveCallback, std::function<void()> deleteFunc) : GuiComponent(window),
+GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams scraperParams, const std::string& /*header*/, std::function<void()> saveCallback) : GuiComponent(window),
 	mScraperParams(scraperParams),
 
-	mBackground(window, ":/frame.png"),
-	mGrid(window, Vector2i(1, 3)),
-
+	mMenu(window, "EDIT GAME INFO"),
 	mMetaDataDecl(mdd),
 	mMetaData(md),
-	mSavedCallback(saveCallback), mDeleteFunc(deleteFunc)
+	mSavedCallback(saveCallback)
 {
-	addChild(&mBackground);
-	addChild(&mGrid);
-
-	mHeaderGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(1, 4));
-
-	mTitle = std::make_shared<TextComponent>(mWindow, "EDIT GAME INFO", Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
-	mSubtitle = std::make_shared<TextComponent>(mWindow, Utils::String::toUpper(Utils::FileSystem::getFileName(scraperParams.game->getPath())),Font::get(FONT_SIZE_SMALL), 0x777777FF, ALIGN_CENTER);
-	mHeaderGrid->setEntry(mTitle, Vector2i(0, 1), false, true);
-	mHeaderGrid->setEntry(mSubtitle, Vector2i(0, 2), false, true);
-
-	mGrid.setEntry(mHeaderGrid, Vector2i(0, 0), false, true);
-
-	mList = std::make_shared<ComponentList>(mWindow);
-	mGrid.setEntry(mList, Vector2i(0, 1), true, true);
+	addChild(&mMenu);
+	
+	mMenu.setSubtitle(Utils::FileSystem::getFileNameNoExt(scraperParams.game->getPath()).c_str());
 
 	// populate list
 	for(auto iter = mdd.cbegin(); iter != mdd.cend(); iter++)
@@ -142,49 +125,13 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 		}
 
 		assert(ed);
-		mList->addRow(row);
+		mMenu.addRow(row);
 		ed->setValue(mMetaData->get(iter->key));
 		mEditors.push_back(ed);
 	}
 
-	std::vector< std::shared_ptr<ButtonComponent> > buttons;
-	
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "cancel", [&] { delete this; }));
-	/*
-	if(mDeleteFunc)
-	{
-		auto deleteFileAndSelf = [&] { mDeleteFunc(); delete this; };
-		auto deleteBtnFunc = [this, deleteFileAndSelf] { mWindow->pushGui(new GuiMsgBox(mWindow, "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\nARE YOU SURE?", "YES", deleteFileAndSelf, "NO", nullptr)); };
-		buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DELETE", "delete", deleteBtnFunc));
-	}
-	if(!scraperParams.system->hasPlatformId(PlatformIds::PLATFORM_IGNORE)){
-		buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "DOWNLOAD GAME INFO", "scrape", std::bind(&GuiMetaDataEd::fetch, this)));
-	}
-	*/
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SAVE", "save", [&] { save(); delete this; }));
-
-	mButtons = makeButtonGrid(mWindow, buttons);
-	mGrid.setEntry(mButtons, Vector2i(0, 2), true, false);
-
-	// resize + center	
-	float width = (float)Math::min(Renderer::getScreenHeight(), (int)(Renderer::getScreenWidth() * 0.90f));
-	setSize(width, Renderer::getScreenHeight() * 0.7f);
-	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, (Renderer::getScreenHeight() - mSize.y()) / 2);
-}
-
-void GuiMetaDataEd::onSizeChanged()
-{
-	mBackground.fitTo(mSize, Vector3f::Zero(), Vector2f(-32, -32));
-
-	mGrid.setSize(mSize);
-
-	mGrid.setRowHeightPerc(0, (TITLE_VERT_PADDING * 2 + TITLE_HEIGHT + SUBTITLE_HEIGHT) / mSize.y());
-	mGrid.setRowHeightPerc(2, mButtons->getSize().y() / mSize.y());
-
-	mHeaderGrid->setRowHeightPerc(0, TITLE_VERT_PADDING / mHeaderGrid->getSize().y());
-	mHeaderGrid->setRowHeightPerc(1, TITLE_HEIGHT / mHeaderGrid->getSize().y());
-	mHeaderGrid->setRowHeightPerc(2, SUBTITLE_HEIGHT / mHeaderGrid->getSize().y());
-	mHeaderGrid->setRowHeightPerc(3, TITLE_VERT_PADDING / mHeaderGrid->getSize().y());
+	mMenu.addButton("CANCEL", "cancel", [&] { delete this; });
+	mMenu.addButton("SAVE", "save", [&] { save(); delete this; });
 }
 
 void GuiMetaDataEd::save()

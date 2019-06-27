@@ -12,7 +12,7 @@
 #include "Window.h"
 
 GuiScraperMulti::GuiScraperMulti(Window* window, const std::queue<ScraperSearchParams>& searches, bool approveResults, bool singleScrape) :
-	GuiComponent(window), mBackground(window, ":/frame.png"), mGrid(window, Vector2i(1, 5)),
+	GuiComponent(window), mBackground(window, ":/frame.png"), mGrid(window, Vector2i(1, 6)),
 	mSearchQueue(searches),
 	mSingleScrape(singleScrape)
 {
@@ -44,7 +44,7 @@ GuiScraperMulti::GuiScraperMulti(Window* window, const std::queue<ScraperSearchP
 	mSearchComp->setAcceptCallback(std::bind(&GuiScraperMulti::acceptResult, this, std::placeholders::_1));
 	mSearchComp->setSkipCallback(std::bind(&GuiScraperMulti::skip, this));
 	mSearchComp->setCancelCallback(std::bind(&GuiScraperMulti::finish, this));
-	mGrid.setEntry(mSearchComp, Vector2i(0, 3), mSearchComp->getSearchType() != ScraperSearchComponent::ALWAYS_ACCEPT_FIRST_RESULT, true);
+	mGrid.setEntry(mSearchComp, Vector2i(0, 4), mSearchComp->getSearchType() != ScraperSearchComponent::ALWAYS_ACCEPT_FIRST_RESULT, true);
 
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
 	
@@ -70,7 +70,7 @@ GuiScraperMulti::GuiScraperMulti(Window* window, const std::queue<ScraperSearchP
 	}
 
 	mButtonGrid = makeButtonGrid(mWindow, buttons);
-	mGrid.setEntry(mButtonGrid, Vector2i(0, 4), true, false);
+	mGrid.setEntry(mButtonGrid, Vector2i(0, 5), true, false);
 
 	setSize(Renderer::getScreenWidth() * 0.95f, Renderer::getScreenHeight() * 0.849f);
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, (Renderer::getScreenHeight() - mSize.y()) / 2);
@@ -90,9 +90,10 @@ void GuiScraperMulti::onSizeChanged()
 	mBackground.fitTo(mSize, Vector3f::Zero(), Vector2f(-32, -32));
 
 	mGrid.setRowHeightPerc(0, TITLE_VERT_PADDING / mSize.y(), false);
-	mGrid.setRowHeightPerc(1, mSystem->getFont()->getLetterHeight() / mSize.y(), false);
-	mGrid.setRowHeightPerc(2, mSubtitle->getFont()->getHeight() * 1.75f / mSize.y(), false);
-	mGrid.setRowHeightPerc(4, mButtonGrid->getSize().y() / mSize.y(), false);
+	mGrid.setRowHeightPerc(1, (mSystem->getFont()->getLetterHeight() + TITLE_LINE_ADD) / mSize.y(), false);
+	mGrid.setRowHeightPerc(2, (mSubtitle->getFont()->getHeight() + TITLE_LINE_ADD) / mSize.y(), false);
+	mGrid.setRowHeightPerc(3, TITLE_VERT_PADDING / mSize.y(), false);
+	mGrid.setRowHeightPerc(5, mButtonGrid->getSize().y() / mSize.y(), false);
 	mGrid.setSize(mSize);
 }
 

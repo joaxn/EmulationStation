@@ -2,8 +2,8 @@
 #ifndef ES_APP_GUIS_GUI_META_DATA_ED_H
 #define ES_APP_GUIS_GUI_META_DATA_ED_H
 
+#include "components/MenuComponent.h"
 #include "components/ComponentGrid.h"
-#include "components/NinePatchComponent.h"
 #include "scrapers/Scraper.h"
 #include "GuiComponent.h"
 #include "MetaData.h"
@@ -14,8 +14,7 @@ class TextComponent;
 class GuiMetaDataEd : public GuiComponent
 {
 public:
-	GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams params, 
-		const std::string& header, std::function<void()> savedCallback, std::function<void()> deleteFunc);
+	GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams params, const std::string& header, std::function<void()> savedCallback);
 	
 	bool input(InputConfig* config, Input input) override;
 	void onSizeChanged() override;
@@ -26,15 +25,8 @@ private:
 	void fetch();
 	void fetchDone(const ScraperSearchResult& result);
 	void close(bool closeAllWindows);
-
-	NinePatchComponent mBackground;
-	ComponentGrid mGrid;
 	
-	std::shared_ptr<TextComponent> mTitle;
-	std::shared_ptr<TextComponent> mSubtitle;
-	std::shared_ptr<ComponentGrid> mHeaderGrid;
-	std::shared_ptr<ComponentList> mList;
-	std::shared_ptr<ComponentGrid> mButtons;
+	MenuComponent mMenu;
 
 	ScraperSearchParams mScraperParams;
 

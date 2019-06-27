@@ -5,8 +5,8 @@
 #define BUTTON_GRID_VERT_PADDING 32
 #define BUTTON_GRID_HORIZ_PADDING 10
 
-#define TITLE_HEIGHT (mTitle->getFont()->getLetterHeight()) + 20
-#define SUBTITLE_HEIGHT (mSubtitle->getFont()->getLetterHeight()) + 20
+#define TITLE_HEIGHT (mTitle->getFont()->getLetterHeight()) + TITLE_LINE_ADD
+#define SUBTITLE_HEIGHT (mSubtitle->getFont()->getLetterHeight()) + TITLE_LINE_ADD
 
 MenuComponent::MenuComponent(Window* window, const char* title, const std::shared_ptr<Font>& titleFont, const char* subtitle, const std::shared_ptr<Font>& subtitleFont) : GuiComponent(window),
 	mBackground(window), mGrid(window, Vector2i(1, 6))

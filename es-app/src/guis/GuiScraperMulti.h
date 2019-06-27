@@ -7,8 +7,6 @@
 #include "scrapers/Scraper.h"
 #include "GuiComponent.h"
 
-#define TITLE_VERT_PADDING (Renderer::getScreenHeight()*0.04f)
-
 class ScraperSearchComponent;
 class TextComponent;
 

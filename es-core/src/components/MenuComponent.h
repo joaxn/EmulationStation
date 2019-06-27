@@ -15,8 +15,6 @@ class ImageComponent;
 std::shared_ptr<ComponentGrid> makeButtonGrid(Window* window, const std::vector< std::shared_ptr<ButtonComponent> >& buttons);
 std::shared_ptr<ImageComponent> makeArrow(Window* window);
 
-#define TITLE_VERT_PADDING (Renderer::getScreenHeight()*0.04f)
-
 class MenuComponent : public GuiComponent
 {
 public:
