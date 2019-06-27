@@ -17,7 +17,6 @@ public:
 	GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams params, const std::string& header, std::function<void()> savedCallback);
 	
 	bool input(InputConfig* config, Input input) override;
-	void onSizeChanged() override;
 	virtual std::vector<HelpPrompt> getHelpPrompts() override;
 
 private:
