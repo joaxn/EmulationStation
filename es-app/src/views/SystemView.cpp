@@ -272,7 +272,7 @@ void SystemView::onCursorChanged(const CursorState& /*state*/)
 	}, goFast ? 10 : 300);
 
 	// wait 600ms to fade in
-	setAnimation(infoFadeIn, goFast ? 0 : 2000, nullptr, false, 2);
+	setAnimation(infoFadeIn, goFast ? 0 : 600, nullptr, false, 2);
 
 	// no need to animate transition, we're not going anywhere (probably mEntries.size() == 1)
 	if(endPos == mCamOffset && endPos == mExtrasCamOffset)
