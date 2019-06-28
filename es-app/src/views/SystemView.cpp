@@ -517,10 +517,6 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
 		float scale = 1.0f + ((mCarousel.logoScale - 1.0f) * (1.0f - fabs(distance)));
 		scale = Math::min(mCarousel.logoScale, Math::max(1.0f, scale));
 		scale /= mCarousel.logoScale;
-
-		if(mEntries.at(index).data.bgColor)
-		Renderer::setMatrix(logoTrans);
-		Renderer::drawRect(0.0, 0.0, mCarousel.size.x(), mCarousel.size.y(), mEntries.at(index).data.bgColor);
 		
 		//joaxn - keep opacity
 		//int opacity = (int)Math::round(0x80 + ((0xFF - 0x80) * (1.0f - fabs(distance))));
