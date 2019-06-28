@@ -22,7 +22,7 @@ Vector2f ImageComponent::getSize() const
 ImageComponent::ImageComponent(Window* window, bool forceLoad, bool dynamic) : GuiComponent(window),
 	mTargetIsMax(false), mTargetIsMin(false), mFlipX(false), mFlipY(false), mTargetSize(0, 0), mColorShift(0xFFFFFFFF),
 	mForceLoad(forceLoad), mDynamic(dynamic), mFadeOpacity(0), mFading(false), mRotateByTargetSize(false),
-	mTopLeftCrop(0.0f, 0.0f), mBottomRightCrop(1.0f, 1.0f)
+	mTopLeftCrop(0.0f, 0.0f), mBottomRightCrop(1.0f, 1.0f), mBgColor(0), mRenderBackground(false)
 {
 	updateColors();
 }
@@ -254,6 +254,17 @@ void ImageComponent::setColorShift(unsigned int color)
 	updateColors();
 }
 
+void ImageComponent::setBackgroundColor(unsigned int color)
+{
+	mBgColor = color;
+	mBgColorOpacity = mBgColor & 0x000000FF;
+}
+
+void ImageComponent::setRenderBackground(bool render)
+{
+	mRenderBackground = render;
+}
+
 void ImageComponent::setOpacity(unsigned char opacity)
 {
 	mOpacity = opacity;
@@ -326,6 +337,9 @@ void ImageComponent::render(const Transform4x4f& parentTrans)
 			Vector2f targetSizePos = (mTargetSize - mSize) * mOrigin * -1;
 			Renderer::drawRect(targetSizePos.x(), targetSizePos.y(), mTargetSize.x(), mTargetSize.y(), 0xFF000033);
 			Renderer::drawRect(0.0f, 0.0f, mSize.x(), mSize.y(), 0x00000033);
+		}
+		if(mRenderBackground){
+			Renderer::drawRect(0.f, 0.f, mSize.x(), mSize.y(), mBgColor);
 		}
 		if(mTexture->isInitialized())
 		{
@@ -454,6 +468,11 @@ void ImageComponent::applyTheme(const std::shared_ptr<ThemeData>& theme, const s
 
 	if(properties & COLOR && elem->has("color"))
 		setColorShift(elem->get<unsigned int>("color"));
+	
+	if (properties & COLOR && elem->has("backgroundColor")) {
+		setBackgroundColor(elem->get<unsigned int>("backgroundColor"));
+		setRenderBackground(true);
+	}
 
 	if(properties & ThemeFlags::ROTATION) {
 		if(elem->has("rotation"))

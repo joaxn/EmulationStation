@@ -57,7 +57,6 @@ void SystemView::populate()
 					logo->applyTheme(theme, "system", "logo", ThemeFlags::PATH | ThemeFlags::COLOR);
 					logo->setRotateByTargetSize(true);
 					e.data.logo = std::shared_ptr<GuiComponent>(logo);
-					e.data.bgColor = logoElem->get<unsigned int>("bgColor");
 				}
 			}
 			if (!e.data.logo)
@@ -71,7 +70,6 @@ void SystemView::populate()
 				text->setSize(mCarousel.logoSize * mCarousel.logoScale);
 				text->applyTheme((*it)->getTheme(), "system", "logoText", ThemeFlags::FONT_PATH | ThemeFlags::FONT_SIZE | ThemeFlags::COLOR | ThemeFlags::FORCE_UPPERCASE | ThemeFlags::LINE_SPACING | ThemeFlags::TEXT);
 				e.data.logo = std::shared_ptr<GuiComponent>(text);
-				e.data.bgColor = false;
 				
 				if (mCarousel.type == VERTICAL || mCarousel.type == VERTICAL_WHEEL)
 				{
@@ -519,6 +517,10 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
 		float scale = 1.0f + ((mCarousel.logoScale - 1.0f) * (1.0f - fabs(distance)));
 		scale = Math::min(mCarousel.logoScale, Math::max(1.0f, scale));
 		scale /= mCarousel.logoScale;
+
+		if(mEntries.at(index).data.bgColor)
+		Renderer::setMatrix(logoTrans);
+		Renderer::drawRect(0.0, 0.0, mCarousel.size.x(), mCarousel.size.y(), mEntries.at(index).data.bgColor);
 		
 		//joaxn - keep opacity
 		//int opacity = (int)Math::round(0x80 + ((0xFF - 0x80) * (1.0f - fabs(distance))));
@@ -532,12 +534,6 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
 		}
 		comp->setScale(scale);
 		comp->setOpacity((unsigned char)opacity);
-		
-		if(!mEntries.at(index).data.bgColor.empty() && mEntries.at(index).data.bgColor != false){
-			Renderer::setMatrix(logoTrans);
-			Renderer::drawRect(0.0, 0.0, comp.size.x(), 1.0f, mEntries.at(index).data.bgColor);
-		}
-		
 		comp->render(logoTrans);
 	}
 	Renderer::popClipRect();

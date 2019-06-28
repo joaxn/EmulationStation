@@ -26,6 +26,9 @@ public:
 
 	void onSizeChanged() override;
 	void setOpacity(unsigned char opacity) override;
+	
+	void setBackgroundColor(unsigned int color);
+	void setRenderBackground(bool render);
 
 	// Resize the image to fit this size. If one axis is zero, scale that axis to maintain aspect ratio.
 	// If both are non-zero, potentially break the aspect ratio.  If both are zero, no resizing.
@@ -96,6 +99,9 @@ private:
 	void fadeIn(bool textureLoaded);
 
 	unsigned int mColorShift;
+	unsigned int mBgColor;
+	unsigned char mBgColorOpacity;
+	bool mRenderBackground;
 
 	std::string mDefaultPath;
 
