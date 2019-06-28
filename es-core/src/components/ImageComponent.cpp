@@ -339,6 +339,8 @@ void ImageComponent::render(const Transform4x4f& parentTrans)
 			Renderer::drawRect(0.0f, 0.0f, mSize.x(), mSize.y(), 0x00000033);
 		}
 		if(mRenderBackground){
+			Vector2f targetSizePos = (mTargetSize - mSize) * mOrigin * -1;
+			Renderer::drawRect(targetSizePos.x(), targetSizePos.y(), mTargetSize.x(), mTargetSize.y(), mBgColor);
 			Renderer::drawRect(0.f, 0.f, mSize.x(), mSize.y(), mBgColor);
 		}
 		if(mTexture->isInitialized())
@@ -469,6 +471,7 @@ void ImageComponent::applyTheme(const std::shared_ptr<ThemeData>& theme, const s
 	if(properties & COLOR && elem->has("color"))
 		setColorShift(elem->get<unsigned int>("color"));
 	
+	setRenderBackground(false);
 	if (properties & COLOR && elem->has("backgroundColor")) {
 		setBackgroundColor(elem->get<unsigned int>("backgroundColor"));
 		setRenderBackground(true);
