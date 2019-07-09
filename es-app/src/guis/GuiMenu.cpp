@@ -383,7 +383,7 @@ void GuiMenu::openUISettings()
 	
 	// COLLECTIONS
 	std::map<std::string, CollectionSystemData> autoSystems = CollectionSystemManager::get()->getAutoCollectionSystems();
-	autoOptionList = std::make_shared< OptionListComponent<std::string> >(mWindow, "SELECT COLLECTIONS", true);
+	auto autoOptionList = std::make_shared< OptionListComponent<std::string> >(mWindow, "SELECT COLLECTIONS", true);
 
 	for(std::map<std::string, CollectionSystemData>::const_iterator it = autoSystems.cbegin() ; it != autoSystems.cend() ; it++ ){
 		autoOptionList->add(it->second.decl.longName, it->second.decl.name, it->second.isEnabled);
