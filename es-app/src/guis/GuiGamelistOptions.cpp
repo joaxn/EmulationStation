@@ -117,7 +117,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		mMenu.addRow(row);
 		
 		
-		if (value == "false"){
+		if (fav_value == "false"){
 			fav_switch->setState(false);
 		}else{
 			fav_switch->setState(false);
