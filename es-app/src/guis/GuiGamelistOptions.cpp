@@ -4,6 +4,7 @@
 #include "guis/GuiGameScraper.h"
 #include "guis/GuiScraperMulti.h"
 #include "guis/GuiMsgBox.h"
+#include "components/SwitchComponent.h"
 #include "scrapers/Scraper.h"
 #include "views/gamelist/IGameListView.h"
 #include "views/UIModeController.h"
