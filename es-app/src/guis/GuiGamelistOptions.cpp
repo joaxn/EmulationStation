@@ -120,7 +120,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		if (fav_value == "false"){
 			fav_switch->setState(false);
 		}else{
-			fav_switch->setState(false);
+			fav_switch->setState(true);
 		}
 		
 		//save - favorites
