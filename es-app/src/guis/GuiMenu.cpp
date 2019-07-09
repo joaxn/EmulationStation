@@ -47,8 +47,8 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	//if (isFullUI)
 	//	addEntry("OTHER SETTINGS", 0x777777FF, true, [this] { openOtherSettings(); });
 	
-	if (isFullUI)
-		addEntry("FAVORITES", ":/menu/collections.svg", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
+	//if (isFullUI)
+	//	addEntry("FAVORITES", ":/menu/collections.svg", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
 
 	if(isFullUI)
 		addEntry("SCREENSAVER SETTINGS", ":/menu/screensaver.svg", 0x777777FF, true, [this] { openScreensaverOptions(); });
@@ -379,6 +379,21 @@ void GuiMenu::openUISettings()
 		if (enable_filter->getState() != filter_is_enabled) ViewController::get()->ReloadAndGoToStart();
 	});
 	*/
+	
+	
+	// COLLECTIONS
+	std::map<std::string, CollectionSystemData> autoSystems = CollectionSystemManager::get()->getAutoCollectionSystems();
+	autoOptionList = std::make_shared< OptionListComponent<std::string> >(mWindow, "SELECT COLLECTIONS", true);
+
+	for(std::map<std::string, CollectionSystemData>::const_iterator it = autoSystems.cbegin() ; it != autoSystems.cend() ; it++ ){
+		autoOptionList->add(it->second.decl.longName, it->second.decl.name, it->second.isEnabled);
+	}
+	s->addWithLabel("AUTOMATIC GAME COLLECTIONS", autoOptionList);
+	s->addSaveFunc([autoOptionList]{
+		std::string outAuto = Utils::String::vectorToCommaString(autoOptionList->getSelectedObjects());
+		Settings::getInstance()->setString("CollectionSystemsAuto", outAuto);
+		Settings::getInstance()->saveFile();
+	});
 
 	mWindow->pushGui(s);
 
