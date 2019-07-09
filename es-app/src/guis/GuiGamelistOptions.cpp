@@ -131,7 +131,6 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 			if(fav_switch->getState()){
 				md->set("favorite", "true");
 			}else{
-				adding = false;
 				md->set("favorite", "false");
 			}
 			file->getSourceFileData()->getSystem()->getIndex()->addToIndex(file);
