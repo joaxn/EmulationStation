@@ -11,6 +11,7 @@
 #include "CollectionSystemManager.h"
 #include "FileFilterIndex.h"
 #include "FileSorts.h"
+#include "MetaData.h"
 #include "GuiMetaDataEd.h"
 #include "SystemData.h"
 #include "utils/FileSystemUtil.h"
@@ -97,7 +98,46 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.addElement(mListSort, false);
 		mMenu.addRow(row);
 	}
-
+	
+	if (UIModeController::getInstance()->isUIModeFull() && !fromPlaceholder && !(mSystem->isCollection() && file->getType() == FOLDER))
+	{
+		
+		//FAVORITES
+		file->getSourceFileData()->getSystem()->getIndex()->removeFromIndex(file);
+		MetaDataList* md = &file->getSourceFileData()->metadata;
+		std::string fav_value = md->get("favorite");
+		auto fav_switch = std::make_shared<SwitchComponent>(window);
+		
+		row.elements.clear();
+		row.addElement(getIcon(":/menu/collections.svg"), false);
+		row.addElement(spacer, false);
+		row.addElement(std::make_shared<TextComponent>(mWindow, "ADD GAME TO FAVORITES", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		row.addElement(favorite, false);
+		mMenu.addRow(row);
+		
+		
+		if (value == "false"){
+			fav_switch->setState(false);
+		}else{
+			fav_switch->setState(false);
+		}
+		
+		//save - favorites
+		addSaveFunc([fav_switch,file] {
+			file->getSourceFileData()->getSystem()->getIndex()->removeFromIndex(file);
+			MetaDataList* md = &file->getSourceFileData()->metadata;
+			std::string value = md->get("favorite");
+			if(fav_switch->getState()){
+				md->set("favorite", "true");
+			}else{
+				adding = false;
+				md->set("favorite", "false");
+			}
+			file->getSourceFileData()->getSystem()->getIndex()->addToIndex(file);
+			CollectionSystemManager::get()->refreshCollectionSystems((file->getSourceFileData());
+		});
+	}
+	
 	if (UIModeController::getInstance()->isUIModeFull() && !fromPlaceholder && !(mSystem->isCollection() && file->getType() == FOLDER))
 	{
 		//EMULATOR
@@ -136,6 +176,15 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 			mMenu.addRow(row);
 		}
 		
+		//save - emulator
+		addSaveFunc([emuList,overrideConfigPath,romConfigName,emuDefault] {
+			if(emuList->getSelected() == emuDefault){
+				Utils::FileSystem::iniSetValue(overrideConfigPath,romConfigName,"");
+			}else{
+				Utils::FileSystem::iniSetValue(overrideConfigPath,romConfigName,emuList->getSelected());
+			}
+		});
+		
 		//EDIT
 		row = reset;
 		row.elements.clear();
@@ -165,15 +214,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.addElement(makeArrow(mWindow), false);
 		row.makeAcceptInputHandler(std::bind(&GuiGamelistOptions::deleteGame, this));
 		mMenu.addRow(row);
-		
-		//save
-		addSaveFunc([emuList,overrideConfigPath,romConfigName,emuDefault] {
-			if(emuList->getSelected() == emuDefault){
-				Utils::FileSystem::iniSetValue(overrideConfigPath,romConfigName,"");
-			}else{
-				Utils::FileSystem::iniSetValue(overrideConfigPath,romConfigName,emuList->getSelected());
-			}
-		});
+
 	}
 
 	//mMenu.addButton("BACK", "back", [&] { save(); delete this; });

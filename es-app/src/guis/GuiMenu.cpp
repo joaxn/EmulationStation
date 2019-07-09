@@ -46,6 +46,9 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 
 	//if (isFullUI)
 	//	addEntry("OTHER SETTINGS", 0x777777FF, true, [this] { openOtherSettings(); });
+	
+	if (isFullUI)
+		addEntry("FAVORITES", ":/menu/collections.svg", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
 
 	if(isFullUI)
 		addEntry("SCREENSAVER SETTINGS", ":/menu/screensaver.svg", 0x777777FF, true, [this] { openScreensaverOptions(); });
