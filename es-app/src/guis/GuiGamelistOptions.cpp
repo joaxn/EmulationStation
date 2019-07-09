@@ -134,7 +134,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 				md->set("favorite", "false");
 			}
 			file->getSourceFileData()->getSystem()->getIndex()->addToIndex(file);
-			CollectionSystemManager::get()->refreshCollectionSystems((file->getSourceFileData());
+			CollectionSystemManager::get()->refreshCollectionSystems(file->getSourceFileData());
 		});
 	}
 	
