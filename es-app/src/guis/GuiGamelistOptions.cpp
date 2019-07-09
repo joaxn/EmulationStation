@@ -113,7 +113,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, SystemData* system) : Gui
 		row.addElement(getIcon(":/menu/collections.svg"), false);
 		row.addElement(spacer, false);
 		row.addElement(std::make_shared<TextComponent>(mWindow, "ADD GAME TO FAVORITES", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-		row.addElement(favorite, false);
+		row.addElement(fav_switch, false);
 		mMenu.addRow(row);
 		
 		
