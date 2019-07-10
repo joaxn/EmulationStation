@@ -19,7 +19,7 @@
 std::vector<SystemData*> SystemData::sSystemVector;
 
 SystemData::SystemData(const std::string& name, const std::string& fullName, SystemEnvironmentData* envData, const std::string& themeFolder, bool CollectionSystem) :
-	mName(name), mFullName(fullName), mEnvData(envData), mThemeFolder(themeFolder), mIsCollectionSystem(CollectionSystem), mIsGameSystem(true)
+	mName(name), mFullName(fullName), mEnvData(envData), mThemeFolder(themeFolder), mIsCollectionSystem(CollectionSystem), mIsGameSystem(true), mIndex(0)
 {
 	mFilterIndex = new FileFilterIndex();
 
@@ -202,6 +202,8 @@ bool SystemData::loadConfig()
 		return false;
 	}
 
+	int index = 0;
+
 	for(pugi::xml_node system = systemList.child("system"); system; system = system.next_sibling("system"))
 	{
 		std::string name, fullname, path, cmd, themeFolder;
@@ -272,6 +274,8 @@ bool SystemData::loadConfig()
 			LOG(LogWarning) << "System \"" << name << "\" has no games! Ignoring it.";
 			delete newSys;
 		}else{
+			newSys->setIndex(index);
+			index++;
 			sSystemVector.push_back(newSys);
 		}
 	}
@@ -494,6 +498,7 @@ void SystemData::loadTheme()
 		sysData.insert(std::pair<std::string, std::string>("system.name", getName()));
 		sysData.insert(std::pair<std::string, std::string>("system.theme", getThemeFolder()));
 		sysData.insert(std::pair<std::string, std::string>("system.fullName", getFullName()));
+		sysData.insert(std::pair<std::string, std::string>("system.index", std::to_string(getIndex())));
 		
 		mTheme->loadFile(sysData, path);
 	} catch(ThemeException& e)

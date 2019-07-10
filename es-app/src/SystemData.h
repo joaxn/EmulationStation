@@ -36,6 +36,9 @@ public:
 	inline const std::vector<PlatformIds::PlatformId>& getPlatformIds() const { return mEnvData->mPlatformIds; }
 	inline bool hasPlatformId(PlatformIds::PlatformId id) { if (!mEnvData) return false; return std::find(mEnvData->mPlatformIds.cbegin(), mEnvData->mPlatformIds.cend(), id) != mEnvData->mPlatformIds.cend(); }
 
+	inline int getIndex() {return mIndex;}
+	inline int setIndex(int index) {mIndex = index;}
+
 	inline const std::shared_ptr<ThemeData>& getTheme() const { return mTheme; }
 
 	std::string getGamelistPath(bool forWrite) const;
@@ -77,6 +80,7 @@ private:
 	SystemEnvironmentData* mEnvData;
 	std::string mThemeFolder;
 	std::shared_ptr<ThemeData> mTheme;
+	int mIndex;
 
 	void populateFolder(FileData* folder);
 	void indexAllGameFilters(const FileData* folder);
