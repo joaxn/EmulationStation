@@ -274,7 +274,7 @@ bool SystemData::loadConfig()
 			LOG(LogWarning) << "System \"" << name << "\" has no games! Ignoring it.";
 			delete newSys;
 		}else{
-			newSys->setIndex(index);
+			newSys->setIdx(index);
 			index++;
 			sSystemVector.push_back(newSys);
 		}
@@ -498,7 +498,7 @@ void SystemData::loadTheme()
 		sysData.insert(std::pair<std::string, std::string>("system.name", getName()));
 		sysData.insert(std::pair<std::string, std::string>("system.theme", getThemeFolder()));
 		sysData.insert(std::pair<std::string, std::string>("system.fullName", getFullName()));
-		sysData.insert(std::pair<std::string, std::string>("system.index", std::to_string(getIndex())));
+		sysData.insert(std::pair<std::string, std::string>("system.index", std::to_string(getIdx())));
 		
 		mTheme->loadFile(sysData, path);
 	} catch(ThemeException& e)
