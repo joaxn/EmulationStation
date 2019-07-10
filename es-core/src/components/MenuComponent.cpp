@@ -59,7 +59,7 @@ float MenuComponent::getButtonGridHeight() const
 
 void MenuComponent::updateSize()
 {
-	const float maxHeight = Renderer::getScreenHeight() * 0.75f;
+	const float maxHeight = Renderer::getScreenHeight() * 0.8f;
 	float subtitleHeight;
 	if(mSubtitle->getValue() != ""){
 		subtitleHeight = SUBTITLE_HEIGHT + TITLE_LINE_ADD;

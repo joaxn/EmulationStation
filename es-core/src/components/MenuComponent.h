@@ -16,7 +16,7 @@ std::shared_ptr<ComponentGrid> makeButtonGrid(Window* window, const std::vector<
 std::shared_ptr<ImageComponent> makeArrow(Window* window);
 
 #define TITLE_VERT_PADDING (Renderer::getScreenHeight()*0.04f)
-#define TITLE_LINE_ADD 10
+#define TITLE_LINE_ADD 8
 
 class MenuComponent : public GuiComponent
 {
