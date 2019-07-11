@@ -388,11 +388,18 @@ void GuiMenu::openUISettings()
 	for(std::map<std::string, CollectionSystemData>::const_iterator it = autoSystems.cbegin() ; it != autoSystems.cend() ; it++ ){
 		autoOptionList->add(it->second.decl.longName, it->second.decl.name, it->second.isEnabled);
 	}
-	s->addWithLabel("AUTOMATIC GAME COLLECTIONS", autoOptionList);
+	s->addWithLabel("GAME COLLECTIONS", autoOptionList);
 	s->addSaveFunc([autoOptionList]{
-		std::string outAuto = Utils::String::vectorToCommaString(autoOptionList->getSelectedObjects());
-		Settings::getInstance()->setString("CollectionSystemsAuto", outAuto);
-		Settings::getInstance()->saveFile();
+		std::string newCol = Utils::String::vectorToCommaString(autoOptionList->getSelectedObjects());
+		std::string actCol = Settings::getInstance()->getString("CollectionSystemsAuto");
+		if(newCol != actCol){
+			Settings::getInstance()->setString("CollectionSystemsAuto", newCol);
+			Settings::getInstance()->saveFile();
+			CollectionSystemManager::get()->loadEnabledListFromSettings();
+			CollectionSystemManager::get()->updateSystemsList();
+			ViewController::get()->goToStart();
+			ViewController::get()->reloadAll();
+		}
 	});
 
 	mWindow->pushGui(s);
