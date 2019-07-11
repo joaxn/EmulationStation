@@ -293,6 +293,7 @@ void GuiMenu::openUISettings()
 	});
 
 	// theme set
+	/*
 	auto themeSets = ThemeData::getThemeSets();
 
 	if(!themeSets.empty())
@@ -325,6 +326,7 @@ void GuiMenu::openUISettings()
 			}
 		});
 	}
+	*/
 
 	// GameList view style
 	auto gamelist_style = std::make_shared< OptionListComponent<std::string> >(mWindow, "GAMELIST VIEW STYLE", false);
