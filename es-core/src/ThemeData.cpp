@@ -64,6 +64,7 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "origin", NORMALIZED_PAIR },
 		{ "selectorHeight", FLOAT },
 		{ "selectorOffsetY", FLOAT },
+		{ "selectorOffsetX", FLOAT },
 		{ "selectorColor", COLOR },
 		{ "selectorImagePath", PATH },
 		{ "selectorImageTile", BOOLEAN },

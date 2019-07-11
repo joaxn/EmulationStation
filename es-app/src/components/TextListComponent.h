@@ -72,6 +72,7 @@ public:
 
 	inline void setSelectorHeight(float selectorScale) { mSelectorHeight = selectorScale; }
 	inline void setSelectorOffsetY(float selectorOffsetY) { mSelectorOffsetY = selectorOffsetY; }
+	inline void setSelectorOffsetX(float selectorOffsetX) { mSelectorOffsetX = selectorOffsetX; }
 	inline void setSelectorColor(unsigned int color) { mSelectorColor = color; }
 	inline void setSelectedColor(unsigned int color) { mSelectedColor = color; }
 	inline void setColor(unsigned int id, unsigned int color) { mColors[id] = color; }
@@ -96,6 +97,7 @@ private:
 	float mLineSpacing;
 	float mSelectorHeight;
 	float mSelectorOffsetY;
+	float mSelectorOffsetX;
 	unsigned int mSelectorColor;
 	unsigned int mSelectedColor;
 	std::string mScrollSound;
@@ -163,11 +165,11 @@ void TextListComponent<T>::render(const Transform4x4f& parentTrans)
 	if(startEntry < listCutoff)
 	{
 		if (mSelectorImage.hasImage()) {
-			mSelectorImage.setPosition(0.f, (mCursor - startEntry)*entrySize + mSelectorOffsetY, 0.f);
+			mSelectorImage.setPosition(0.f + mSelectorOffsetX, (mCursor - startEntry)*entrySize + mSelectorOffsetY, 0.f);
 			mSelectorImage.render(trans);
 		} else {
 			Renderer::setMatrix(trans);
-			Renderer::drawRect(0.f, (mCursor - startEntry)*entrySize + mSelectorOffsetY, mSize.x(), mSelectorHeight, mSelectorColor);
+			Renderer::drawRect(0.f + mSelectorOffsetX, (mCursor - startEntry)*entrySize + mSelectorOffsetY, mSize.x(), mSelectorHeight, mSelectorColor);
 		}
 	}
 
@@ -416,6 +418,13 @@ void TextListComponent<T>::applyTheme(const std::shared_ptr<ThemeData>& theme, c
 			setSelectorOffsetY(elem->get<float>("selectorOffsetY") * scale);
 		} else {
 			setSelectorOffsetY(0.0);
+		}
+		if(elem->has("selectorOffsetX"))
+		{
+			float scale = this->mParent ? this->mParent->getSize().x() : (float)Renderer::getScreenWidth();
+			setSelectorOffsetX(elem->get<float>("selectorOffsetX") * scale);
+		} else {
+			setSelectorOffsetX(0.0);
 		}
 	}
 
