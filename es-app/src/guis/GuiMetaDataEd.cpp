@@ -19,6 +19,7 @@
 #include "FileData.h"
 #include "FileFilterIndex.h"
 #include "SystemData.h"
+#include "Log.h"
 #include "Window.h"
 
 GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams scraperParams, const std::string& /*header*/, std::function<void()> saveCallback) : GuiComponent(window),
