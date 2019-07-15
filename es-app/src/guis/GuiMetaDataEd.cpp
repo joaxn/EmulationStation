@@ -148,7 +148,7 @@ void GuiMetaDataEd::save()
 	{
 		if(mMetaDataDecl.at(i).isStatistic)
 			continue;
-		LOG(LogInfo) << "Meta set " << mMetaDataDecl.at(i).key << " = " << mEditors.at(i)->getValue();
+		//LOG(LogInfo) << "Meta set " << mMetaDataDecl.at(i).key << " = " << mEditors.at(i)->getValue();
 		mMetaData->set(mMetaDataDecl.at(i).key, mEditors.at(i)->getValue());
 	}
 
@@ -187,7 +187,7 @@ void GuiMetaDataEd::close(bool closeAllWindows)
 	for(unsigned int i = 0; i < mEditors.size(); i++)
 	{
 		const std::string& key = mMetaDataDecl.at(i).key;
-		LOG(LogInfo) << "Meta close check key:" << key << " " << mMetaData->get(key) << " == " << mEditors.at(i)->getValue();
+		//LOG(LogInfo) << "Meta close check key:" << key << " " << mMetaData->get(key) << " == " << mEditors.at(i)->getValue();
 		if(mMetaData->get(key) != mEditors.at(i)->getValue())
 		{
 			dirty = true;
