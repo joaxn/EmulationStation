@@ -82,7 +82,6 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 		case MD_DATE:
 			{
 				ed = std::make_shared<DateTimeEditComponent>(window);
-				ed->setFont(Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT));
 				row.addElement(ed, false, true);
 
 				auto spacer = std::make_shared<GuiComponent>(mWindow);
