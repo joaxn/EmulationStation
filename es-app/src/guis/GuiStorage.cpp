@@ -141,6 +141,22 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "ST
 	setPosition((Renderer::getScreenWidth() - mSize.x()) / 2, Renderer::getScreenHeight() * 0.15f);
 }
 
+bool GuiStorage::input(InputConfig* config, Input input){
+	
+	if(config->isMappedTo("b", input) && input.value != 0){
+		delete this;
+		return true;
+	}
+
+	if(config->isMappedTo("start", input) && input.value != 0){
+		Window* window = mWindow;
+		while(window->peekGui() && window->peekGui() != ViewController::get())
+			delete window->peekGui();
+		return true;
+	}
+	return GuiComponent::input(config, input);
+}
+
 
 void GuiStorage::writeStorageSettings() {
 	std::stringstream cmd;
