@@ -27,6 +27,7 @@ private:
 	void openSoundSettings();
 	void openUISettings();
 	void openNetworkSettings();
+	void openStorageSettings();
 	void openUpdate();
 	
 	MenuComponent mMenu;

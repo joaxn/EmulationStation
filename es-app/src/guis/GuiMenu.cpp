@@ -36,9 +36,6 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 		addEntry("NETWORK SETTINGS", ":/menu/network.svg", 0x777777FF, true, [this] { openNetworkSettings(); });
 	
 	if (isFullUI)
-		addEntry("UPDATE", ":/menu/update.svg", 0x777777FF, true, [this] { openUpdate(); });
-	
-	if (isFullUI)
 		addEntry("DOWNLOAD GAME INFO", ":/menu/scraper.svg", 0x777777FF, true, [this] { openScraperSettings(); });
 
 	if (isFullUI)
@@ -50,11 +47,17 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	//if (isFullUI)
 	//	addEntry("FAVORITES", ":/menu/collections.svg", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
 
+	if (isFullUI)
+		addEntry("STORAGE", ":/menu/storage.svg", 0x777777FF, true, [this] { openStorageSettings(); });
+
 	if(isFullUI)
 		addEntry("SCREENSAVER SETTINGS", ":/menu/screensaver.svg", 0x777777FF, true, [this] { openScreensaverOptions(); });
 
 	if (isFullUI)
 		addEntry("CONFIGURE INPUT", ":/menu/controller.svg", 0x777777FF, true, [this] { openConfigInput(); });
+	
+	if (isFullUI)
+		addEntry("UPDATE", ":/menu/update.svg", 0x777777FF, true, [this] { openUpdate(); });
 
 	if (isFullUI)
 		addEntry("QUIT", ":/menu/quit.svg", 0x777777FF, true, [this] {openQuitMenu(); });
@@ -67,9 +70,14 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 
 void GuiMenu::openNetworkSettings()
 {
-	
 	Window* window = mWindow;
 	window->pushGui(new GuiNetwork(window));
+}
+
+void GuiMenu::openStorageSettings()
+{
+	Window* window = mWindow;
+	window->pushGui(new GuiStorage(window));
 }
 
 void GuiMenu::openUpdate()

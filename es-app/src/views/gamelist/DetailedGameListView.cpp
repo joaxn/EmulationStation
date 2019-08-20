@@ -57,6 +57,14 @@ DetailedGameListView::DetailedGameListView(Window* window, FileData* root) :
 	mLblPlayCount.setText("Times played: ");
 	addChild(&mLblPlayCount);
 	addChild(&mPlayCount);
+	
+	mLblSystem.setText("System: ");
+	addChild(&mLblSystem);
+	addChild(&mSystem);
+	mLblFavorite.setText(_("Favorite") + ": ");
+	addChild(&mLblFavorite);
+	addChild(&mFavorite);
+
 
 	mName.setPosition(mSize.x(), mSize.y());
 	mName.setDefaultZIndex(40);
@@ -94,7 +102,7 @@ void DetailedGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& them
 	assert(labels.size() == 8);
 	const char* lblElements[8] = {
 		"md_lbl_rating", "md_lbl_releasedate", "md_lbl_developer", "md_lbl_publisher", 
-		"md_lbl_genre", "md_lbl_players", "md_lbl_lastplayed", "md_lbl_playcount"
+		"md_lbl_genre", "md_lbl_players", "md_lbl_lastplayed", "md_lbl_playcount", "md_lbl_favorite", "md_lbl_system"
 	};
 
 	for(unsigned int i = 0; i < labels.size(); i++)
@@ -108,7 +116,7 @@ void DetailedGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& them
 	assert(values.size() == 8);
 	const char* valElements[8] = {
 		"md_rating", "md_releasedate", "md_developer", "md_publisher", 
-		"md_genre", "md_players", "md_lastplayed", "md_playcount"
+		"md_genre", "md_players", "md_lastplayed", "md_playcount", "md_favorite", "md_system"
 	};
 
 	for(unsigned int i = 0; i < values.size(); i++)
@@ -168,6 +176,8 @@ void DetailedGameListView::initMDValues()
 	mPlayers.setFont(defaultFont);
 	mLastPlayed.setFont(defaultFont);
 	mPlayCount.setFont(defaultFont);
+	mFavorite.setFont(defaultFont);
+	mSystem.setFont(defaultFont);
 
 	float bottom = 0.0f;
 
@@ -213,8 +223,15 @@ void DetailedGameListView::updateInfoPanel()
 
 		if(file->getType() == GAME)
 		{
+			mSystem.setValue(file->getSystem()->getFullName());
 			mLastPlayed.setValue(file->metadata.get("lastplayed"));
 			mPlayCount.setValue(file->metadata.get("playcount"));
+			if(file->metadata.get("favorite")){
+				mFavorite.setValue("1");
+			}else{
+				mFavorite.setValue("0");
+			}
+			
 		}
 		
 		fadingOut = false;
@@ -266,6 +283,8 @@ std::vector<TextComponent*> DetailedGameListView::getMDLabels()
 	ret.push_back(&mLblPlayers);
 	ret.push_back(&mLblLastPlayed);
 	ret.push_back(&mLblPlayCount);
+	ret.push_back(&mLblFavorite);
+	ret.push_back(&mLblSystem);
 	return ret;
 }
 
@@ -280,5 +299,7 @@ std::vector<GuiComponent*> DetailedGameListView::getMDValues()
 	ret.push_back(&mPlayers);
 	ret.push_back(&mLastPlayed);
 	ret.push_back(&mPlayCount);
+	ret.push_back(&mFavorite);
+	ret.push_back(&mSystem);
 	return ret;
 }

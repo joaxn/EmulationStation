@@ -31,6 +31,7 @@ set(ES_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiVideoScreensaverOptions.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiSlideshowScreensaverOptions.h
 	${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiNetwork.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiStorage.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiKeyboard.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMenu.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiSettings.h

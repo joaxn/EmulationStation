@@ -163,6 +163,8 @@ void Settings::setDefaults()
 	mStringMap["WifiSSID"] = "";
 	mStringMap["WifiKey"] = "";
 	
+	mStringMap["SmbKey"] = "";
+	
 	mStringMap["WifiCountry"] = "AT";
 }
 
