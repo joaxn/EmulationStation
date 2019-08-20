@@ -3,8 +3,6 @@
 #include "components/OptionListComponent.h"
 #include "components/SliderComponent.h"
 #include "components/SwitchComponent.h"
-#include "components/SliderComponent.h"
-#include "components/ProgressBarComponent.h"
 
 #include "guis/GuiMsgBox.h"
 #include "guis/GuiKeyboard.h"
@@ -74,16 +72,9 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 	/*----------------------------------------------*/
 	//BAR
 	/*----------------------------------------------*/
-	pbar_total = std::make_shared<ProgressBarComponent>(mWindow, "ppp");
-	auto tell_perc = std::make_shared<TextComponent>(mWindow, s3.str() + "%", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	tell_perc->setAlignment(ALIGN_RIGHT);
-	int pbSize = mMenu.getSize().x() * .8f;
-	pbar_total->setSize(pbSize, mMenu.getSize().y() * .09f);
-	pbar_total->setPosition(0, 0);
-	pbar_total->setValue(iPerc);
-	pbar_total->setColor(0x777777FF);
+	pbar_total = std::make_shared<SliderComponent>(mWindow, 0, 100.f, 0, s3.str() + "%");
+	pbar_total->setValue((float)iPerc);
 	row.addElement(pbar_total, false);
-	row.addElement(tell_perc, true);
 	mMenu.addRow(row);
 	row.elements.clear();
 	
