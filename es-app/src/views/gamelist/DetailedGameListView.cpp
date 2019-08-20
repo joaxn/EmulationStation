@@ -61,7 +61,7 @@ DetailedGameListView::DetailedGameListView(Window* window, FileData* root) :
 	mLblConsole.setText("System: ");
 	addChild(&mLblConsole);
 	addChild(&mConsole);
-	mLblFavorite.setText"Favorite: ");
+	mLblFavorite.setText("Favorite: ");
 	addChild(&mLblFavorite);
 	addChild(&mFavorite);
 
@@ -223,7 +223,7 @@ void DetailedGameListView::updateInfoPanel()
 
 		if(file->getType() == GAME)
 		{
-			mConsole.setValue(file->getSystem()->getFullName());
+			mConsole.setValue(file->getSystemName());
 			mLastPlayed.setValue(file->metadata.get("lastplayed"));
 			mPlayCount.setValue(file->metadata.get("playcount"));
 			if(file->metadata.get("favorite") == "false"){
