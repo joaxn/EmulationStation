@@ -8,8 +8,12 @@
 #include "guis/GuiKeyboard.h"
 #include "guis/GuiTextEditPopupKeyboard.h"
 #include "guis/GuiSettings.h"
+
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
+
+#include "utils/FileSystemUtil.h"
+
 #include "Scripting.h"
 #include "SystemData.h"
 #include "Log.h"
@@ -26,80 +30,98 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "ST
 {
 	ComponentListRow row;
 	
-	/*----------------------------------------------*/
-	//CALCULATION
-	/*----------------------------------------------*/
-	FILE *fp;
-	char path[1035];
-	fp = popen("df /stat/sda1 -B M --output=size,avail,pcent", "r");
+	// if usb stick is detected
+	std::string path = "/media/usb/roms";
+	if(Utils::FileSystem::exists(path)){
+		/*----------------------------------------------*/
+		//CALCULATION
+		/*----------------------------------------------*/
+		
+		FILE *fp;
+		char path[1035];
+		std::string cLine;
+		fp = popen("df /dev/sda1 -B M --output=size,avail,pcent 2>&1", "r");
+		while (fgets(path, sizeof(path), fp) != NULL) {
+			// Grab the last line.
+			cLine = path;
+		}
 
-	std::string cLine;
-	while (fgets(path, sizeof(path), fp) != NULL) {
-		// Grab the last line.
-		cLine = path;
+		// format the info out and put into ints.
+		std::string f1, f2, f3;
+		int f = cLine.find("M");
+		f1 = cLine.substr(0, f);
+		int q = cLine.substr(f + 1).find("M");
+		f2 = cLine.substr(f + 1, q);
+		int p = cLine.find("%");
+		f3 = cLine.substr(p - 3, p);
+
+		// convert to ints
+		float iSize = stof(f1);
+		float iAvailable = stof(f2);
+		int iPerc = stoi(f3);
+
+		// get size in GB then put it back to string
+		std::string totalSizeInGb;
+		std::string totalAvailableInGb;
+		std::stringstream ss, s2;
+		ss << std::setprecision(4) << float(iSize / 1000);
+		s2 << std::setprecision(4) << float(iAvailable / 1000);
+		totalSizeInGb = ss.str();
+		totalAvailableInGb = s2.str();
+
+		// get used
+		int iUsed = iSize - iAvailable;
+
+		// Get percents for progressbars
+		//float pUsed = (float(iSize / iUsed) * 10);		// Old garbage way.
+		std::stringstream s3;
+		s3 << iPerc;
+		
+		/*----------------------------------------------*/
+		//BAR
+		/*----------------------------------------------*/
+		auto pbar_total = std::make_shared<SliderComponent>(mWindow, 0, 100.f, 0, s3.str() + "%");
+		pbar_total->setValue((float)iPerc);
+		row.addElement(pbar_total, true);
+		mMenu.addRow(row);
+		row.elements.clear();
+		
+		/*----------------------------------------------*/
+		//SIZE
+		/*----------------------------------------------*/
+		auto tell_totalsize = std::make_shared<TextComponent>(mWindow, "USB STORAGE SIZE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+		auto tell_totalsize_i = std::make_shared<TextComponent>(mWindow, "" + totalSizeInGb + " GB", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+		tell_totalsize_i->setHorizontalAlignment(ALIGN_RIGHT);
+		row.addElement(tell_totalsize, true);
+		row.addElement(tell_totalsize_i, true);
+		mMenu.addRow(row);
+		row.elements.clear();
+
+		/*----------------------------------------------*/
+		//FREE
+		/*----------------------------------------------*/
+		auto tell_free = std::make_shared<TextComponent>(mWindow, "USB STORAGE FREE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+		auto tell_free_i = std::make_shared<TextComponent>(mWindow, "" + totalAvailableInGb + " GB", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+		tell_totalsize_i->setHorizontalAlignment(ALIGN_RIGHT);
+		row.addElement(tell_free, true);
+		row.addElement(tell_free_i, true);
+		mMenu.addRow(row);
+		row.elements.clear();
+	
+	}else{
+		
+		/*----------------------------------------------*/
+		//MOUNT
+		/*----------------------------------------------*/
+		auto tell_usb = std::make_shared<TextComponent>(mWindow, "USB STORAGE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+		auto tell_usb_i = std::make_shared<TextComponent>(mWindow, "NOT FOUND", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+		tell_usb_i->setHorizontalAlignment(ALIGN_RIGHT);
+		row.addElement(tell_usb, true);
+		row.addElement(tell_usb_i, true);
+		mMenu.addRow(row);
+		row.elements.clear();
+		
 	}
-
-	// format the info out and put into ints.
-	std::string f1, f2, f3;
-	int f = cLine.find("M");
-	f1 = cLine.substr(0, f);
-	int q = cLine.substr(f + 1).find("M");
-	f2 = cLine.substr(f + 1, q);
-	int p = cLine.find("%");
-	f3 = cLine.substr(p - 3, p);
-
-	// convert to ints
-	float iSize = stof(f1);
-	float iAvailable = stof(f2);
-	int iPerc = stoi(f3);
-
-	// get size in GB then put it back to string
-	std::string totalSizeInGb;
-	std::string totalAvailableInGb;
-	std::stringstream ss, s2;
-	ss << std::setprecision(4) << float(iSize / 1000);
-	s2 << std::setprecision(4) << float(iAvailable / 1000);
-	totalSizeInGb = ss.str();
-	totalAvailableInGb = s2.str();
-
-	// get used
-	int iUsed = iSize - iAvailable;
-
-	// Get percents for progressbars
-	//float pUsed = (float(iSize / iUsed) * 10);		// Old garbage way.
-	std::stringstream s3;
-	s3 << iPerc;
-	
-	/*----------------------------------------------*/
-	//BAR
-	/*----------------------------------------------*/
-	auto pbar_total = std::make_shared<SliderComponent>(mWindow, 0, 100.f, 0, s3.str() + "%");
-	pbar_total->setValue((float)iPerc);
-	row.addElement(pbar_total, true);
-	mMenu.addRow(row);
-	row.elements.clear();
-	
-	/*----------------------------------------------*/
-	//SIZE
-	/*----------------------------------------------*/
-	auto tell_totalsize = std::make_shared<TextComponent>(mWindow, "TOTAL DISK SIZE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	auto tell_totalsize_i = std::make_shared<TextComponent>(mWindow, "" + totalSizeInGb + " GB", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
-	tell_totalsize_i->setHorizontalAlignment(ALIGN_RIGHT);
-	row.addElement(tell_totalsize, true);
-	row.addElement(tell_totalsize_i, true);
-	mMenu.addRow(row);
-	row.elements.clear();
-
-	/*----------------------------------------------*/
-	//FREE
-	/*----------------------------------------------*/
-	auto tell_free = std::make_shared<TextComponent>(mWindow, "TOTAL DISK FREE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	auto tell_free_i = std::make_shared<TextComponent>(mWindow, "" + totalAvailableInGb + " GB", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
-	tell_totalsize_i->setHorizontalAlignment(ALIGN_RIGHT);
-	row.addElement(tell_free, true);
-	row.addElement(tell_free_i, true);
-	mMenu.addRow(row);
-	row.elements.clear();
 	
 	
 	/*----------------------------------------------*/
