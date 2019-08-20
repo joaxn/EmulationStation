@@ -227,7 +227,7 @@ void DetailedGameListView::updateInfoPanel()
 			mLastPlayed.setValue(file->metadata.get("lastplayed"));
 			mPlayCount.setValue(file->metadata.get("playcount"));
 			if(file->metadata.get("favorite") == "false"){
-				mFavorite.setValue("0");
+				mFavorite.setValue("");
 			}else{
 				mFavorite.setValue("1");
 			}

@@ -26,7 +26,7 @@
 #include <string>
 #include <stdlib.h>
 
-GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "STORAGE")
+GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "USB STORAGE")
 {
 	ComponentListRow row;
 	
@@ -80,11 +80,13 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "ST
 		/*----------------------------------------------*/
 		//BAR
 		/*----------------------------------------------*/
+		/*
 		auto pbar_total = std::make_shared<SliderComponent>(mWindow, 0, 100.f, 0, s3.str() + "%");
 		pbar_total->setValue((float)iPerc);
 		row.addElement(pbar_total, true);
 		mMenu.addRow(row);
 		row.elements.clear();
+		*/
 		
 		/*----------------------------------------------*/
 		//SIZE
@@ -96,13 +98,24 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "ST
 		row.addElement(tell_totalsize_i, true);
 		mMenu.addRow(row);
 		row.elements.clear();
+		
+		/*----------------------------------------------*/
+		//PERCENT
+		/*----------------------------------------------*/
+		auto tell_perc = std::make_shared<TextComponent>(mWindow, "USB STORAGE USED", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+		auto tell_prec_i = std::make_shared<TextComponent>(mWindow, "" + s3.str() + " %", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+		tell_prec_i->setHorizontalAlignment(ALIGN_RIGHT);
+		row.addElement(tell_perc, true);
+		row.addElement(tell_prec_i, true);
+		mMenu.addRow(row);
+		row.elements.clear();
 
 		/*----------------------------------------------*/
 		//FREE
 		/*----------------------------------------------*/
-		auto tell_free = std::make_shared<TextComponent>(mWindow, "USB STORAGE FREE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+		auto tell_free = std::make_shared<TextComponent>(mWindow, "USB STORAGE AVAILABLE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 		auto tell_free_i = std::make_shared<TextComponent>(mWindow, "" + totalAvailableInGb + " GB", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
-		tell_totalsize_i->setHorizontalAlignment(ALIGN_RIGHT);
+		tell_free_i->setHorizontalAlignment(ALIGN_RIGHT);
 		row.addElement(tell_free, true);
 		row.addElement(tell_free_i, true);
 		mMenu.addRow(row);
@@ -139,8 +152,6 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "ST
 		std::string smbKey = newVal;
 		for(int i = 0; i < smbKey.length(); ++i) smbKey[i] = '*';
 		editPass->setText(smbKey);
-		writeStorageSettings();
-		Settings::getInstance()->saveFile();
 	};
 	
 	row.addElement(title, true);
@@ -156,7 +167,7 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "ST
 	/*----------------------------------------------*/
 	//BUTTONS
 	/*----------------------------------------------*/
-	mMenu.addButton("BACK", "go back", [this] { delete this; });
+	mMenu.addButton("BACK", "go back", [this] { writeStorageSettings(); delete this; });
 
 	addChild(&mMenu);
 	setSize(mMenu.getSize());
@@ -166,11 +177,13 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "ST
 bool GuiStorage::input(InputConfig* config, Input input){
 	
 	if(config->isMappedTo("b", input) && input.value != 0){
+		writeStorageSettings();
 		delete this;
 		return true;
 	}
 
 	if(config->isMappedTo("start", input) && input.value != 0){
+		writeStorageSettings();
 		Window* window = mWindow;
 		while(window->peekGui() && window->peekGui() != ViewController::get())
 			delete window->peekGui();
@@ -185,5 +198,6 @@ void GuiStorage::writeStorageSettings() {
 	std::string smbKey = Settings::getInstance()->getString("SmbKey");
 	cmd << "(echo \"" << smbKey << "\"; echo \"" << smbKey << "\") | smbpasswd -s worukami";
 	system(cmd.str().c_str());
-	system("sudo service smbd restart");
+	system("sudo service smbd restart &");
+	Settings::getInstance()->saveFile();
 }
