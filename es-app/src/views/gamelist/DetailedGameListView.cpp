@@ -9,10 +9,10 @@ DetailedGameListView::DetailedGameListView(Window* window, FileData* root) :
 	mImage(window),
 
 	mLblRating(window), mLblReleaseDate(window), mLblDeveloper(window), mLblPublisher(window), 
-	mLblGenre(window), mLblPlayers(window), mLblLastPlayed(window), mLblPlayCount(window),
+	mLblGenre(window), mLblPlayers(window), mLblLastPlayed(window), mLblPlayCount(window), mLblFavorite(window), mLblConsole(window),
 
 	mRating(window), mReleaseDate(window), mDeveloper(window), mPublisher(window), 
-	mGenre(window), mPlayers(window), mLastPlayed(window), mPlayCount(window),
+	mGenre(window), mPlayers(window), mLastPlayed(window), mPlayCount(window), mFavorite(window), mConsole(window),
 	mName(window)
 {
 	//mHeaderImage.setPosition(mSize.x() * 0.25f, 0);
@@ -58,9 +58,9 @@ DetailedGameListView::DetailedGameListView(Window* window, FileData* root) :
 	addChild(&mLblPlayCount);
 	addChild(&mPlayCount);
 	
-	mLblSystem.setText("System: ");
-	addChild(&mLblSystem);
-	addChild(&mSystem);
+	mLblConsole.setText("System: ");
+	addChild(&mLblConsole);
+	addChild(&mConsole);
 	mLblFavorite.setText(_("Favorite") + ": ");
 	addChild(&mLblFavorite);
 	addChild(&mFavorite);
@@ -102,7 +102,7 @@ void DetailedGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& them
 	assert(labels.size() == 8);
 	const char* lblElements[8] = {
 		"md_lbl_rating", "md_lbl_releasedate", "md_lbl_developer", "md_lbl_publisher", 
-		"md_lbl_genre", "md_lbl_players", "md_lbl_lastplayed", "md_lbl_playcount", "md_lbl_favorite", "md_lbl_system"
+		"md_lbl_genre", "md_lbl_players", "md_lbl_lastplayed", "md_lbl_playcount", "md_lbl_favorite", "md_lbl_console"
 	};
 
 	for(unsigned int i = 0; i < labels.size(); i++)
@@ -116,7 +116,7 @@ void DetailedGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& them
 	assert(values.size() == 8);
 	const char* valElements[8] = {
 		"md_rating", "md_releasedate", "md_developer", "md_publisher", 
-		"md_genre", "md_players", "md_lastplayed", "md_playcount", "md_favorite", "md_system"
+		"md_genre", "md_players", "md_lastplayed", "md_playcount", "md_favorite", "md_console"
 	};
 
 	for(unsigned int i = 0; i < values.size(); i++)
@@ -177,7 +177,7 @@ void DetailedGameListView::initMDValues()
 	mLastPlayed.setFont(defaultFont);
 	mPlayCount.setFont(defaultFont);
 	mFavorite.setFont(defaultFont);
-	mSystem.setFont(defaultFont);
+	mConsole.setFont(defaultFont);
 
 	float bottom = 0.0f;
 
@@ -223,7 +223,7 @@ void DetailedGameListView::updateInfoPanel()
 
 		if(file->getType() == GAME)
 		{
-			mSystem.setValue(file->getSystem()->getFullName());
+			mConsole.setValue(file->getSystem()->getFullName());
 			mLastPlayed.setValue(file->metadata.get("lastplayed"));
 			mPlayCount.setValue(file->metadata.get("playcount"));
 			if(file->metadata.get("favorite")){
@@ -284,7 +284,7 @@ std::vector<TextComponent*> DetailedGameListView::getMDLabels()
 	ret.push_back(&mLblLastPlayed);
 	ret.push_back(&mLblPlayCount);
 	ret.push_back(&mLblFavorite);
-	ret.push_back(&mLblSystem);
+	ret.push_back(&mLblConsole);
 	return ret;
 }
 
@@ -300,6 +300,6 @@ std::vector<GuiComponent*> DetailedGameListView::getMDValues()
 	ret.push_back(&mLastPlayed);
 	ret.push_back(&mPlayCount);
 	ret.push_back(&mFavorite);
-	ret.push_back(&mSystem);
+	ret.push_back(&mConsole);
 	return ret;
 }

@@ -27,7 +27,9 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 {
 	ComponentListRow row;
 	
-	
+	/*----------------------------------------------*/
+	//CALCULATION
+	/*----------------------------------------------*/
 	FILE *fp;
 	char path[1035];
 	fp = popen("df /stat/sda1 -B M --output=size,avail,pcent", "r");
@@ -69,6 +71,9 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 	std::stringstream s3;
 	s3 << iPerc;
 	
+	/*----------------------------------------------*/
+	//BAR
+	/*----------------------------------------------*/
 	pbar_total = std::make_shared<ProgressBarComponent>(mWindow, "ppp");
 	auto tell_perc = std::make_shared<TextComponent>(mWindow, s3.str() + "%", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
 	tell_perc->setAlignment(ALIGN_RIGHT);
@@ -79,11 +84,16 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 	pbar_total->setColor(0x777777FF);
 	row.addElement(pbar_total, false);
 	row.addElement(tell_perc, true);
+	mMenu.addRow(row);
 	row.elements.clear();
 	
 	
+	/*----------------------------------------------*/
 	//PASSWORD
-	title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	/*----------------------------------------------*/
+	auto title = std::make_shared<TextComponent>(mWindow, "PASSWORD", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto spacer = std::make_shared<GuiComponent>(mWindow);
+	spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
 	std::string smbKey = Settings::getInstance()->getString("SmbKey");
 	for(int i = 0; i < smbKey.length(); ++i) smbKey[i] = '*';
 	auto editPass = std::make_shared<TextComponent>(mWindow, smbKey, Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
@@ -107,7 +117,9 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 	mMenu.addRow(row);
 	row.elements.clear();
 	
-	// BUTTONS
+	/*----------------------------------------------*/
+	//BUTTONS
+	/*----------------------------------------------*/
 	mMenu.addButton("BACK", "go back", [this] { delete this; });
 
 	addChild(&mMenu);
