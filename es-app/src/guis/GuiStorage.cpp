@@ -146,6 +146,6 @@ void GuiStorage::writeStorageSettings() {
 	std::stringstream cmd;
 	std::string smbKey = Settings::getInstance()->getString("SmbKey");
 	cmd << "(echo \"" << smbKey << "\"; echo \"" << smbKey << "\") | smbpasswd -s worukami";
-	system(cmd.str());
+	system(cmd.str().c_str());
 	system("sudo service smbd restart");
 }
