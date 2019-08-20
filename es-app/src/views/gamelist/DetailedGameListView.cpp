@@ -61,7 +61,7 @@ DetailedGameListView::DetailedGameListView(Window* window, FileData* root) :
 	mLblConsole.setText("System: ");
 	addChild(&mLblConsole);
 	addChild(&mConsole);
-	mLblFavorite.setText(_("Favorite") + ": ");
+	mLblFavorite.setText"Favorite: ");
 	addChild(&mLblFavorite);
 	addChild(&mFavorite);
 
@@ -99,8 +99,8 @@ void DetailedGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& them
 
 	initMDLabels();
 	std::vector<TextComponent*> labels = getMDLabels();
-	assert(labels.size() == 8);
-	const char* lblElements[8] = {
+	assert(labels.size() == 10);
+	const char* lblElements[10] = {
 		"md_lbl_rating", "md_lbl_releasedate", "md_lbl_developer", "md_lbl_publisher", 
 		"md_lbl_genre", "md_lbl_players", "md_lbl_lastplayed", "md_lbl_playcount", "md_lbl_favorite", "md_lbl_console"
 	};
@@ -113,8 +113,8 @@ void DetailedGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& them
 
 	initMDValues();
 	std::vector<GuiComponent*> values = getMDValues();
-	assert(values.size() == 8);
-	const char* valElements[8] = {
+	assert(values.size() == 10);
+	const char* valElements[10] = {
 		"md_rating", "md_releasedate", "md_developer", "md_publisher", 
 		"md_genre", "md_players", "md_lastplayed", "md_playcount", "md_favorite", "md_console"
 	};
@@ -226,10 +226,10 @@ void DetailedGameListView::updateInfoPanel()
 			mConsole.setValue(file->getSystem()->getFullName());
 			mLastPlayed.setValue(file->metadata.get("lastplayed"));
 			mPlayCount.setValue(file->metadata.get("playcount"));
-			if(file->metadata.get("favorite")){
-				mFavorite.setValue("1");
-			}else{
+			if(file->metadata.get("favorite") == "false"){
 				mFavorite.setValue("0");
+			}else{
+				mFavorite.setValue("1");
 			}
 			
 		}
