@@ -72,9 +72,31 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 	/*----------------------------------------------*/
 	//BAR
 	/*----------------------------------------------*/
-	pbar_total = std::make_shared<SliderComponent>(mWindow, 0, 100.f, 0, s3.str() + "%");
+	auto pbar_total = std::make_shared<SliderComponent>(mWindow, 0, 100.f, 0, s3.str() + "%");
 	pbar_total->setValue((float)iPerc);
 	row.addElement(pbar_total, false);
+	mMenu.addRow(row);
+	row.elements.clear();
+	
+	/*----------------------------------------------*/
+	//SIZE
+	/*----------------------------------------------*/
+	auto tell_totalsize = std::make_shared<TextComponent>(mWindow, "TOTAL DISK SIZE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto tell_totalsize_i = std::make_shared<TextComponent>(mWindow, "" + totalSizeInGb + " GB", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	tell_totalsize_i->setAlignment(ALIGN_RIGHT);
+	row.addElement(tell_totalsize, true);
+	row.addElement(tell_totalsize_i, true);
+	mMenu.addRow(row);
+	row.elements.clear();
+
+	/*----------------------------------------------*/
+	//FREE
+	/*----------------------------------------------*/
+	auto tell_free = std::make_shared<TextComponent>(mWindow, "TOTAL DISK FREE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto tell_free_i = std::make_shared<TextComponent>(mWindow, "" + totalAvailableInGb + " GB", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	tell_free_i->setAlignment(ALIGN_RIGHT);
+	row.addElement(tell_free, true);
+	row.addElement(tell_free_i, true);
 	mMenu.addRow(row);
 	row.elements.clear();
 	
