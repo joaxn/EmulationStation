@@ -94,6 +94,7 @@ set(ES_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiSlideshowScreensaverOptions.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiKeyboard.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiNetwork.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiStorage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMenu.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiSettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiScraperMulti.cpp
