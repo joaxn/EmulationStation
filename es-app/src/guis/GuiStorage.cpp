@@ -15,13 +15,14 @@
 #include "Log.h"
 
 #include <iostream>
+#include <iomanip>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
 #include <string>
 #include <stdlib.h>
 
-GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NETWORK SETTINGS"), mTimer(0), mState(0)
+GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "STORAGE")
 {
 	ComponentListRow row;
 	
@@ -74,7 +75,7 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 	/*----------------------------------------------*/
 	auto pbar_total = std::make_shared<SliderComponent>(mWindow, 0, 100.f, 0, s3.str() + "%");
 	pbar_total->setValue((float)iPerc);
-	row.addElement(pbar_total, false);
+	row.addElement(pbar_total, true);
 	mMenu.addRow(row);
 	row.elements.clear();
 	
@@ -82,8 +83,8 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 	//SIZE
 	/*----------------------------------------------*/
 	auto tell_totalsize = std::make_shared<TextComponent>(mWindow, "TOTAL DISK SIZE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	auto tell_totalsize_i = std::make_shared<TextComponent>(mWindow, "" + totalSizeInGb + " GB", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	tell_totalsize_i->setAlignment(ALIGN_RIGHT);
+	auto tell_totalsize_i = std::make_shared<TextComponent>(mWindow, "" + totalSizeInGb + " GB", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+	tell_totalsize_i->setHorizontalAlignment(ALIGN_RIGHT);
 	row.addElement(tell_totalsize, true);
 	row.addElement(tell_totalsize_i, true);
 	mMenu.addRow(row);
@@ -93,8 +94,8 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 	//FREE
 	/*----------------------------------------------*/
 	auto tell_free = std::make_shared<TextComponent>(mWindow, "TOTAL DISK FREE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	auto tell_free_i = std::make_shared<TextComponent>(mWindow, "" + totalAvailableInGb + " GB", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	tell_free_i->setAlignment(ALIGN_RIGHT);
+	auto tell_free_i = std::make_shared<TextComponent>(mWindow, "" + totalAvailableInGb + " GB", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+	tell_totalsize_i->setHorizontalAlignment(ALIGN_RIGHT);
 	row.addElement(tell_free, true);
 	row.addElement(tell_free_i, true);
 	mMenu.addRow(row);
@@ -144,7 +145,7 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "NE
 void GuiStorage::writeStorageSettings() {
 	std::stringstream cmd;
 	std::string smbKey = Settings::getInstance()->getString("SmbKey");
-	cmd << '(echo "' << smbKey << '"; echo "' smbKey << '") | smbpasswd -s worukami';
+	cmd << "(echo \"" << smbKey << "\"; echo \"" << smbKey << "\") | smbpasswd -s worukami";
 	system(cmd.str());
 	system("sudo service smbd restart");
 }
