@@ -83,7 +83,7 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 		case MD_DATE:
 			{
 				ed = std::make_shared<DateTimeEditComponent>(window);
-				row.addElement(ed, true, true);
+				row.addElement(ed, false, true);
 
 				auto spacer = std::make_shared<GuiComponent>(mWindow);
 				spacer->setSize(Renderer::getScreenWidth() * 0.0025f, 0);

@@ -140,7 +140,7 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "US
 	//LOCATION
 	/*----------------------------------------------*/
 	auto tell_loc = std::make_shared<TextComponent>(mWindow, "NETWORK LOKATION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-	auto tell_loc_i = std::make_shared<TextComponent>(mWindow, "\\WORUKAMI", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+	auto tell_loc_i = std::make_shared<TextComponent>(mWindow, "\\\\WORUKAMI", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
 	tell_loc_i->setHorizontalAlignment(ALIGN_RIGHT);
 	row.addElement(tell_loc, true);
 	row.addElement(tell_loc_i, true);
