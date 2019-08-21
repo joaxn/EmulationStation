@@ -376,10 +376,12 @@ void GuiMenu::openUISettings()
 	});
 
 	// show help
+	/*
 	auto show_help = std::make_shared<SwitchComponent>(mWindow);
 	show_help->setState(Settings::getInstance()->getBool("ShowHelpPrompts"));
 	s->addWithLabel("ON-SCREEN HELP", show_help);
 	s->addSaveFunc([show_help] { Settings::getInstance()->setBool("ShowHelpPrompts", show_help->getState()); });
+	*/
 
 	// enable filters (ForceDisableFilters)
 	/*
