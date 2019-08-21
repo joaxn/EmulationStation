@@ -89,17 +89,6 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "US
 		*/
 		
 		/*----------------------------------------------*/
-		//SIZE
-		/*----------------------------------------------*/
-		auto tell_totalsize = std::make_shared<TextComponent>(mWindow, "USB STORAGE SIZE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-		auto tell_totalsize_i = std::make_shared<TextComponent>(mWindow, "" + totalSizeInGb + " GB", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
-		tell_totalsize_i->setHorizontalAlignment(ALIGN_RIGHT);
-		row.addElement(tell_totalsize, true);
-		row.addElement(tell_totalsize_i, true);
-		mMenu.addRow(row);
-		row.elements.clear();
-		
-		/*----------------------------------------------*/
 		//PERCENT
 		/*----------------------------------------------*/
 		auto tell_perc = std::make_shared<TextComponent>(mWindow, "USB STORAGE USED", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
@@ -107,6 +96,17 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "US
 		tell_prec_i->setHorizontalAlignment(ALIGN_RIGHT);
 		row.addElement(tell_perc, true);
 		row.addElement(tell_prec_i, true);
+		mMenu.addRow(row);
+		row.elements.clear();
+		
+		/*----------------------------------------------*/
+		//SIZE
+		/*----------------------------------------------*/
+		auto tell_totalsize = std::make_shared<TextComponent>(mWindow, "USB STORAGE SIZE", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+		auto tell_totalsize_i = std::make_shared<TextComponent>(mWindow, "" + totalSizeInGb + " GB", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+		tell_totalsize_i->setHorizontalAlignment(ALIGN_RIGHT);
+		row.addElement(tell_totalsize, true);
+		row.addElement(tell_totalsize_i, true);
 		mMenu.addRow(row);
 		row.elements.clear();
 
@@ -136,6 +136,27 @@ GuiStorage::GuiStorage(Window* window) : GuiComponent(window), mMenu(window, "US
 		
 	}
 	
+	/*----------------------------------------------*/
+	//LOCATION
+	/*----------------------------------------------*/
+	auto tell_loc = std::make_shared<TextComponent>(mWindow, "NETWORK LOKATION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto tell_loc_i = std::make_shared<TextComponent>(mWindow, "\\WORUKAMI", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+	tell_loc_i->setHorizontalAlignment(ALIGN_RIGHT);
+	row.addElement(tell_loc, true);
+	row.addElement(tell_loc_i, true);
+	mMenu.addRow(row);
+	row.elements.clear();
+	
+	/*----------------------------------------------*/
+	//USER
+	/*----------------------------------------------*/
+	auto tell_user = std::make_shared<TextComponent>(mWindow, "USER", Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+	auto tell_user_i = std::make_shared<TextComponent>(mWindow, "WORUKAMI", Font::get(FONT_SIZE_MEDIUM, FONT_PATH_LIGHT), 0x777777FF);
+	tell_user_i->setHorizontalAlignment(ALIGN_RIGHT);
+	row.addElement(tell_user, true);
+	row.addElement(tell_user_i, true);
+	mMenu.addRow(row);
+	row.elements.clear();
 	
 	/*----------------------------------------------*/
 	//PASSWORD
@@ -196,7 +217,7 @@ bool GuiStorage::input(InputConfig* config, Input input){
 void GuiStorage::writeStorageSettings() {
 	std::stringstream cmd;
 	std::string smbKey = Settings::getInstance()->getString("SmbKey");
-	cmd << "(echo \"" << smbKey << "\"; echo \"" << smbKey << "\") | smbpasswd -s worukami";
+	cmd << "(echo \"" << smbKey << "\"; echo \"" << smbKey << "\") | sudo smbpasswd -s worukami";
 	system(cmd.str().c_str());
 	system("sudo service smbd restart &");
 	Settings::getInstance()->saveFile();

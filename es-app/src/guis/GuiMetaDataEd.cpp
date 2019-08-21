@@ -82,7 +82,7 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 		case MD_DATE:
 			{
 				ed = std::make_shared<DateTimeEditComponent>(window);
-				row.addElement(ed, false, true);
+				row.addElement(ed, true, true);
 
 				auto spacer = std::make_shared<GuiComponent>(mWindow);
 				spacer->setSize(Renderer::getScreenWidth() * 0.0025f, 0);
@@ -160,6 +160,9 @@ void GuiMetaDataEd::save()
 
 	// update respective Collection Entries
 	CollectionSystemManager::get()->refreshCollectionSystems(mScraperParams.game);
+	
+	// write gameslist to xml
+	updateGamelist(mScraperParams.system);
 }
 
 void GuiMetaDataEd::fetch()

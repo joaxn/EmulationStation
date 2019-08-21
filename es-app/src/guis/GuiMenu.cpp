@@ -282,6 +282,7 @@ void GuiMenu::openUISettings()
 	});
 
 	// transition style
+	/*
 	auto transition_style = std::make_shared< OptionListComponent<std::string> >(mWindow, "TRANSITION STYLE", false);
 	std::vector<std::string> transitions;
 	transitions.push_back("fade");
@@ -300,6 +301,7 @@ void GuiMenu::openUISettings()
 		}
 		Settings::getInstance()->setString("TransitionStyle", transition_style->getSelected());
 	});
+	*/
 
 	// theme set
 	/*
@@ -343,8 +345,8 @@ void GuiMenu::openUISettings()
 	styles.push_back("automatic");
 	styles.push_back("basic");
 	styles.push_back("detailed");
-	styles.push_back("video");
-	styles.push_back("grid");
+	//styles.push_back("video");
+	//styles.push_back("grid");
 
 	for (auto it = styles.cbegin(); it != styles.cend(); it++)
 		gamelist_style->add(*it, *it, Settings::getInstance()->getString("GamelistViewStyle") == *it);
@@ -365,7 +367,7 @@ void GuiMenu::openUISettings()
 	{
 		if ("retropie" != (*it)->getName())
 		{
-			systemfocus_list->add((*it)->getName(), (*it)->getName(), Settings::getInstance()->getString("StartupSystem") == (*it)->getName());
+			systemfocus_list->add((*it)->getFullName(), (*it)->getName(), Settings::getInstance()->getString("StartupSystem") == (*it)->getName());
 		}
 	}
 	s->addWithLabel("START ON SYSTEM", systemfocus_list);
