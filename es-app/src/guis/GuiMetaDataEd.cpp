@@ -17,6 +17,7 @@
 #include "views/ViewController.h"
 #include "CollectionSystemManager.h"
 #include "FileData.h"
+#include "Gamelist.h"
 #include "FileFilterIndex.h"
 #include "SystemData.h"
 #include "Log.h"
